@@ -7,7 +7,7 @@
     "@aeSignOutButtonLbl": {
         "description": "Botón para cerara la sesión en la aplicación"
     },
-    "aeUserNameLbl": "Usuario",
+    "aeUserNameLbl": "Usuario ",
     "aePasswordLbl": "Contraseña",
     "aeFirstNameLbl": "Nombre",
     "aeLastNameLbl": "Apellido",
