@@ -1,0 +1,1 @@
+class LFAppException implements Exception {}

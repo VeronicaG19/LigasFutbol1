@@ -1,0 +1,362 @@
+{
+    "aeAppTitle": "Auxilio Exprés",
+    "@aeAppTitle": {
+        "description": "Título de la aplicación"
+    },
+    "aeSignOutButtonLbl": "Cerrar sesión",
+    "@aeSignOutButtonLbl": {
+        "description": "Botón para cerara la sesión en la aplicación"
+    },
+    "aeUserNameLbl": "Usuario",
+    "aePasswordLbl": "Contraseña",
+    "aeFirstNameLbl": "Nombre",
+    "aeLastNameLbl": "Apellido",
+    "aeEmailLbl": "Correo electrónico",
+    "@aeEmailLbl": {
+        "description": "Etiqueta para correo electrónico"
+    },
+    "aePhoneNumberLbl": "Teléfono",
+    "@aePhoneNumberLbl": {
+        "description": "Etiqueta para teléfono"
+    },
+    "emailOrPhoneLabel": "correo electrónico o teléfono",
+    "@emailOrPhoneLabel": {
+        "description": "Etiqueta para correo electrónico o teléfono"
+    },
+    "aeContinueButtonLbl": "Continuar",
+    "@aeContinueButtonLbl": {
+        "description": "El contenido para un botón de continuar en la app"
+    },
+    "aeConfirmBtn": "Confirmar",
+    "@aeConfirmBtn": {
+        "description": "Etiqueta de confirmación en la app"
+    },
+    "aeSubmitLbl": "Enviar",
+    "@aeSubmitLbl": {
+        "description": "Etiqueta de enviar en la app"
+    },
+    "aeBackButtonLbl": "Regresar",
+    "@aeBackButtonLbl": {
+        "description": "El contenido para un botón de regresar en la app"
+    },
+    "aeRetryLabel": "Reintentar",
+    "@aeRetryLabel": {
+        "description": "Etiqueta para indicar la acción de reintentar en cualquier contenido de la app"
+    },
+    "aeCancelLbl": "Cancelar",
+    "aeCloslLbl": "Cerrar",
+    "@aeCancelLbl": {
+        "description": "Etiqueta para indicar la acción de cancelar en cualquier contenido de la app"
+    },
+    "aeRefuseLbl": "Rechazar",
+    "@aeRefuseLbl": {
+        "description": "Etiqueta para indicar la acción de rechazar en cualquier contenido de la app"
+    },
+    "aeNoContentLbl": "Sin contenido",
+    "@aeNoContentLbl": {
+        "description": "Etiqueta de sin contenido"
+    },
+    "aeDataUpdatedLbl": "Datos actualizados correctamente",
+    "@aeDataUpdatedLbl": {
+        "description": "Data updated label"
+    },
+    "aeSettingsLbl": "Configuración",
+    "aeSkipBtn": "Omitir",
+    "aeGoButton": "ir",
+    "aeAcceptLbl": "Aceptar",
+    "aeSgtLbl": "Siguiente",
+    "aeInvalidDataMsg": "Datos no válidos",
+    "aeEmailNotFoundMsg": "El email que introdujiste no está registrado con nosotros",
+    "aePhoneNotFoundMsg": "El teléfono que introdujiste no está registrado con nosotros",
+    "aeInvalidPasswordMsg": "Contraseña no válida",
+    "aeInvalidUsernameMsg": "Usuario no válido",
+    "aeInvalidPhoneNumberMsg": "Número de teléfono inválido",
+    "aeInvalidEmailMsg": "Correo electrónico inválido",
+    "aeEmptyFieldMsg": "Campo vacío",
+    "aeGenericFailureMsg": "{errorCode, select, imUsed{El registro ya existe} unknownError{Ah ocurrido un problema} socketException{No se pudo conectar al servidor} notModified{No se modificó el contenido} badRequest{La petición no fue realizada correctamente} unauthorized{Acceso denegado} forbidden{Acceso denegado} serverError{Ah ocurrido un problema en el servidor} timeout{El tiempo de espera se ah excedido} noCacheFound{No se encontraron datos} notFound{No se encontraron datos} other{Other}}",
+    "@aeGenericFailureMsg": {
+        "description": "Evaluates the error code and shows a message",
+        "placeholders": {
+            "errorCode": {
+                "type": "String",
+                "example": "badRequest"
+            }
+        }
+    },
+    "signInFailureMsg": "{errorCode, select, unauthorized{No se pudo autenticar el usuario. Usuario y/o contraseña incorrectos.} badCredentials{No se pudo autenticar el usuario. Usuario y/o contraseña incorrectos.} other{No se pudo iniciar sesión}}",
+    "@signInFailureMsg": {
+        "description": "Evaluates the sign in error code and shows a message",
+        "placeholders": {
+            "errorCode": {
+                "type": "String",
+                "example": "badRequest"
+            }
+        }
+    },
+    "inviteMembersHamburgerMenuButton": "Invitar",
+    "@inviteMembersHamburgerMenuButton": {
+        "description": "Botón de navegación en el menú drawer como atajo para realizar invitaciones"
+    },
+    "paymentsHamburgerMenuButton": "Pagos",
+    "@paymentsHamburgerMenuButton": {
+        "description": "Botón de navegación en el menú drawer para ver la información de los pagos pendientes"
+    },
+    "helpEventHamburgerMenuButton": "Ayuda",
+    "@helpEventHamburgerMenuButton": {
+        "description": "Botón de navegación en el menú drawer para acceder al centro de ayuda"
+    },
+    "myAccountHamburgerMenuButton": "Mi cuenta",
+    "@myAccountHamburgerMenuButton": {
+        "description": "Botón de navegación en el menú drawer para acceder a los datos de la cuenta en Auxilio Exprés"
+    },
+    "informationHamburgerMenuButton": "Información legal",
+    "@informationHamburgerMenuButton": {
+        "description": "Botón de navegación en el menú drawer para acceder a información legal de la app, como términos y condiciones, politicas de privacidad, etc."
+    },
+    "notificationsNavigationMenu": "Notif.",
+    "@notificationsNavigationMenu": {
+        "description": "Botón del menú inferior para visualizar las notificaciones, como las invitaciones"
+    },
+    "othersNavigationMenu": "Otros",
+    "@othersNavigationMenu": {
+        "description": "Botón del menú inferior para tener acceso a otras configuraciones de las alarmas fisicas"
+    },
+    "saveConfigurationButton": "Guardar Cambios",
+    "@saveConfigurationButton": {
+        "description": "Botón para guardar la configuración"
+    },
+    "sendInvitationButton": "Enviar invitación",
+    "@sendInvitationButton": {
+        "description": "Botón  para enviar la invitación"
+    },
+    "inviteCodeButton": "Invitar por código",
+    "@inviteCodeButton": {
+        "description": "Botón  para enviar la invitación por codigo"
+    },
+    "anotherOptionLabel": "o bien",
+    "@anotherOptionLabel": {
+        "description": "Label para añadir otra opción para realizar la invitación"
+    },
+    "invitePhoneButton": "Invitar por telefóno",
+    "@invitePhoneButton": {
+        "description": "Botón para enviar la invitación por teléfono"
+    },
+    "notNotificationDescriptionText": "No tienes notificaciones",
+    "@notNotificationDescriptionText": {
+        "description": "Descripción cuando no se tienen notificaciones"
+    },
+    "aboutTitle": "Información",
+    "@aboutTitle": {
+        "description": "Titulo de la pantalla de información"
+    },
+    "frequentQuestionsLabel": "Preguntas frecuentes",
+    "@frequentQuestionsLabel": {
+        "description": "Etiqueta de preguntas frecuentes"
+    },
+    "privacyPoliciesLabel": "Política de privacidad",
+    "@privacyPoliciesLabel": {
+        "description": "Etiqueta de politicas de privacidad"
+    },
+    "termsAndConditionsLabel": "Términos y condiciones",
+    "@termsAndConditionsLabel": {
+        "description": "Etiqueta de términos y condiciones"
+    },
+    "seeDemoLabel": "Ver demo",
+    "@seeDemoLabel": {
+        "description": "Etiqueta de ver demo"
+    },
+    "appInformationLabel": "Información de la app",
+    "@appInformationLabel": {
+        "description": "Etiqueta para ver la información de la aplicación"
+    },
+    "passwordUpdatedSuccessfully": "Se ha cambiado correctamente tu contraseña. Recibirás una confirmación en tu correo electrónico.",
+    "signUpButtonLbl": "CREAR CUENTA",
+    "signUpTitle": "Registrar",
+    "signUpVerifyWithPhoneBtn": "Usar verificación con teléfono",
+    "signUpVerifyWithEmailBtn": "Usar verificación con email",
+    "signUpInsertALbl": "Ingresa un",
+    "signUpValidReqMsgLbl": "válido",
+    "signUpResentCodeButtonLbl": "Reenviar código",
+    "signUpEnterCodeLbl": "Escriba su código",
+    "signUpVerificationCodeFailureMsg": "Introduce el código de verificación",
+    "signUpCodeFormLbl": "Hemos enviado un código de 4 dígitos a: {code}",
+    "@signUpCodeFormLbl": {
+        "description": "Verification code form label",
+        "type": "text",
+        "placeholders": {
+            "code": {
+                "example": "1234",
+                "description": "Verification code"
+            }
+        }
+    },
+    "signUpUserFormLbl": "¡Estás a un paso!",
+    "signUpPersonFormLbl": "¡Dos pasos más y listo!",
+    "signUpCodeFormTitle": "Código",
+    "signUpPersonFormTitle": "Datos",
+    "signUpAccountFormTitle": "Cuenta",
+    "signUpRegisteringUserMsg": "Registrando usuario",
+    "signUpFirstNameFailureMsg": "Por favor, introduce tu nombre",
+    "signUpLastNameFailureMsg": "Por favor, introduce tu apellido",
+    "signUpInvalidUsernameMsg": "Usuario inválido",
+    "signUpExceptionMessage": "El proceso de registro no se pudo completar correctamente, inténtalo de nuevo.",
+    "signUpVerificationFailureMsg": "{errorCode, select, alreadyExists{El contacto que nos proporcionaste ya está registrado por otro usuario} userExist{El nombre de usuario ya está registrado por otra persona} invalidCode{El código de verificación es inválido} other{No se pudo completar el proceso, intenta nuevamente}}",
+    "@signUpVerificationFailureMsg": {
+        "description": "Evaluates the sign up verification error code and shows a message",
+        "placeholders": {
+            "errorCode": {
+                "type": "String",
+                "example": "badRequest"
+            }
+        }
+    },
+    "signUpMaxIntentsMsg": "Intenta de nuevo en {value} minutos",
+    "@signUpMaxIntentsMsg": {
+        "description": "Mensage de error de intentos máximos",
+        "type": "text",
+        "placeholders": {
+            "value": {
+                "example": "10",
+                "description": "Remaining time"
+            }
+        }
+    },
+    "ksMessageTransit": "Por favor ingresa el código de verificación",
+    "invitationAcceptedSuccessfullyLabel": "Invitación aceptada correctamente",
+    "invitationRejectSuccessfullyLabel": "Invitación rechazada correctamente",
+    "memberRejectSuccessfullyLabel": "Integrante eliminado correctamente",
+    "auxilioExpresShareTitle": "Prueba {appName}",
+    "@auxilioExpresShareTitle": {
+        "description": "App name",
+        "type": "text",
+        "placeholders": {
+            "appName": {
+                "example": "Wipax",
+                "description": "App name"
+            }
+        }
+    },
+    "accountEmailFormTitle": "Escribe tu nuevo correo electrónico",
+    "accountPhoneFormTitle": "Escribe tu nuevo teléfono",
+    "accountPasswordFormTitle": "Escribe tu nueva contraseña",
+    "accountPreviousPasswordLbl": "Contraseña anterior",
+    "accountNewPasswordLbl": "Nueva contraseña",
+    "accountChangePasswordLbl": "Cambiar contraseña",
+    "accountDataFailureMsg": "{errorCode, select, phoneExists{Este teléfono ya está registrado por otro usuario} emailExists{Este correo ya está registrado por otro usuario} invalidPassword{La contraseña es inválida} notMatchPassword{Las contraseñas no coinciden} other{No se pudo completar el proceso, intenta nuevamente}}",
+    "@accountDataFailureMsg": {
+        "description": "Evaluates error code and shows a message",
+        "placeholders": {
+            "errorCode": {
+                "type": "String",
+                "example": "phoneExists"
+            }
+        }
+    },
+    "rejectInvitationMsg": "¿Seguro que deseas eliminar la invitacion de {name}?",
+    "@rejectInvitationMsg": {
+        "description": "Reject an invitation",
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "example": "Jhon Doe",
+                "description": "User name"
+            }
+        }
+    },
+    "recoverPasswordTitle": "Recuperar contraseña",
+    "recoverPasswordMsg": "Contraseña restablecida correctamente, te llegará tu nueva contraseña por el medio que nos proporcionaste, en caso de haber ingresado el correo favor de revisar en SPAM.",
+    "passwordRecoveryFailureMsg": "{errorCode, select, notModified{No se pudo actualizar la contraseña, intenta de nuevo.} serverError{El medio de contacto que proporcionaste no está registrado en Auxilio Exprés} other{No se pudo completar la petición, intenta de nuevo}}",
+    "@passwordRecoveryFailureMsg": {
+        "description": "Evaluates the password recovery error code and shows a message",
+        "placeholders": {
+            "errorCode": {
+                "type": "String",
+                "example": "notModified"
+            }
+        }
+    },
+    "accountUserLoggedLbl": "Iniciaste sesión como {user}",
+    "@accountUserLoggedLbl": {
+        "description": "User name",
+        "type": "text",
+        "placeholders": {
+            "user": {
+                "example": "ut1",
+                "description": "User name"
+            }
+        }
+    },
+    "configureLanguageLbl": "Configurar idioma",
+    "aeSpanishLbl": "Español",
+    "aeEnglishLbl": "Inglés",
+    "screenRepairLabel": "Página temporalmente deshabilitada, estamos trabajando en ello para brindarte un mejor servicio",
+    "auxilioPremiumTitle": "Prueba {appName} PREMIUM gratis por 1 mes",
+    "@auxilioPremiumTitle": {
+        "description": "App name",
+        "type": "text",
+        "placeholders": {
+            "appName": {
+                "example": "Wipax",
+                "description": "App name"
+            }
+        }
+    },
+    "aeProfileImage": "Imagen de perfil",
+    "aeSelectPhoto": "Selecciona una foto",
+    "aeSelectPhotoFromGallery": "De la galería",
+    "aeTakePhoto": "Toma una foto",
+    "inactivationPermissionsLabel":"¿Te gustaría otorgar permisos a tus contactos para que puedan activar una de tus sirenas?",
+    "aeEmergencyAlertTitle":"Alerta de emergencia",
+    "aeWatchEmergencyBroadcast":"VER TRANSMISIÓN",
+    "aeSeeEmergencyLocation":"COMO LLEGAR",
+    "aeCloseEmergencyWindow":"CERRAR AVISO",
+    "lblTerms1":"Aceptas ",
+    "lblTerms2":"Términos y Condiciones",
+    "lblTerms3":" y ",
+    "lblTerms4":"Aviso de privacidad",
+    "recoverPasswordAdv": "Has restablecido tu contraseña. Continúa con los siguientes pasos para iniciar sesión:\n\n1. Si la recuperación la hiciste mediante un número de teléfono espera a recibir el mensaje, esto puede demorar un poco.\n\n2. Si lo hiciste por correo electrónico recuerda revisar en SPAM ya que a veces pueden llegar ahí.\n\n3. En el mensaje viene tu usuario junto con tu nueva contraseña, usa estos datos para iniciar sesión en la aplicación de {appName}.\n\n4. Recuerda cambiar la contraseña una vez que inicies sesión por una contraseña que sea de tu agrado.",
+    "@recoverPasswordAdv": {
+        "description": "App name",
+        "type": "text",
+        "placeholders": {
+            "appName": {
+                "example": "Wipax",
+                "description": "App name"
+            }
+        }
+    },
+    "tacWarningMsg": "Debes aceptar los términos y condiciones para continuar",
+    "noEmailLabel":"Sin correo electrónico",
+    "noPhoneLabel":"Sin número telefóno",
+    "invitationCurrentUserErrorMsg": "No te puedes autoinvitar",
+    "deactivateAccountLblBtn" : "Eliminar cuenta",
+    "deactivateAccountLbl" : "Al confirmar eliminar cuenta, ya no podras iniciar sesion con ese usuario, tendras que crear una nueva cuenta.",
+    "lblinvitesrch" : "Buscar",
+    "deleteMemberMsg": "¿Deseas eliminar la invitación enviada al usuario {name}?",
+    "@deleteMemberMsg": {
+        "description": "Delete Member",
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "example": "AUX-48",
+                "description": "User name"
+            }
+        }
+    },
+    "deleteInvitationPendingLbl": "Se ha eliminado correctamente la invitación",
+    "testAlarmLbL" : "Simulacro de alarma",
+    "rejectMemberParentMsg": "¿Seguro que deseas abandonar el grupo de {name}?",
+    "@rejectMemberParentMsg": {
+        "description": "Reject an membet",
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "example": "Jhon Doe",
+                "description": "User name"
+            }
+        }
+    },
+    "forgetPasswordLBL": "¿Olvidaste tu contraseña?",
+    "signUpHereLBL":"Regístrate aquí",
+    "notAccountLBL": "¿No tienes una cuenta?"
+}

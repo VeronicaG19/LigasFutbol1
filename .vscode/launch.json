@@ -1,0 +1,75 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ligas-futbol-flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "authentication_repository",
+            "cwd": "packages/authentication_repository",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "datasource_client",
+            "cwd": "packages/datasource_client",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "user_repository",
+            "cwd": "packages/user_repository",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "ligas_futbol_local",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/ligas_futbol_local.dart",
+            "args": [
+             "--flavor",
+              //"ligas_futbol_local"
+            ]
+          },
+          {
+            "name": "ligas_futbol_dev",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/ligas_futbol_dev.dart",
+            "args": [
+              "--flavor",
+              "dev"
+              //"ligas_futbol_dev"
+            ]
+          },
+          {
+            "name": "ligas_futbol_prod",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/ligas_futbol_prod.dart",
+            "args": [
+              "--flavor",
+              //"prod"
+              "ligas_futbol_prod"
+            ]
+          },
+
+          {
+            "name": "ligas_futbol_test",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/ligas_futbol_test.dart",
+            "args": [
+              "--flavor",
+              //"prod"
+              "ligas_futbol_test"
+            ]
+          }
+    ]
+}

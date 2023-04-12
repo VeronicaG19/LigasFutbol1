@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>752236706692-hiqnemilmdh3h3moslfe9g92smlamhoi.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.752236706692-hiqnemilmdh3h3moslfe9g92smlamhoi</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>752236706692-705rn9easndknu8agqrruf5ve0nejvkr.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDJaOkLiS5FGtD4dwkDT84t3tzci84cqaw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>752236706692</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ccs.swat.iaas.spr.ligasfutbol.ligasFutbolFlutter</string>
+	<key>PROJECT_ID</key>
+	<string>auxilio-express</string>
+	<key>STORAGE_BUCKET</key>
+	<string>auxilio-express.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:752236706692:ios:57232195f7777a4a0bbbd1</string>
+	<key>DATABASE_URL</key>
+	<string>https://auxilio-express.firebaseio.com</string>
+</dict>
+</plist>

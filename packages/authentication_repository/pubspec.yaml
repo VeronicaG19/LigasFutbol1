@@ -1,0 +1,31 @@
+name: authentication_repository
+description: Authentication repository
+version: 1.0.1
+
+publish_to: 'none'
+#homepage:
+
+environment:
+  sdk: '>=2.18.1 <3.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  http: ^0.13.4
+  equatable: ^2.0.5
+  jwt_decoder: ^2.0.1
+  dartz: ^0.10.0
+  user_repository:
+    path: ../user_repository
+  datasource_client:
+    path: ../datasource_client
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+
