@@ -161,7 +161,7 @@ class _HomePageMobile extends StatelessWidget {
                         height: 15,
                       ),
                       Text(
-                        '¡Ven y regístrate a Ligas fútbol!',
+                        '¡Regístrate a Ligas fútbol !',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.montserrat(
                           fontSize: 20,
