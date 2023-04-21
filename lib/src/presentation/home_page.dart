@@ -185,7 +185,7 @@ class _HomePageMobile extends StatelessWidget {
                       ),
                       TextButton(
                         child: Text(
-                          "¡Regístrate 𝐆𝐑𝐀𝐓𝐈𝐒 ahora!",
+                          "¡Regístrate 𝐆𝐑𝐀𝐓𝐈𝐒 YA!",
                           style: TextStyle(
                               color: Colors.blueGrey,
                               fontSize: 17,
