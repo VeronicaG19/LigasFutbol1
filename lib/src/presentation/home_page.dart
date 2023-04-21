@@ -286,7 +286,7 @@ class _HomePageWeb extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      '¡Regístrate a Ligas fútbol!',
+                      '¡Ven y regístrate a Ligas de campeones!',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.montserrat(
                         fontSize: 30,
