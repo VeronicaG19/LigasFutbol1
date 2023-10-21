@@ -27,10 +27,11 @@ class TournamentRepositoryImpl implements ITournamentRepository {
   TournamentRepositoryImpl(this._apiClient);
 
   @override
-  RepositoryResponse<List<Tournament>> getTournamentByLeagueId(int leagueId) {
+  RepositoryResponse<List<Tournament>> getTournamentByLeagueId(int leagueId,
+      {bool requiresAuthToken = true}) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
+            requiresAuthToken: requiresAuthToken,
             converter: Tournament.fromJson,
             endpoint: getTournamentEndpoint + "/league/$leagueId")
         .validateResponse();
@@ -38,9 +39,11 @@ class TournamentRepositoryImpl implements ITournamentRepository {
 
   @override
   RepositoryResponse<Tournament> getFindByNameAndCategory(
-      int categoryId, String tournamentName) {
+      int categoryId, String tournamentName,
+      {bool requiresAuthToken = true}) {
     return _apiClient.network
         .getData(
+            requiresAuthToken: requiresAuthToken,
             converter: Tournament.fromJson,
             endpoint: getFindByNameAndCategoryEndpoint +
                 "?categoryId=$categoryId&tournamentName=$tournamentName")
@@ -49,10 +52,11 @@ class TournamentRepositoryImpl implements ITournamentRepository {
 
   @override
   RepositoryResponse<List<ScoringTournamentDTO>> getScoringTournamentId(
-      int tournamentId) {
+      int tournamentId,
+      {bool requiresAuthToken = true}) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
+            requiresAuthToken: requiresAuthToken,
             converter: ScoringTournamentDTO.fromJson,
             //  queryParams: {'idLeague': leagueId},
             endpoint: "$getScoringTournamentIdEndpoint/$tournamentId")
@@ -61,10 +65,11 @@ class TournamentRepositoryImpl implements ITournamentRepository {
 
   @override
   RepositoryResponse<List<GoalsTournamentDTO>> getGoalsTournamentId(
-      int tournamentId) {
+      int tournamentId,
+      {bool requiresAuthToken = true}) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
+            requiresAuthToken: requiresAuthToken,
             converter: GoalsTournamentDTO.fromJson,
             //  queryParams: {'idLeague': leagueId},
             endpoint: "$getGoalsTournamentIdEndpoint/$tournamentId")
@@ -76,7 +81,6 @@ class TournamentRepositoryImpl implements ITournamentRepository {
       int partyId) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             endpoint: "$getTournamentByPlayerEndpoint/$partyId",
             converter: TournamentByPlayer.fromJson)
         .validateResponse();
@@ -87,7 +91,6 @@ class TournamentRepositoryImpl implements ITournamentRepository {
       int partyId, int tournamentId) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             endpoint:
                 "$getPerformanceByPlayerEndpoint?partyId=$partyId&tournamentId=$tournamentId",
             converter: PerformanceByTournament.fromJson)
@@ -179,7 +182,6 @@ class TournamentRepositoryImpl implements ITournamentRepository {
       int leagueId) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             converter: Tournament.fromJson,
             endpoint:
                 getTournamentEndpoint + "/allTournamentsByLeague/$leagueId")
@@ -190,7 +192,6 @@ class TournamentRepositoryImpl implements ITournamentRepository {
   RepositoryResponse<ResgisterCountInterface> getCountByLeagueId(int leagueId) {
     return _apiClient.network
         .getData(
-            requiresAuthToken: false,
             converter: ResgisterCountInterface.fromJson,
             endpoint:
                 getTournamentEndpoint + "/counttournamentsleague/$leagueId")
@@ -231,9 +232,11 @@ class TournamentRepositoryImpl implements ITournamentRepository {
 
   @override
   RepositoryResponse<TournamentChampionDTO> getTournamentChampion(
-      int tournamentId) {
+      int tournamentId,
+      {bool requiresAuthToken = true}) {
     return _apiClient.network
         .getData(
+            requiresAuthToken: requiresAuthToken,
             endpoint: '$getTournamentChampionEndpoint/$tournamentId',
             converter: TournamentChampionDTO.fromJson)
         .validateResponse();
@@ -251,9 +254,11 @@ class TournamentRepositoryImpl implements ITournamentRepository {
   }
 
   @override
-  RepositoryResponse<String> getTournamentMatchesStatus(int tournamentId) {
+  RepositoryResponse<String> getTournamentMatchesStatus(int tournamentId,
+      {bool requiresAuthToken = true}) {
     return _apiClient.network
         .getData(
+            requiresAuthToken: requiresAuthToken,
             endpoint: '$getTournamentMatchesStatusEndpoint/$tournamentId',
             converter: (response) => response['result'] as String)
         .validateResponse();
@@ -287,7 +292,6 @@ class TournamentRepositoryImpl implements ITournamentRepository {
       int tournamentId) {
     return _apiClient.network
         .getData(
-            requiresAuthToken: false,
             endpoint: '$configLeagueEndpoint/$tournamentId',
             converter: ConfigLeagueInterfaceDTO.fromJson)
         .validateResponse();

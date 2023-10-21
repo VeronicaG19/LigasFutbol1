@@ -1,6 +1,4 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -37,7 +35,7 @@ class _CreateFieldLeagueManagerState extends State<CreateFieldLeagueManager> {
     final personInfo =
         context.select((AuthenticationBloc bloc) => bloc.state.user.person);
     final leagueId =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
 
     void launchGoogleMaps(double lat, double lng) async {
       Uri url =

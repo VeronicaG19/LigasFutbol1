@@ -25,7 +25,7 @@ class MatchesCubit extends Cubit<MatchesState> {
             screenStatus: ScreenStatus.error,
             errorMessage: l.errorMessage)), (r) {
       print("Datos ${r.length}");
-      emit(state.copyWith(screenStatus: ScreenStatus.loaded, matchesList: r));
+      emit(state.copyWith(screenStatus: ScreenStatus.loaded, matchesList: r, myTeam: teamId));
     });
   }
 

@@ -129,6 +129,11 @@ class AuthenticationRepository implements AuthenticationInterface {
   @override
   void clearUpdateRequest(String type) =>
       _signupService.clearUpdateRequest(type);
+
+  @override
+  RepoResponse<User> createLFUserAndAssignRoles(User user) =>
+      Task(() => _signupService.createLFUserAndAssignRoles(user))
+          ._validateResponse();
 }
 
 extension _AuthResponse<T> on Task<T> {

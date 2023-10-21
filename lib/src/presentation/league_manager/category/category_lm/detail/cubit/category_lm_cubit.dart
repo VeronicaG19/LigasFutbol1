@@ -41,77 +41,144 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
             screenStatus: ScreenStatus.error,
             errorMessage: l.errorMessage)), (r) {
       print("Datos ${r.length}");
-      emit(state.copyWith(screenStatus: ScreenStatus.loaded, categoryList: r, status: FormzStatus.pure));
+      emit(state.copyWith(
+          screenStatus: ScreenStatus.loaded,
+          categoryList: r,
+          categoryInfo: Category.empty,
+          categoryId: 0,
+          status: FormzStatus.pure));
+      getSoccerGender();
     });
   }
 
   Future<void> getInfoCategoryId({required int categoryId}) async {
-    
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
     final response = await _categoryService.getCategoryById(categoryId);
-    
-
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
-            errorMessage: l.errorMessage)), (r) async {
-      emit(state.copyWith(categoryInfo: r, categoryId: categoryId));
-      getCourrenTountament(r.categoryId!);
+            errorMessage: l.errorMessage)), (r) {
+      emit(state.copyWith(
+        categoryInfo: r,
+        categoryId: categoryId,
+        screenStatus: ScreenStatus.infoLoading,
+      ));
+      getHistoricTournamentByCategoryId();
+      //getCourrenTountament(r.categoryId!);
     });
-   
   }
 
-  Future<void> getCourrenTountament(int categryId) async{
+  /*UPDATE*/
+  Future<void> onChangeNameCategoryUpdate(
+      {required String categoryName}) async {
+    emit(state.copyWith(
+      categoryInfo: state.categoryInfo.copyWith(categoryName: categoryName),
+    ));
+  }
+
+  Future<void> onChangeMinAgeUpdate({required String ageMin}) async {
+    emit(state.copyWith(
+      categoryInfo: state.categoryInfo.copyWith(
+        ageMin: int.parse(ageMin),
+      ),
+    ));
+  }
+
+  Future<void> onChangeMaxAgeUpdate({required String ageMax}) async {
+    emit(state.copyWith(
+      categoryInfo: state.categoryInfo.copyWith(
+        ageMax: int.parse(ageMax),
+      ),
+    ));
+  }
+
+  Future<void> onChangeTypeGenderUpdate(
+      {required LookUpValue typeGender}) async {
+    emit(state.copyWith(
+      categoryInfo: state.categoryInfo.copyWith(
+        gender: typeGender.lookupValue,
+      ),
+    ));
+  }
+
+  Future<void> onChangeCommentUpdate({required String categoryComment}) async {
+    emit(state.copyWith(
+      categoryInfo: state.categoryInfo.copyWith(
+        categoryComment: categoryComment,
+      ),
+    ));
+  }
+
+  Future<void> onChangeYellowCardUpdate(
+      {required String yellowForPunishment}) async {
+    emit(state.copyWith(
+      categoryInfo: state.categoryInfo.copyWith(
+        yellowForPunishment: int.parse(yellowForPunishment),
+      ),
+    ));
+  }
+
+  Future<void> onChangeRedCardUpdate({required String redForPunishment}) async {
+    emit(state.copyWith(
+      categoryInfo: state.categoryInfo.copyWith(
+        redForPunishment: int.parse(redForPunishment),
+      ),
+    ));
+  }
+  /*UPDATE*/
+
+  Future<void> getCourrenTountament(int categryId) async {
     //state.categoryId == categryId;
-    final getTournament = await _tournamentService.getCurrentTournament(categryId);
+    final getTournament =
+        await _tournamentService.getCurrentTournament(categryId);
     final lookUpValueResponse =
         await _lookUpValueService.getLookUpValueByType("SOCCER_CAT_GENDER");
 
     getTournament.fold((l) {
-        print("error ----->${l.errorMessage}");
-        emit(state.copyWith(
-            screenStatus: ScreenStatus.error, errorMessage: l.errorMessage));
-      }, (r) async {
-        print("se creo correctamente todo -------------------");
-        LookUpValue lookUpValue = LookUpValue.empty;
-        for (final e in lookUpValueResponse) {
-          if (e.lookupValue.toString() == state.categoryInfo.sportType) {
-            lookUpValue = e;
-          }
+      print("error ----->${l.errorMessage}");
+      emit(state.copyWith(
+          screenStatus: ScreenStatus.error, errorMessage: l.errorMessage));
+    }, (r) async {
+      print("se creo correctamente todo -------------------");
+      LookUpValue lookUpValue = LookUpValue.empty;
+      for (final e in lookUpValueResponse) {
+        if (e.lookupValue.toString() == state.categoryInfo.sportType) {
+          lookUpValue = e;
         }
-        final categoryName =
-            CategoryName.dirty(state.categoryInfo.categoryName ?? '');
-        final comment = Comment.dirty(state.categoryInfo.categoryComment ?? '');
-        final maxAge = MaxAge.dirty(state.categoryInfo.ageMax.toString() ?? '');
-        final minAge = MinAge.dirty(state.categoryInfo.ageMin.toString() ?? '');
-        final redForPunishment = RedForPunishment.dirty(
-            state.categoryInfo.redForPunishment.toString() ?? '');
-        final yellowForPunishment = YellowForPunishment.dirty(
-            state.categoryInfo.yellowForPunishment.toString() ?? '');
-        emit(state.copyWith(
-            tournamentInfo: r,
-            status: Formz.validate([
-              categoryName,
-              comment,
-              maxAge,
-              minAge,
-              redForPunishment,
-              yellowForPunishment
-            ]),
-            screenStatus: ScreenStatus.infoLoading,
-            categoryName: categoryName,
-            comment: comment,
-            maxAge: maxAge,
-            minAge: minAge,
-            categoryId: categryId,
-            redForPunishment: redForPunishment,
-            yellowForPunishment: yellowForPunishment,
-            lookupValueList: lookUpValueResponse,
-            selectedLookupValue: lookUpValue));
-        //
-      });
-        getGoalsTournamentId();
-     getHistoricTournamentByCategoryId();
+      }
+      final categoryName =
+          CategoryName.dirty(state.categoryInfo.categoryName ?? '');
+      final comment = Comment.dirty(state.categoryInfo.categoryComment ?? '');
+      final maxAge = MaxAge.dirty(state.categoryInfo.ageMax ?? 0);
+      final minAge = MinAge.dirty(state.categoryInfo.ageMin ?? 0);
+      final redForPunishment = RedForPunishment.dirty(
+          state.categoryInfo.redForPunishment.toString() ?? '');
+      final yellowForPunishment = YellowForPunishment.dirty(
+          state.categoryInfo.yellowForPunishment.toString() ?? '');
+      emit(state.copyWith(
+          tournamentInfo: r,
+          status: Formz.validate([
+            categoryName,
+            //comment,
+            maxAge,
+            minAge,
+            redForPunishment,
+            yellowForPunishment
+          ]),
+          screenStatus: ScreenStatus.infoLoading,
+          categoryName: categoryName,
+          comment: comment,
+          maxAge: maxAge,
+          minAge: minAge,
+          categoryId: categryId,
+          redForPunishment: redForPunishment,
+          yellowForPunishment: yellowForPunishment,
+          lookupValueList: lookUpValueResponse,
+          selectedLookupValue: lookUpValue));
+      //
+    });
+    getGoalsTournamentId();
+    getHistoricTournamentByCategoryId();
   }
 
   Future<void> getLookUpValueByTypeLM() async {
@@ -125,6 +192,23 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
     emit(state.copyWith(
         lookupValueList: lookUpValueResponse,
         selectedLookupValue: lookUpValue));
+  }
+
+  Future<void> getSoccerGender() async {
+    //emit(state.copyWith(screenStatus: ScreenStatus.loading));
+    final response =
+        await _lookUpValueService.getLookUpValueByTypeLM('SOCCER_CAT_GENDER');
+
+    response.fold(
+        (l) => emit(state.copyWith(
+            screenStatus: ScreenStatus.error,
+            errorMessage: l.errorMessage)), (r) {
+      emit(state.copyWith(
+        screenStatus: ScreenStatus.lookupsLoaded,
+        lookupValueList: r,
+        selectedLookupValue: r[0],
+      ));
+    });
   }
 
   Future<void> deleteCategoryId(int? categoryId, int leagueId) async {
@@ -141,22 +225,16 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
   void onChangeCategoryName(String value) {
     final categoryName = CategoryName.dirty(value);
     emit(state.copyWith(
-        status: Formz.validate([
-          categoryName,
-          state.comment,
-          state.maxAge,
-          state.minAge,
-          state.redForPunishment,
-          state.yellowForPunishment
-        ]),
-        categoryName: categoryName));
+      status: Formz.validate([categoryName, state.categoryName]),
+      categoryName: categoryName,
+    ));
   }
 
   void onChangeComment(String value) {
     final comment = Comment.dirty(value);
     emit(state.copyWith(
         status: Formz.validate([
-          comment,
+          // comment,
           state.maxAge,
           state.minAge,
           state.redForPunishment,
@@ -176,7 +254,26 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
   }
 
   void onChangeMaxAge(String value) {
-    final maxAge = MaxAge.dirty(value);
+    final valMax = int.parse((value.isNotEmpty) ? value : '0');
+    final valMin = state.minAge.value;
+
+    print('>>> ---------------------------------------------------------');
+    print('>>> onChangeMaxAge');
+    print('>>> ---------------------------------------------------------');
+    print('>>> state.maxAge.value : ${state.maxAge.value}');
+    print('>>> state.minAge.value : ${state.minAge.value}');
+    print('>>> ---------------------------------------------------------');
+    print('>>> valMax : $valMax');
+    print('>>> valMin : $valMin');
+    print('>>> ---------------------------------------------------------');
+
+    emit(state.copyWith(validAge: (valMax > valMin)));
+
+    final maxAge = MaxAge.dirty(valMax);
+
+    print('${maxAge.value}');
+    print('>>> ---------------------------------------------------------');
+
     emit(state.copyWith(
         status: Formz.validate([
           maxAge,
@@ -184,20 +281,39 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
           state.redForPunishment,
           state.yellowForPunishment,
           state.categoryName,
-          state.comment
+          //   state.comment
         ]),
         maxAge: maxAge));
   }
 
   void onChangeMinAge(String value) {
-    final minAge = MinAge.dirty(value);
+    final valMax = state.maxAge.value;
+    final valMin = int.parse((value.isNotEmpty) ? value : '0');
+
+    print('>>> ---------------------------------------------------------');
+    print('>>> onChangeMinAge');
+    print('>>> ---------------------------------------------------------');
+    print('>>> state.maxAge.value : ${state.maxAge.value}');
+    print('>>> state.minAge.value : ${state.minAge.value}');
+    print('>>> ---------------------------------------------------------');
+    print('>>> valMax : $valMax');
+    print('>>> valMin : $valMin');
+    print('>>> ---------------------------------------------------------');
+
+    emit(state.copyWith(validAge: (valMin < valMax)));
+
+    final minAge = MinAge.dirty(valMin);
+
+    print('${minAge.value}');
+    print('>>> ---------------------------------------------------------');
+
     emit(state.copyWith(
         status: Formz.validate([
           minAge,
           state.redForPunishment,
           state.yellowForPunishment,
           state.categoryName,
-          state.comment,
+          //state.comment,
           state.maxAge
         ]),
         minAge: minAge));
@@ -210,7 +326,7 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
           redForPunishment,
           state.yellowForPunishment,
           state.categoryName,
-          state.comment,
+          //state.comment,
           state.maxAge,
           state.minAge
         ]),
@@ -223,7 +339,7 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
         status: Formz.validate([
           yellowForPunishment,
           state.categoryName,
-          state.comment,
+          //state.comment,
           state.maxAge,
           state.minAge,
           state.redForPunishment
@@ -232,29 +348,11 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
   }
 
   Future<void> updateCategoryId() async {
-    print("Valor1");
+    Category category = state.categoryInfo;
     //valida el formulario
-    if (!state.status.isValidated) return;
-    print("Valor2");
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
-    print("Valor--->${state.yellowForPunishment.value}");
-    print("Valor--->${state.redForPunishment.value}");
-    print("Valor--->${state.comment.value}");
-    print("Valor--->${state.maxAge.value}");
-    print("Valor--->${state.minAge.value}");
-    print("Valor--->${state.selectedLookupValue.lookupValue}");
-    print("Valor--->${state.categoryName.value}");
-    final response =
-        await _categoryService.editCategory(state.categoryInfo.copyWith(
-      yellowForPunishment: int.parse(state.yellowForPunishment.value),
-      categoryName: state.categoryName.value,
-      ageMax: int.parse(state.maxAge.value),
-      ageMin: int.parse(state.minAge.value),
-      gender: state.selectedLookupValue.lookupValue,
-      categoryComment: state.comment.value,
-      sportType: state.selectedLookupValue.lookupValue.toString(),
-      redForPunishment: int.parse(state.redForPunishment.value),
-    ));
+    //if (!state.status.isValidated) return;
+
+    final response = await _categoryService.editCategory(category);
 
     response.fold(
         (l) => emit(
@@ -262,56 +360,65 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
                   status: FormzStatus.submissionFailure,
                   errorMessage: l.errorMessage),
             ), (r) {
-            final catL =  state.categoryList;
-            int index = catL.indexWhere((element) => element.categoryId == r.categoryId);
-            catL.removeWhere((element) => element.categoryId == r.categoryId );
-            catL.insert(index, r);
+      final catL = state.categoryList;
+      int index =
+          catL.indexWhere((element) => element.categoryId == r.categoryId);
+      catL.removeWhere((element) => element.categoryId == r.categoryId);
+      catL.insert(index, r);
 
       emit(state.copyWith(
-        status: FormzStatus.submissionSuccess,
-        categoryInfo: r,
-        categoryList: catL
-      ));
+          status: FormzStatus.submissionSuccess,
+          screenStatus: ScreenStatus.updatedSuccessful,
+          categoryInfo: r,
+          categoryList: catL));
     });
     // getCategoryByTournamentByAndLeagueId(
     //   legueId: authenticationBloc.state.leagueManager.leagueId);
   }
 
   Future<void> createCategoryId(League league) async {
-    print("Valor1");
     //valida el formulario
-    if (!state.status.isValidated) return;
-    print("Valor2");
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
-    print("Valor--->${state.yellowForPunishment.value}");
-    print("Valor--->${state.redForPunishment.value}");
-    print("Valor--->${state.comment.value}");
-    print("Valor--->${state.maxAge.value}");
-    print("Valor--->${state.minAge.value}");
-    print("Valor--->${state.selectedLookupValue.lookupValue}");
-    print("Valor--->${state.categoryName.value}");
-    final response = await _categoryService.createCategory(state.categoryInfo
-        .copyWith(
-            yellowForPunishment: int.parse(state.yellowForPunishment.value),
-            categoryName: state.categoryName.value,
-            ageMax: int.parse(state.maxAge.value),
-            ageMin: int.parse(state.minAge.value),
-            categoryComment: state.comment.value,
-            gender: state.selectedLookupValue.lookupValue,
-            sportType: state.selectedLookupValue.lookupValue.toString(),
-            redForPunishment: int.parse(state.redForPunishment.value),
-            leagueId: league));
+    //if (!state.status.isValidated) return;
+    validateForm();
 
-    response.fold(
-        (l) => emit(
-              state.copyWith(
-                  status: FormzStatus.submissionFailure,
-                  errorMessage: l.errorMessage),
-            ), (r) async {
-      await getCategoryByTournamentByAndLeagueId(legueId: league.leagueId);
+    if (state.allFormIsValid && state.validAge) {
+      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+      final response = await _categoryService.createCategory(
+        state.categoryInfo.copyWith(
+          yellowForPunishment: int.parse(state.yellowForPunishment.value),
+          categoryName: state.categoryName.value,
+          ageMax: state.maxAge.value,
+          ageMin: state.minAge.value,
+          categoryComment: state.comment.value,
+          gender: state.selectedLookupValue.lookupValue,
+          sportType: state.selectedLookupValue.lookupValue.toString(),
+          redForPunishment: int.parse(state.redForPunishment.value),
+          leagueId: league,
+        ),
+      );
+
+      response.fold((l) {
+        emit(state.copyWith(
+          status: FormzStatus.submissionFailure,
+          errorMessage: l.errorMessage,
+        ));
+      }, (r) async {
+        await getCategoryByTournamentByAndLeagueId(legueId: league.leagueId);
+
+        emit(state.copyWith(
+          status: FormzStatus.submissionSuccess,
+          screenStatus: ScreenStatus.successfullyCreated,
+          categoryInfo: r,
+        ));
+
+        resetInputsAndForm();
+      });
+
       emit(state.copyWith(
-          status: FormzStatus.submissionSuccess, categoryInfo: r));
-    });
+        status: FormzStatus.pure,
+      ));
+    }
   }
 
   Future<void> getHistoricTournamentByCategoryId() async {
@@ -329,7 +436,7 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
       response.fold(
           (l) => emit(state.copyWith(
               screenStatus: ScreenStatus.error,
-              errorMessage: l.errorMessage)), (r) {
+              errorMessage: '>>> ${l.errorMessage}')), (r) {
         print("Datos ${r.length}");
 
         emit(state.copyWith(
@@ -353,7 +460,7 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
       final response = await _tournamentService
           .getScoringTournamentId(state.tournamentInfo.tournamentId!);
       //1141
-      response.fold((l) async{
+      response.fold((l) async {
         print("error torneo 1 ----->${l.errorMessage}");
         final response = await _tournamentService
             .getGoalsTournamentId(state.tournamentInfo.tournamentId!);
@@ -366,7 +473,7 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
           emit(state.copyWith(
               screenStatus: ScreenStatus.tournamentloaded, goalsTournament: r));
         });
-       /* emit(state.copyWith(
+        /* emit(state.copyWith(
             screenStatus: ScreenStatus.error, errorMessage: l.errorMessage));*/
       }, (r) async {
         emit(state.copyWith(scoringTournamentDTO: r));
@@ -382,6 +489,59 @@ class CategoryLmCubit extends Cubit<CategoryLmState> {
               screenStatus: ScreenStatus.tournamentloaded, goalsTournament: r));
         });
       });
+    }
+  }
+
+  void resetInputsAndForm() {
+    emit(state.copyWith(
+      categoryName: const CategoryName.pure(),
+      minAge: const MinAge.pure(),
+      maxAge: const MaxAge.pure(),
+      comment: const Comment.pure(),
+      yellowForPunishment: const YellowForPunishment.pure(),
+      redForPunishment: const RedForPunishment.pure(),
+      status: FormzStatus.pure,
+    ));
+  }
+
+  void validateForm() {
+    bool allFormIsValid;
+
+    if (state.categoryName.valid &&
+        state.minAge.valid &&
+        state.maxAge.valid &&
+        // state.comment.valid &&
+        state.yellowForPunishment.valid &&
+        state.redForPunishment.valid) {
+      allFormIsValid = true;
+    } else {
+      allFormIsValid = false;
+    }
+
+    emit(state.copyWith(
+      status: Formz.validate([
+        CategoryName.dirty(state.categoryName.value),
+        MinAge.dirty(state.minAge.value),
+        MaxAge.dirty(state.maxAge.value),
+        //Comment.dirty(state.comment.value),
+        YellowForPunishment.dirty(state.yellowForPunishment.value),
+        RedForPunishment.dirty(state.redForPunishment.value),
+      ]),
+      allFormIsValid: allFormIsValid,
+      validAge: ((state.minAge.value < state.maxAge.value) &&
+          (state.maxAge.value > state.minAge.value)),
+    ));
+  }
+
+  String? genderType(int value) {
+    if (value == 1) {
+      return "Varonil";
+    } else if (value == 2) {
+      return "Femenil";
+    } else if (value == 3) {
+      return "Mixto";
+    } else {
+      return "Otro";
     }
   }
 }

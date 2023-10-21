@@ -21,8 +21,12 @@ class CategoryName extends FormzInput<String, CategoryNameValidationError> {
 
   @override
   CategoryNameValidationError? validator(String? value) {
-    return value?.trim().isNotEmpty == true
+    return value != null && value.trim().length > 5 && value.trim().isNotEmpty
         ? null
         : CategoryNameValidationError.invalid;
+  }
+
+  bool isLarge({required String value}) {
+    return (value.length > 3) ? true : false;
   }
 }

@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>752236706692-hiqnemilmdh3h3moslfe9g92smlamhoi.apps.googleusercontent.com</string>
+	<string>961689438961-jn1ucms9o0ck1baacpolsimdrlb08l7o.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.752236706692-hiqnemilmdh3h3moslfe9g92smlamhoi</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>752236706692-705rn9easndknu8agqrruf5ve0nejvkr.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.961689438961-jn1ucms9o0ck1baacpolsimdrlb08l7o</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDJaOkLiS5FGtD4dwkDT84t3tzci84cqaw</string>
+	<string>AIzaSyDVhgK77hCCF1SWKseJJgoQR-gtl9fGUbk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>752236706692</string>
+	<string>961689438961</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.ccs.swat.iaas.spr.ligasfutbol.ligasFutbolFlutter</string>
 	<key>PROJECT_ID</key>
-	<string>auxilio-express</string>
+	<string>wiplif-80bf2</string>
 	<key>STORAGE_BUCKET</key>
-	<string>auxilio-express.appspot.com</string>
+	<string>wiplif-80bf2.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:752236706692:ios:57232195f7777a4a0bbbd1</string>
-	<key>DATABASE_URL</key>
-	<string>https://auxilio-express.firebaseio.com</string>
+	<string>1:961689438961:ios:105f8c7b96ff36a1627750</string>
 </dict>
 </plist>

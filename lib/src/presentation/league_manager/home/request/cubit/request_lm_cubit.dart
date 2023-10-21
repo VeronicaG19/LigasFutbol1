@@ -24,7 +24,7 @@ part 'request_lm_state.dart';
 class RequestLmCubit extends Cubit<RequestLmState> {
   RequestLmCubit(this._service, this._leagueService, this._categoryService,
       this._iRolService)
-      : super(RequestLmState());
+      : super(const RequestLmState());
   final IUserRequestsService _service;
   final ILeagueService _leagueService;
   final ICategoryService _categoryService;
@@ -98,6 +98,7 @@ class RequestLmCubit extends Cubit<RequestLmState> {
   }
 
   Future<void> onChangeLeague(League leage) async {
+    print('change lige');
     emit(state.copyWith(leageSlct: leage));
   }
 

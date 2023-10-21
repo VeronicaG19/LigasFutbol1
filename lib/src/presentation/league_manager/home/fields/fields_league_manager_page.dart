@@ -6,7 +6,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../../../service_locator/injection.dart';
 import '../../../app/bloc/authentication_bloc.dart';
 import '../widget/card_field.dart';
-import 'create_field_league_manager_page.dart';
 import 'cubit/field_lm_cubit.dart';
 
 class FieldsLeagueManagerPage extends StatelessWidget {
@@ -15,7 +14,7 @@ class FieldsLeagueManagerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return BlocProvider(
       create: (_) =>
           locator<FieldLmCubit>()..loadfields(leagueId: leagueManager.leagueId),
@@ -51,7 +50,7 @@ class FieldsLeagueManagerPage extends StatelessWidget {
             children: [
               Column(
                 children: [
-                    /*Row(
+                  /*Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
@@ -61,7 +60,7 @@ class FieldsLeagueManagerPage extends StatelessWidget {
                             context,
                             EditPlayerProfilePage.route(BlocProvider.of<PlayerProfileCubit>(context))
                         );*/
-                          Navigator.push(
+                          /*   Navigator.push(
                             context,
                             MaterialPageRoute<void>(
                               builder: (_) => BlocProvider.value(
@@ -69,7 +68,7 @@ class FieldsLeagueManagerPage extends StatelessWidget {
                                       BlocProvider.of<FieldLmCubit>(context)..getTypeFields(),
                                   child: const CraeteFieldLeagueManagerPage()),
                             ),
-                          );
+                          );*/
                           /* Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -91,7 +90,7 @@ class FieldsLeagueManagerPage extends StatelessWidget {
                           height: 35,
                           width: 150,
                           child: Text(
-                            'Crear campo',
+                            'Buscar campos',
                             style: TextStyle(
                               fontFamily: 'SF Pro',
                               color: Colors.grey[200],
@@ -108,14 +107,15 @@ class FieldsLeagueManagerPage extends StatelessWidget {
                     itemCount: state.fieldtList.length,
                     itemBuilder: (context, index) {
                       return CardField(
-                          activeId: state.fieldtList[index].activeId ?? 0,
-                          fieldId: state.fieldtList[index].fieldId ?? 0,
-                          name: "${state.fieldtList[index].fieldName}",
-                          photo:
-                              "${state.fieldtList[index].fieldPhotoId?.document ?? ''}",
-                          direction: "${state.fieldtList[index].fieldsAddress}",
-                          quealify: 1,
-                          field: state.fieldtList[index],);
+                        activeId: state.fieldtList[index].activeId ?? 0,
+                        fieldId: state.fieldtList[index].fieldId ?? 0,
+                        name: "${state.fieldtList[index].fieldName}",
+                        photo:
+                            "${state.fieldtList[index].fieldPhotoId?.document ?? ''}",
+                        direction: "${state.fieldtList[index].fieldsAddress}",
+                        quealify: 1,
+                        field: state.fieldtList[index],
+                      );
                     },
                     shrinkWrap: true,
                     padding:

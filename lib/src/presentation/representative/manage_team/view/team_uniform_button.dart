@@ -13,59 +13,46 @@ class TeamUniformButton extends StatelessWidget {
   const TeamUniformButton({
     super.key,
     required this.uniformDto,
+    required this.rutaImage,
   });
 
   final UniformDto uniformDto;
+  final String rutaImage;
 
   @override
   Widget build(BuildContext context) {
-    const defaultImage = kIsWeb
-        ? NetworkImage('assets/images/playera1.png') as ImageProvider
-        : AssetImage('assets/images/playera1.png');
+    final defaultImage = kIsWeb
+        ? NetworkImage(rutaImage) as ImageProvider
+        : AssetImage(rutaImage);
     return GestureDetector(
       onTap: () async {
         final photo =
             await ImagePicker().pickImage(source: ImageSource.gallery);
         if (photo != null) {
           showDialog(
-              context: context,
-              builder: (_) {
-                return BlocProvider.value(
-                  value: BlocProvider.of<ManageTeamCubit>(context),
-                  child: SelectedImage(
-                    uniformDto: uniformDto,
-                    file: photo,
-                    typeOption: (uniformDto.uniformType == "LOCAL") ? 1 : 2,
-                  ),
-                );
-              });
+            context: context,
+            builder: (_) {
+              return BlocProvider.value(
+                value: BlocProvider.of<ManageTeamCubit>(context),
+                child: SelectedImage(
+                  uniformDto: uniformDto,
+                  file: photo,
+                  typeOption: (uniformDto.uniformType == "LOCAL") ? 1 : 2,
+                ),
+              );
+            },
+          );
         }
       },
       child: Column(
         children: [
-          SizedBox(
-            width: 150,
-            height: 200,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    shape: BoxShape.rectangle,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: (uniformDto.uniformTshirtImage != null)
-                          ? Image.memory(
-                                  base64Decode(uniformDto.uniformTshirtImage!))
-                              .image
-                          : defaultImage,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          CircleAvatar(
+              backgroundColor: Colors.black38,
+              radius: 50,
+              backgroundImage: (uniformDto.uniformTshirtImage != null)
+                  ? Image.memory(base64Decode(uniformDto.uniformTshirtImage!))
+                      .image
+                  : defaultImage),
           Text(
             (uniformDto.uniformType == "LOCAL") ? "Local" : "Visitante",
             textAlign: TextAlign.center,
@@ -177,7 +164,9 @@ class _SelectedImageState extends State<SelectedImage> {
 
     return SimpleDialog(
       title: Text(
-          'Uniforme ${(widget.uniformDto.uniformType == "LOCAL") ? "Local" : "Visitante"}'),
+        'Uniforme ${(widget.uniformDto.uniformType == "LOCAL") ? "Local" : "Visitante"}',
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       children: [
         Center(
           child: Column(
@@ -189,12 +178,24 @@ class _SelectedImageState extends State<SelectedImage> {
                 child: Card(
                   elevation: 4.0,
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(15.0),
                     child: image(),
                   ),
                 ),
               ),
-              const SizedBox(height: 24.0),
+              const SizedBox(height: 12.0),
+              BlocBuilder<ManageTeamCubit, ManageTeamState>(
+                builder: (context, state) {
+                  context.read<ManageTeamCubit>().convertImgToBs(
+                        xFile: _pickedFile,
+                        file: _croppedFile,
+                      );
+                  return (state.imageIsLarge!)
+                      ? const _ImageSizeAlert()
+                      : const SizedBox(height: 0);
+                },
+              ),
+              const SizedBox(height: 12.0),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -239,6 +240,36 @@ class _SelectedImageState extends State<SelectedImage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ImageSizeAlert extends StatelessWidget {
+  const _ImageSizeAlert();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(left: 24.0, right: 24.0),
+      child: Card(
+        elevation: 2.5,
+        color: Colors.orange,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            bottom: 10,
+            left: 15,
+            right: 15,
+          ),
+          child: Text(
+            'El tamaño de la imagen es mas grande que el recomendado(1MB), esto puede tardar, por favor espere un poco.',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15.0,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

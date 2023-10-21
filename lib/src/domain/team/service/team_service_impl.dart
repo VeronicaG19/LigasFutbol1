@@ -34,8 +34,17 @@ class TeamServiceImpl implements ITeamService {
 
   @override
   RepositoryResponse<CommonPageableResponse<Team>> getAllTeams(
-      {int? page, int? size}) {
-    return _repository.getAllTeams(page: page, size: size);
+      {int? page,
+      int? size,
+      int? categoryId,
+      String? requestPlayers,
+      String? teamName}) {
+    return _repository.getAllTeams(
+        page: page,
+        size: size,
+        categoryId: categoryId,
+        requestPlayers: requestPlayers,
+        teamName: teamName);
   }
 
   @override
@@ -114,8 +123,10 @@ class TeamServiceImpl implements ITeamService {
   }
 
   @override
-  RepositoryResponse<Team> getDetailTeamByIdTeam(int teamId) {
-    return _repository.getDetailTeamByIdTeam(teamId);
+  RepositoryResponse<Team> getDetailTeamByIdTeam(int teamId,
+      {bool requiresAuthToken = true}) {
+    return _repository.getDetailTeamByIdTeam(teamId,
+        requiresAuthToken: requiresAuthToken);
   }
 
   @override
@@ -128,4 +139,8 @@ class TeamServiceImpl implements ITeamService {
       int tournamentId) {
     return _repository.getTeamClassifiedByTournament(tournamentId);
   }
+
+  @override
+  RepositoryResponse<Team> updateTeamByTeamService(Team team) =>
+      _repository.updateTeamByTeamService(team);
 }

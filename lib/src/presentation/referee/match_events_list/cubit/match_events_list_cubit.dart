@@ -30,4 +30,21 @@ class MatchEventsListCubit extends Cubit<MatchEventsListState> {
       ));
     });
   }
+
+  Future<void> loadAllEventsReferee({required int matchId}) async{
+    emit(state.copyWith(screenState: BasicCubitScreenState.loading));
+    final response = await _matchEventService.getMatchEventsRefereeAll(matchId);
+
+    response.fold(
+            (l) => emit(state.copyWith(
+            screenState: BasicCubitScreenState.error,
+            errorMessage: l.errorMessage
+        )),(r)
+    {
+      emit(state.copyWith(
+          screenState: BasicCubitScreenState.loaded,
+          eventsList: r
+      ));
+    });
+  }
 }

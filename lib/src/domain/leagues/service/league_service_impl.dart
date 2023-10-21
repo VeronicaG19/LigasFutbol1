@@ -12,13 +12,14 @@ class LeagueServiceImpl implements ILeagueService {
   LeagueServiceImpl(this._repository);
 
   @override
-  RepositoryResponse<List<League>> getAllLeagues() {
-    return _repository.getAllLeagues();
+  RepositoryResponse<List<League>> getAllLeagues(
+      {bool requiresAuthToken = true}) {
+    return _repository.getAllLeagues(requiresAuthToken: requiresAuthToken);
   }
 
   @override
-  RepositoryResponse<void> deleteLeague(int id) {
-    return _repository.deleteLeague(id);
+  RepositoryResponse<String> deleteLeague(int id, bool isForced) {
+    return _repository.deleteLeague(id, isForced);
   }
 
   @override

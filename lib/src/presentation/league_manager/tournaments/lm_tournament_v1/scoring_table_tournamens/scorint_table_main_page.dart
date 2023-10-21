@@ -86,10 +86,10 @@ class ScoringTableMainPage extends StatelessWidget {
               height: 500,
               child: Column(
                 children: [
-                  const Center(child: Text('Tabla de goleo')),
                   const SizedBox(
-                    height: 5,
+                    height: 10,
                   ),
+
                   Visibility(
                     visible: state.isAddScoring,
                     child: Row(
@@ -262,45 +262,45 @@ class ScoringTableMainPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SizedBox(
-                                width: 39,
+                                width: 100,
                                 child: Text(
                                   "Pos",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 10,
+                                      fontSize: 13,
                                       color: Colors.grey[200],
                                       fontWeight: FontWeight.w900),
                                 ),
                               ),
                               SizedBox(
-                                width: 40,
+                                width: 200,
                                 child: Text(
                                   "Jugador",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 10,
+                                      fontSize: 13,
                                       color: Colors.grey[200],
                                       fontWeight: FontWeight.w900),
                                 ),
                               ),
                               SizedBox(
-                                width: 35,
+                                width: 200,
                                 child: Text(
                                   "Equipo",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 10,
+                                      fontSize: 13,
                                       color: Colors.grey[200],
                                       fontWeight: FontWeight.w900),
                                 ),
                               ),
                               SizedBox(
-                                width: 25,
+                                width: 100,
                                 child: Text(
                                   "Goles",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 10,
+                                      fontSize: 13,
                                       color: Colors.grey[200],
                                       fontWeight: FontWeight.w900),
                                 ),
@@ -326,7 +326,7 @@ class ScoringTableMainPage extends StatelessWidget {
                                       children: [
                                         Container(
                                           height: 40,
-                                          width: 39,
+                                          width: 100,
                                           child: Center(
                                             child: Text(
                                               "${index + 1}°",
@@ -339,7 +339,7 @@ class ScoringTableMainPage extends StatelessWidget {
                                           ),
                                         ),
                                         Container(
-                                            width: 40,
+                                            width: 200,
                                             color: Colors.black12,
                                             height: 40,
                                             child: Center(
@@ -358,7 +358,7 @@ class ScoringTableMainPage extends StatelessWidget {
                                               ),
                                             )),
                                         Container(
-                                            width: 40,
+                                            width: 200,
                                             height: 40,
                                             child: Center(
                                               child: Text(
@@ -376,7 +376,7 @@ class ScoringTableMainPage extends StatelessWidget {
                                               ),
                                             )),
                                         Container(
-                                            width: 40,
+                                            width: 100,
                                             height: 40,
                                             color: Colors.black12,
                                             child: Center(

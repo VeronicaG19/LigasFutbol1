@@ -1,6 +1,6 @@
 part of 'staticts_lm_cubit.dart';
 
-  enum ScreenStatus {
+  enum ScreenStatusA {
     initial,
     loading,
     loaded,
@@ -11,14 +11,14 @@ part of 'staticts_lm_cubit.dart';
 
 class StatictsLmState extends Equatable {
   final String? errorMessage;
-  final ScreenStatus screenStatus;
+  final ScreenStatusA screenStatus;
   final ResgisterCountInterface detailTournament;
   final ResgisterCountInterface detailCategory;
   final ResgisterCountInterface detailTeam;
 
   const StatictsLmState({
     this.errorMessage,
-    this.screenStatus = ScreenStatus.initial,
+    this.screenStatus = ScreenStatusA.initial,
     this.detailTournament = ResgisterCountInterface.empty,
     this.detailCategory = ResgisterCountInterface.empty,
     this.detailTeam = ResgisterCountInterface.empty
@@ -26,7 +26,7 @@ class StatictsLmState extends Equatable {
 
 StatictsLmState copyWith({
     String? errorMessage,
-    ScreenStatus? screenStatus,
+    ScreenStatusA? screenStatus,
     ResgisterCountInterface? detailTournament,
     ResgisterCountInterface? detailCategory,
     ResgisterCountInterface? detailTeam

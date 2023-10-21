@@ -54,7 +54,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -79,12 +79,20 @@ android {
     flavorDimensions "app"
     productFlavors {
         dev {
-            applicationId "com.ccs.swat.iaas.spr.ligas_futbol.ligas_futbol_flutter"
+            applicationId "dev.ias.swat.ccs.com.Wiplif"
             dimension "app"
+           //manifestPlaceholders = [appName: "Wiplif"]
+            resValue "string", "app_name", "Wiplif"
+            minSdkVersion 21
+            targetSdkVersion 33
         }
         prod {
             applicationId "com.ccs.swat.iaas.spr.ligas_futbol.ligas_futbol_flutter"
             dimension "app"
+            //manifestPlaceholders = [appName: "Ligas Futbol"]
+            resValue "string", "app_name", "Ligas Fútbol"
+            minSdkVersion 21
+            targetSdkVersion 33
         }
     }
 }

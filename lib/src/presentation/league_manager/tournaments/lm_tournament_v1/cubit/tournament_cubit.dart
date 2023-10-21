@@ -98,17 +98,19 @@ class TournamentCubit extends Cubit<TournamentState> {
   Future<void> loadDays(String listDaysSelected) async {
     List<int> daySelected = [];
     List<Days> days = [
-      Days(daysEnum: DaysEnum.lunes, isSelected: false),
-      Days(daysEnum: DaysEnum.martes, isSelected: false),
-      Days(daysEnum: DaysEnum.miercoles, isSelected: false),
-      Days(daysEnum: DaysEnum.jueves, isSelected: false),
-      Days(daysEnum: DaysEnum.viernes, isSelected: false),
-      Days(daysEnum: DaysEnum.sabado, isSelected: false),
-      Days(daysEnum: DaysEnum.domingo, isSelected: false),
+      const Days(daysEnum: DaysEnum.lunes, isSelected: false),
+      const Days(daysEnum: DaysEnum.martes, isSelected: false),
+      const Days(daysEnum: DaysEnum.miercoles, isSelected: false),
+      const Days(daysEnum: DaysEnum.jueves, isSelected: false),
+      const Days(daysEnum: DaysEnum.viernes, isSelected: false),
+      const Days(daysEnum: DaysEnum.sabado, isSelected: false),
+      const Days(daysEnum: DaysEnum.domingo, isSelected: false),
     ];
     if (listDaysSelected != '') {
-      if (listDaysSelected.length > 1) {
+      if (listDaysSelected.isNotEmpty) {
+        
         listDaysSelected.split(':').forEach((day) {
+         
           daySelected.add(int.parse(day));
         });
       } else {
@@ -116,16 +118,18 @@ class TournamentCubit extends Cubit<TournamentState> {
       }
     }
 
-    if (daySelected.length == 7) {
-      days.forEach((day) {
-        day.copyWith(isSelected: true);
-      });
-    } else if (daySelected.length > 0 && daySelected.length < 7) {
-      daySelected.forEach((dayslct) {
+    if (daySelected.length >= 7) {
+      for (var dayslcts in daySelected) {
+         int ds = days
+            .indexWhere((day) => day.daysEnum == day.getDaySelected(dayslcts));
+        days[ds] = days[ds].copyWith(isSelected: true);
+      }
+    } else if (daySelected.isNotEmpty && daySelected.length < 7) {
+      for (var dayslct in daySelected) {
         int ds = days
             .indexWhere((day) => day.daysEnum == day.getDaySelected(dayslct));
         days[ds] = days[ds].copyWith(isSelected: true);
-      });
+      }
     }
 
     emit(state.copyWith(daysList: days));
@@ -277,7 +281,7 @@ class TournamentCubit extends Cubit<TournamentState> {
       Category cat = state.categories.elementAt(state.indexCatSelec!);
       getTournamentsByCategory(category: cat);
       emit(state.copyWith(
-          screenStatus: ScreenStatus.changedTournament,
+          screenStatus: ScreenStatus.tournamentDeleted,
           tournamentSelected: Tournament.empty));
     });
   }

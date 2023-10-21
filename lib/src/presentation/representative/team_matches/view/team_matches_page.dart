@@ -15,9 +15,9 @@ class TeamMatchesPage extends StatelessWidget{
           create: (_) =>
           locator<TeamMatchesCubit>()..getMatchesByTeam(teamId: teamId),
           child: ListView(
-            children: const [
-              SizedBox(height: 15),
-              TeamMatchesContent(),
+            children: [
+              const SizedBox(height: 15),
+              TeamMatchesContent(teamId: teamId,),
             ],
           ),
         )

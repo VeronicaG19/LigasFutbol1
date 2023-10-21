@@ -32,7 +32,7 @@ class RefereeDialogContent extends StatelessWidget {
                   child: TextField(
                     decoration: const InputDecoration(hintText: "Comentarios"),
                     keyboardType: TextInputType.multiline,
-                    maxLines: 5,
+                    maxLines: 2,
                     onChanged: context.read<LmRequestCubit>().onCommentChanged,
                   ),
                 ),

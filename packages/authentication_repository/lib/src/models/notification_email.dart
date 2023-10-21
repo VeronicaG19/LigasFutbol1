@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 
 const String _kHost = 'smtp.gmail.com';
 const int _kPort = 587;
-const String _kEmail = 'ccs.noreply.apps@gmail.com';
-const String _kPassword = 'ujxftygkcrxrdmlp';
+const String _kEmail = 'info.noreply.express@gmail.com';
+const String _kPassword = 'ejngwxemkebajdei';
 
 class NotificationEmail extends Equatable {
   final String host;

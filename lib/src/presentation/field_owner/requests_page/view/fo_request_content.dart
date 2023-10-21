@@ -7,7 +7,6 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../../../../core/enums.dart';
 import '../../../../domain/user_requests/entity/field_owner_request.dart';
 import '../../../app/app.dart';
-import '../../../widgets/notification_icon/cubit/notification_count_cubit.dart';
 import '../cubit/fo_request_cubit.dart';
 
 class FoRequestContent extends StatelessWidget {
@@ -15,8 +14,8 @@ class FoRequestContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final league = context
-        .select((AuthenticationBloc bloc) => bloc.state.leagueManager.leagueId);
+    final league = context.select(
+        (AuthenticationBloc bloc) => bloc.state.selectedLeague.leagueId);
     final rol = context
         .select((AuthenticationBloc bloc) => bloc.state.user.applicationRol);
     return BlocConsumer<FoRequestCubit, FoRequestState>(
@@ -32,8 +31,17 @@ class FoRequestContent extends StatelessWidget {
           );
         } else if (state.screenStatus == BasicCubitScreenState.loaded) {
           context
-              .read<NotificationCountCubit>()
-              .onLoadNotificationCount(league, rol);
+              .read<NotificationBloc>()
+              .add(LoadNotificationCount(league, rol));
+        } else if (state.screenStatus == BasicCubitScreenState.success) {
+          showTopSnackBar(
+            context,
+            CustomSnackBar.success(
+              backgroundColor: Colors.green[800]!,
+              textScaleFactor: 1.0,
+              message: 'Solicitud aceptada',
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -78,7 +86,7 @@ class _CardContent extends StatelessWidget {
       fontWeight: FontWeight.w500,
     );
     final league =
-        context.read<AuthenticationBloc>().state.leagueManager.leagueId;
+        context.read<AuthenticationBloc>().state.selectedLeague.leagueId;
     final title = 'Solicitud de ${request.leaguePresident}';
     final subtitle = '${request.fieldName} - ${request.startDate}';
     return Card(
@@ -108,19 +116,19 @@ class _CardContent extends StatelessWidget {
                       onPressed: () {
                         context
                             .read<FoRequestCubit>()
-                            .onAcceptRequest(request, league);
+                            .onCancelRequest(request.requestId, league);
                         Navigator.pop(contextD);
                       },
-                      child: const Text('ACEPTAR'),
+                      child: const Text('RECHAZAR'),
                     ),
                     TextButton(
                       onPressed: () {
                         context
                             .read<FoRequestCubit>()
-                            .onCancelRequest(request.requestId, league);
+                            .onAcceptRequest(request, league);
                         Navigator.pop(contextD);
                       },
-                      child: const Text('RECHAZAR'),
+                      child: const Text('ACEPTAR'),
                     ),
                   ],
                 ),

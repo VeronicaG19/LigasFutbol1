@@ -23,7 +23,6 @@ class TeamRepositoryImpl implements ITeamRepository {
   RepositoryResponse<List<Team>> getRequestTeamByLeague(int leagueId) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             endpoint: "$getRequestTeamByLeagueEndpoint/N/$leagueId",
             converter: Team.fromJson)
         .validateResponse();
@@ -49,12 +48,19 @@ class TeamRepositoryImpl implements ITeamRepository {
 
   @override
   RepositoryResponse<CommonPageableResponse<Team>> getAllTeams(
-      {int? page, int? size}) {
+      {int? page,
+      int? size,
+      int? categoryId,
+      String? requestPlayers,
+      String? teamName}) {
     final data = <String, dynamic>{};
     if (page != null) {
       data.addAll({'page': page});
     }
     data.addAll({'size': size ?? 10});
+    data.addAll({'categoryId': categoryId});
+    data.addAll({'requestPlayers': requestPlayers});
+    data.addAll({'teamName': teamName});
     return _apiClient.network
         .getData(
             endpoint: getAllPagedTeamsEndpoint,
@@ -192,7 +198,6 @@ class TeamRepositoryImpl implements ITeamRepository {
   RepositoryResponse<ResgisterCountInterface> getCountByLeagueId(int leagueId) {
     return _apiClient.network
         .getData(
-            requiresAuthToken: false,
             converter: ResgisterCountInterface.fromJson,
             endpoint: createTeamPresident + "/countTeams/$leagueId")
         .validateResponse();
@@ -208,9 +213,13 @@ class TeamRepositoryImpl implements ITeamRepository {
   }
 
   @override
-  RepositoryResponse<Team> getDetailTeamByIdTeam(int teamId) {
+  RepositoryResponse<Team> getDetailTeamByIdTeam(int teamId,
+      {bool requiresAuthToken = true}) {
     return _apiClient.network
-        .getData(endpoint: '$getTeamByTeamId/$teamId', converter: Team.fromJson)
+        .getData(
+            requiresAuthToken: requiresAuthToken,
+            endpoint: '$getTeamByTeamId/$teamId',
+            converter: Team.fromJson)
         .validateResponse();
   }
 
@@ -228,8 +237,15 @@ class TeamRepositoryImpl implements ITeamRepository {
       int tournamentId) {
     return _apiClient.network
         .getCollectionData(
-        endpoint: '$getTeamClassifiedByTournamentId/$tournamentId',
-        converter: TeamTournament.fromJson)
+            endpoint: '$getTeamClassifiedByTournamentId/$tournamentId',
+            converter: TeamTournament.fromJson)
         .validateResponse();
   }
+
+  @override
+  RepositoryResponse<Team> updateTeamByTeamService(Team team) =>
+      _apiClient.updateData(
+          endpoint: teamServiceTeamsEndpoint,
+          data: team.toJson(),
+          converter: Team.fromJson);
 }

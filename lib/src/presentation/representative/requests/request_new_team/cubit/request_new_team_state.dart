@@ -4,9 +4,11 @@ enum ScreenStatus {
   initial,
   loading,
   loaded,
+  loadingCategories,
   teamCreated,
   error,
 }
+
 class RequestNewTeamState extends Equatable {
   final List<Category> categoryList;
   final List<League> leagueList;
@@ -52,7 +54,7 @@ class RequestNewTeamState extends Equatable {
       categoryId: categoryId ?? this.categoryId,
       leagueId: leagueId ?? this.leagueId,
       teamName: teamName ?? this.teamName,
-      formzStatus : formzStatus ?? this.formzStatus,
+      formzStatus: formzStatus ?? this.formzStatus,
       errorMessage: errorMessage ?? this.errorMessage,
       screenStatus: screenStatus ?? this.screenStatus,
     );
@@ -60,15 +62,14 @@ class RequestNewTeamState extends Equatable {
 
   @override
   List<Object?> get props => [
-    categoryList,
-    leagueList,
-    categorySelect,
-    leagueSelect,
-    categoryId,
-    leagueId,
-    teamName,
-    formzStatus,
-    screenStatus,
-  ];
-
+        categoryList,
+        leagueList,
+        categorySelect,
+        leagueSelect,
+        categoryId,
+        leagueId,
+        teamName,
+        formzStatus,
+        screenStatus,
+      ];
 }

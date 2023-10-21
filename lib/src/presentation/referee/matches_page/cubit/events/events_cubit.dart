@@ -5,6 +5,8 @@ import 'package:injectable/injectable.dart';
 import 'package:ligas_futbol_flutter/src/core/enums.dart';
 import 'package:ligas_futbol_flutter/src/domain/agenda/entity/qra_event.dart';
 import 'package:ligas_futbol_flutter/src/domain/match_event/service/i_match_event_service.dart';
+import 'package:ligas_futbol_flutter/src/domain/match_event/util/event_util.dart';
+import 'package:ligas_futbol_flutter/src/domain/matches/dto/detail_eliminatory_dto/qualifying_match_detail_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/end_match/end_match_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/match_detail/match_detail_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/match_event/match_event_dto.dart';
@@ -12,11 +14,10 @@ import 'package:ligas_futbol_flutter/src/domain/matches/dto/referee_match.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/service/i_matches_service.dart';
 import 'package:ligas_futbol_flutter/src/domain/player/dto/player_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/player/service/i_player_service.dart';
-import 'package:ligas_futbol_flutter/src/domain/match_event/util/event_util.dart';
+import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/view/match_events/validators/minut.dart';
 import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/view/match_events/validators/player.dart';
 import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/view/match_events/validators/type_event.dart';
 import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/view/match_events/validators/type_match_team.dart';
-import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/view/match_events/validators/minut.dart';
 
 import '../../../../../domain/tournament/entity/tournament.dart';
 import '../../../../../domain/tournament/service/i_tournament_service.dart';
@@ -26,10 +27,10 @@ part 'events_state.dart';
 @injectable
 class EventsCubit extends Cubit<EventsState> {
   EventsCubit(
-      this._matchesService,
-      this._matchEventService,
-      this._iPlayerService,
-      this._tournamentService,
+    this._matchesService,
+    this._matchEventService,
+    this._iPlayerService,
+    this._tournamentService,
   ) : super(const EventsState());
 
   final IMatchesService _matchesService;
@@ -42,6 +43,10 @@ class EventsCubit extends Cubit<EventsState> {
   Future<void> onLoadingMatchEvents({required RefereeMatchDTO match}) async {
     getListEvents();
     getMatchDetail(match: match);
+
+    if (match.jornada == 0) {
+      getDetailEliminatory(matchId: match.matchId ?? 0);
+    }
   }
 
   Future<void> getMatchDetail({required RefereeMatchDTO match}) async {
@@ -225,7 +230,7 @@ class EventsCubit extends Cubit<EventsState> {
         state.typeEventValidator.valid == true &&
         state.minutValidator.valid == true) {
       emit(state.copyWith(
-        screenState: BasicCubitScreenState.sending,
+        screenState: BasicCubitScreenState.loading,
       ));
 
       final response = await _matchEventService.createMatchEvent(MatchEventDTO(
@@ -247,8 +252,9 @@ class EventsCubit extends Cubit<EventsState> {
         ));
       }, (r) {
         emit(state.copyWith(
-          screenState: BasicCubitScreenState.success,
-        ));
+            screenState: BasicCubitScreenState.success,
+            formzStatus: FormzStatus.submissionSuccess,
+            statusMessage: "2"));
       });
     }
   }
@@ -273,7 +279,7 @@ class EventsCubit extends Cubit<EventsState> {
     print("> > > > > > > > > > > > > > > > > > >");
 
     emit(state.copyWith(
-      screenState: BasicCubitScreenState.sending,
+      screenState: BasicCubitScreenState.loading,
     ));
 
     final response = await _matchesService.endMatch(endMatchDTO);
@@ -289,11 +295,19 @@ class EventsCubit extends Cubit<EventsState> {
       (r) {
         print('success > $response');
         emit(state.copyWith(
-          screenState: BasicCubitScreenState.success,
-          formzStatus: FormzStatus.submissionSuccess
-        ));
+            screenState: BasicCubitScreenState.success, statusMessage: "3"));
       },
     );
+  }
+
+  void resetInputsAndForm() {
+    emit(state.copyWith(
+      matchDetail: MatchDetailDTO.empty,
+      scoreShoutOutLocal: null,
+      scoreShoutOutVisit: null,
+      minutValidator: const Minut.pure(),
+      formzStatus: FormzStatus.pure,
+    ));
   }
 
   Future<void> increaseScore(TypeMatchTem typeTeam) async {
@@ -334,14 +348,28 @@ class EventsCubit extends Cubit<EventsState> {
 
   Future<void> getTournamentDetail({required int tournamentId}) async {
     emit(state.copyWith(screenState: BasicCubitScreenState.loading));
-    final response = await _tournamentService.detailTournamentPresident(tournamentId);
+    final response =
+        await _tournamentService.detailTournamentPresident(tournamentId);
     response.fold(
-            (l) => emit(state.copyWith(
+        (l) => emit(state.copyWith(
             screenState: BasicCubitScreenState.error,
             errorMessage: l.errorMessage)), (r) {
       print('torneo --> $r');
       emit(state.copyWith(
           screenState: BasicCubitScreenState.loaded, tournamentSelected: r));
+    });
+  }
+
+  Future<void> getDetailEliminatory({required int matchId}) async {
+    //emit(state.copyWith(screenState: BasicCubitScreenState.loading));
+    final response = await _matchesService.getDetailEliminatory(matchId);
+    response.fold(
+        (l) => emit(state.copyWith(
+            screenState: BasicCubitScreenState.error,
+            errorMessage: l.errorMessage)), (r) {
+      print('MATCH ELIMINATORY --> $r');
+      emit(state.copyWith(
+          screenState: BasicCubitScreenState.loaded, qualifyingMatchDetail: r));
     });
   }
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

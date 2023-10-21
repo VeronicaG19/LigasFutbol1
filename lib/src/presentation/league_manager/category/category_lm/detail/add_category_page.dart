@@ -14,8 +14,8 @@ class AddCategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
-    final Color? color2 = Colors.green[800];
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
+
     return TextButton(
       onPressed: () async {
         showDialog(
@@ -26,7 +26,7 @@ class AddCategoryPage extends StatelessWidget {
                 title: const Text('Agregar categoria'),
                 content: BlocProvider.value(
                     value: BlocProvider.of<CategoryLmCubit>(context)
-                      ..getLookUpValueByTypeLM(),
+                      ..getSoccerGender(),
                     // create: (_) =>
                     //   locator<CategoryLmCubit>()..getLookUpValueByTypeLM(),
                     child: BlocConsumer<CategoryLmCubit, CategoryLmState>(
@@ -57,7 +57,7 @@ class AddCategoryPage extends StatelessWidget {
                         child: ListView(children: <Widget>[
                           Column(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               CircleAvatar(
@@ -71,7 +71,7 @@ class AddCategoryPage extends StatelessWidget {
                                   color: Colors.grey[300],
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 30,
                               ),
                               Column(
@@ -84,8 +84,8 @@ class AddCategoryPage extends StatelessWidget {
                                       ),
                                       child: _CategoryNameInput(),
                                     ),
-                                    Row(
-                                      children: const <Widget>[
+                                    const Row(
+                                      children: <Widget>[
                                         Expanded(
                                           child: Padding(
                                             padding: EdgeInsets.only(
@@ -113,8 +113,8 @@ class AddCategoryPage extends StatelessWidget {
                                       padding: EdgeInsets.only(bottom: 10),
                                       child: _CommentInput(),
                                     ),
-                                    Row(
-                                      children: const <Widget>[
+                                    const Row(
+                                      children: <Widget>[
                                         Expanded(
                                           child: Padding(
                                             padding: EdgeInsets.only(
@@ -144,6 +144,9 @@ class AddCategoryPage extends StatelessWidget {
                                               Expanded(
                                                 child: TextButton(
                                                   onPressed: () async {
+                                                    context
+                                                        .read<CategoryLmCubit>()
+                                                        .resetInputsAndForm();
                                                     Navigator.of(context).pop();
                                                   },
                                                   child: Container(
@@ -176,30 +179,34 @@ class AddCategoryPage extends StatelessWidget {
                                               ),
                                               Expanded(
                                                 child: TextButton(
-                                                  onPressed: state
-                                                          .status.isValidated
-                                                      ? () async {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                          await context
-                                                              .read<
-                                                                  CategoryLmCubit>()
-                                                              .createCategoryId(
-                                                                  leagueManager);
-                                                        }
-                                                      : null,
+                                                  onPressed: () async {
+                                                    await context
+                                                        .read<CategoryLmCubit>()
+                                                        .createCategoryId(
+                                                            leagueManager);
+                                                    if (state.validAge &&
+                                                        state.allFormIsValid) {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }
+                                                  },
                                                   child: Container(
                                                     width: double.infinity,
                                                     padding: const EdgeInsets
                                                             .fromLTRB(
                                                         16.0, 10.0, 16.0, 10.0),
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Color(0xff045a74),
+                                                    decoration: BoxDecoration(
+                                                      color: (state.validAge &&
+                                                              state
+                                                                  .allFormIsValid)
+                                                          ? const Color(
+                                                              0xff045a74)
+                                                          : Colors.grey,
                                                       borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  15.0)),
+                                                          const BorderRadius
+                                                              .all(
+                                                        Radius.circular(15.0),
+                                                      ),
                                                     ),
                                                     child: Text(
                                                       'Guardar cambios',
@@ -265,15 +272,13 @@ class _CategoryNameInput extends StatelessWidget {
         key: const Key('name_category_textField'),
         onChanged: (value) =>
             context.read<CategoryLmCubit>().onChangeCategoryName(value),
-        onFieldSubmitted: (value) => state.status.isSubmissionInProgress
-            ? null
-            : context.read<CategoryLmCubit>().updateCategoryId(),
+        onFieldSubmitted: (value) => state.status.isSubmissionInProgress,
         decoration: InputDecoration(
-          labelText: "Nombre Categoria",
-          labelStyle: TextStyle(fontSize: 13),
-          errorText: state.categoryName.invalid ? "Datos no válidos" : null,
+          labelText: "Nombre Categoría",
+          labelStyle: const TextStyle(fontSize: 13),
+          errorText: state.categoryName.invalid ? "Nombre muy corto" : null,
         ),
-        style: TextStyle(fontSize: 13),
+        style: const TextStyle(fontSize: 13),
       ),
     );
   }
@@ -285,7 +290,8 @@ class _MinAgeInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryLmCubit, CategoryLmState>(
-      buildWhen: (previous, current) => previous.minAge != current.minAge,
+      buildWhen: (previous, current) => (previous.minAge != current.minAge ||
+          previous.validAge != current.validAge),
       builder: (context, state) {
         return TextFormField(
           key: const Key('age_min_textField'),
@@ -299,10 +305,12 @@ class _MinAgeInput extends StatelessWidget {
               : context.read<CategoryLmCubit>().updateCategoryId(),
           decoration: InputDecoration(
             labelText: "Edad minima",
-            labelStyle: TextStyle(fontSize: 13),
-            errorText: state.minAge.invalid ? "Datos no válidos" : null,
+            labelStyle: const TextStyle(fontSize: 13),
+            errorText: (state.minAge.invalid || !state.validAge)
+                ? "Debe ser menor a la máxima"
+                : null,
           ),
-          style: TextStyle(fontSize: 13),
+          style: const TextStyle(fontSize: 13),
         );
       },
     );
@@ -315,7 +323,8 @@ class _MaxAgeInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryLmCubit, CategoryLmState>(
-      buildWhen: (previous, current) => previous.maxAge != current.maxAge,
+      buildWhen: (previous, current) => (previous.maxAge != current.maxAge ||
+          previous.validAge != current.validAge),
       builder: (context, state) {
         return TextFormField(
           key: const Key('age_max_textField'),
@@ -329,8 +338,10 @@ class _MaxAgeInput extends StatelessWidget {
               : context.read<CategoryLmCubit>().updateCategoryId(),
           decoration: InputDecoration(
             labelText: "Edad máxima",
-            labelStyle: TextStyle(fontSize: 13),
-            errorText: state.maxAge.invalid ? "Datos no válidos" : null,
+            labelStyle: const TextStyle(fontSize: 13),
+            errorText: (state.maxAge.invalid || !state.validAge)
+                ? "Debe ser mayor a la minima"
+                : null,
           ),
           style: const TextStyle(fontSize: 13),
         );
@@ -354,10 +365,10 @@ class _CommentInput extends StatelessWidget {
           onFieldSubmitted: (value) => state.status.isSubmissionInProgress
               ? null
               : context.read<CategoryLmCubit>().updateCategoryId(),
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: "Comentario",
             labelStyle: const TextStyle(fontSize: 13),
-            errorText: state.comment.invalid ? "Datos no válidos" : null,
+            // errorText: state.comment.invalid ? "Datos no válidos" : null,
           ),
           style: const TextStyle(fontSize: 13),
         );
@@ -388,11 +399,11 @@ class _YellowForPunishmentInput extends StatelessWidget {
               : context.read<CategoryLmCubit>().updateCategoryId(),
           decoration: InputDecoration(
             labelText: "Amarillas para suspensión",
-            labelStyle: TextStyle(fontSize: 13),
+            labelStyle: const TextStyle(fontSize: 13),
             errorText:
                 state.yellowForPunishment.invalid ? "Datos no válidos" : null,
           ),
-          style: TextStyle(fontSize: 13),
+          style: const TextStyle(fontSize: 13),
         );
       },
     );
@@ -420,11 +431,11 @@ class _RedForPunishmentInput extends StatelessWidget {
               : context.read<CategoryLmCubit>().updateCategoryId(),
           decoration: InputDecoration(
             labelText: "Rojas para sanción de partidos",
-            labelStyle: TextStyle(fontSize: 13),
+            labelStyle: const TextStyle(fontSize: 13),
             errorText:
                 state.redForPunishment.invalid ? "Datos no válidos" : null,
           ),
-          style: TextStyle(fontSize: 13),
+          style: const TextStyle(fontSize: 13),
         );
       },
     );

@@ -27,6 +27,7 @@ class Field extends Equatable {
   final int? leagueId;
   final List<MatchSpr>? matchesList;
   final String? sportType;
+
   const Field({
     this.activeId,
     this.assessement,
@@ -90,6 +91,8 @@ class Field extends Equatable {
 
   bool get isNotEmpty => this != Field.empty;
 
+  String get getFieldName => fieldName ?? '';
+
   /// Connect the generated [_$FieldFromJson] function to the `fromJson`
   /// factory.
   factory Field.fromJson(Map<String, dynamic> json) => _$FieldFromJson(json);
@@ -98,24 +101,22 @@ class Field extends Equatable {
   Map<String, dynamic> toJson() => _$FieldToJson(this);
 
   @override
-  List<Object?> get props {
-    return [
-      activeId,
-      assessement,
-      availability,
-      enabledFlag,
-      fieldId,
-      fieldName,
-      fieldPhotoId,
-      fieldType,
-      fieldsAddress,
-      fieldsLatitude,
-      fieldsLength,
-      hourClose,
-      hourOpen,
-      leagueId,
-      matchesList,
-      sportType,
-    ];
-  }
+  List<Object?> get props => [
+        activeId,
+        assessement,
+        availability,
+        enabledFlag,
+        fieldId,
+        fieldName,
+        fieldPhotoId,
+        fieldType,
+        fieldsAddress,
+        fieldsLatitude,
+        fieldsLength,
+        hourClose,
+        hourOpen,
+        leagueId,
+        matchesList,
+        sportType,
+      ];
 }

@@ -4,22 +4,17 @@ import 'package:ligas_futbol_flutter/src/presentation/representative/requests/cu
 
 import '../../../../service_locator/injection.dart';
 import '../../../app/app.dart';
-import '../../../widgets/notification_icon/cubit/notification_count_cubit.dart';
 import 'rep_requests_content.dart';
 
 class RepRequestsPage extends StatelessWidget {
   const RepRequestsPage({Key? key}) : super(key: key);
 
-  static Route route(NotificationCountCubit notificationCountCubit) =>
-      MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: notificationCountCubit,
-          child: const RepRequestsPage(),
-        ),
+  static Route route() => MaterialPageRoute(
+        builder: (_) => const RepRequestsPage(),
       );
   @override
   Widget build(BuildContext context) {
-    final teamId = context.read<AuthenticationBloc>().state.teamManager.teamId;
+    final teamId = context.read<AuthenticationBloc>().state.selectedTeam.teamId;
     print('TEAM_ID -->$teamId');
     return DefaultTabController(
       length: 3,
@@ -49,7 +44,7 @@ class RepRequestsPage extends StatelessWidget {
         body: BlocProvider(
           create: (_) => locator<RepresentantiveRequestsCubit>()
             ..loadRepresentativeRequests(teamId: teamId!),
-          child:  const RepRequestsContent(),
+          child: const RepRequestsContent(),
         ),
       ),
     );

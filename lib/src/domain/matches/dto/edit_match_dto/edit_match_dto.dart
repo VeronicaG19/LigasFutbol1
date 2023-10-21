@@ -10,31 +10,32 @@ class EditMatchDTO extends Equatable {
   final DateTime? hourMatch;
   final int? matchId;
   final int? refereeId;
-  const EditMatchDTO({
-    this.dateMatch,
-    this.fieldId,
-    this.hourMatch,
-    this.matchId,
-    this.refereeId,
-  });
+  final int? leagueId;
+  const EditMatchDTO(
+      {this.dateMatch,
+      this.fieldId,
+      this.hourMatch,
+      this.matchId,
+      this.refereeId,
+      this.leagueId});
 
-  EditMatchDTO copyWith({
-    DateTime? dateMatch,
-    int? fieldId,
-    DateTime? hourMatch,
-    int? matchId,
-    int? refereeId,
-  }) {
+  EditMatchDTO copyWith(
+      {DateTime? dateMatch,
+      int? fieldId,
+      DateTime? hourMatch,
+      int? matchId,
+      int? refereeId,
+      int? leagueId}) {
     return EditMatchDTO(
-      dateMatch: dateMatch ?? this.dateMatch,
-      fieldId: fieldId ?? this.fieldId,
-      hourMatch: hourMatch ?? this.hourMatch,
-      matchId: matchId ?? this.matchId,
-      refereeId: refereeId ?? this.refereeId,
-    );
+        dateMatch: dateMatch ?? this.dateMatch,
+        fieldId: fieldId ?? this.fieldId,
+        hourMatch: hourMatch ?? this.hourMatch,
+        matchId: matchId ?? this.matchId,
+        refereeId: refereeId ?? this.refereeId,
+        leagueId: leagueId ?? this.leagueId);
   }
 
-    /// Connect the generated [_$EditMatchDTOFromJson] function to the `fromJson`
+  /// Connect the generated [_$EditMatchDTOFromJson] function to the `fromJson`
   /// factory.
   factory EditMatchDTO.fromJson(Map<String, dynamic> json) =>
       _$EditMatchDTOFromJson(json);
@@ -46,12 +47,6 @@ class EditMatchDTO extends Equatable {
 
   @override
   List<Object?> get props {
-    return [
-      dateMatch,
-      fieldId,
-      hourMatch,
-      matchId,
-      refereeId,
-    ];
+    return [dateMatch, fieldId, hourMatch, matchId, refereeId, leagueId];
   }
 }

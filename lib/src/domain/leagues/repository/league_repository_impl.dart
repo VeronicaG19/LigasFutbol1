@@ -14,21 +14,21 @@ class LeagueRepositoryImpl implements ILeagueRepository {
   LeagueRepositoryImpl(this._apiClient);
 
   @override
-  RepositoryResponse<List<League>> getAllLeagues() {
+  RepositoryResponse<List<League>> getAllLeagues(
+      {bool requiresAuthToken = true}) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
+            requiresAuthToken: requiresAuthToken,
             endpoint: getAllLeaguesEndpoint,
             converter: League.fromJson)
         .validateResponse();
   }
 
   @override
-  RepositoryResponse<void> deleteLeague(int id) {
-    return _apiClient.network
-        .deleteData(
-            endpoint: '$getAllLeaguesEndpoint/$id', converter: League.fromJson)
-        .validateResponse();
+  RepositoryResponse<String> deleteLeague(int id, bool isForced) {
+    return _apiClient.deleteData(
+        endpoint: '$leagueBaseEndpoint/delete/$id/$isForced',
+        converter: (response) => response['result'] ?? '');
   }
 
   @override
@@ -72,9 +72,9 @@ class LeagueRepositoryImpl implements ILeagueRepository {
 
   @override
   RepositoryResponse<List<League>> getRefereeLeagues(int refereeId) {
-    return _apiClient.network.getCollectionData(
+    return _apiClient.fetchCollectionData(
         queryParams: {'refereeId': refereeId},
         endpoint: getRefereeLeaguesEndpoint,
-        converter: League.fromJson).validateResponse();
+        converter: League.fromJson);
   }
 }

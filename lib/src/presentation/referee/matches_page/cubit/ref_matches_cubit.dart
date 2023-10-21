@@ -13,31 +13,41 @@ class RefMatchesCubit extends Cubit<RefMatchesState> {
   RefMatchesCubit(this._matchesService) : super(const RefMatchesState());
 
   final IMatchesService _matchesService;
+
   Future<void> onLoadInitialData(int refereeId) async {
-    print("> onLoadInitialData $refereeId");
+    List<RefereeMatchDTO>? finishedMatchesList = [];
+    List<RefereeMatchDTO>? otherMatchesList = [];
+
     emit(state.copyWith(screenState: BasicCubitScreenState.loading));
     final request =
         await _matchesService.getRefereeMatches(refereeId: refereeId);
+    for (final e in request) {
+      if (e.estado == "Finalizado") {
+        finishedMatchesList.add(e);
+      } else {
+        otherMatchesList.add(e);
+      }
+    }
     emit(state.copyWith(
-        screenState: BasicCubitScreenState.loaded, matches: request));
+        screenState: BasicCubitScreenState.loaded,
+        matches: request,
+        finishedMatchesList: finishedMatchesList,
+        otherMatchesList: otherMatchesList));
   }
 
   Future<void> onPressStartGame({
     required int refereeId,
     required RefereeMatchDTO match,
   }) async {
-    print("> onPressStartGame $refereeId");
-
-    emit(state.copyWith(screenState: BasicCubitScreenState.sending));
+    emit(state.copyWith(screenState: BasicCubitScreenState.loading));
 
     final response = await _matchesService.startMatch(match.matchId!);
 
     response.fold(
       (l) => emit(state.copyWith(screenState: BasicCubitScreenState.error)),
       (r) {
-        print("> Respuesta");
-        print("$r");
-        emit(state.copyWith(screenState: BasicCubitScreenState.success));
+        emit(state.copyWith(
+            screenState: BasicCubitScreenState.success, statusMessage: "1"));
         onLoadInitialData(refereeId);
       },
     );

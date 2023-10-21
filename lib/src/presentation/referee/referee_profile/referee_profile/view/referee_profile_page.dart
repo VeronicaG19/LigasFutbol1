@@ -6,19 +6,28 @@ import 'package:ligas_futbol_flutter/src/presentation/widgets/edit_profile_image
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../../../service_locator/injection.dart';
 import '../../../../app/app.dart';
 import '../../../referee_match_fee/refree_match_fee_list/view/referee_match_fee_list_page.dart';
 import '../../referee_agenda/view/referee_agenda_page.dart';
 import '../cubit/referee_profile_cubit.dart';
 import 'edit_addres_page.dart';
 
-class RefereeProfilePage extends StatelessWidget {
+enum PositionItemType {
+  log,
+  position,
+}
+
+class RefereeProfilePage extends StatefulWidget {
   const RefereeProfilePage({Key? key}) : super(key: key);
 
   static Route route() =>
       MaterialPageRoute(builder: (_) => const RefereeProfilePage());
 
+  @override
+  State<RefereeProfilePage> createState() => _RefereeProfilePageState();
+}
+
+class _RefereeProfilePageState extends State<RefereeProfilePage> {
   @override
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
@@ -239,16 +248,33 @@ class _AddressCard extends StatelessWidget {
       ),
       trailing: IconButton(
         icon: const Icon(Icons.edit),
-        onPressed: () {
+        onPressed: () async {
           Navigator.push(
             context,
             MaterialPageRoute<void>(
-              builder: (context) =>EditAddressPage(
-                    personId: refereeData.partyId!,
-                    personName: name,
-                  ),
+              builder: (context) => EditAddressPage(
+                personId: refereeData.partyId ?? 0,
+                personName: name,
+              ),
             ),
           );
+          /*if (await Permission.location.isRestricted ||
+              await Permission.location.isDenied ||
+              await Permission.location.isPermanentlyDenied) {
+            Permission.location.request().then((value) {
+              if (value == PermissionStatus.granted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (context) => EditAddressPage(
+                      personId: refereeData.partyId ?? 0,
+                      personName: name,
+                    ),
+                  ),
+                );
+              }
+            });
+          }*/
         },
       ),
     );
@@ -384,4 +410,11 @@ class _AddressInput extends StatelessWidget {
       },
     );
   }
+}
+
+class PositionItem {
+  PositionItem(this.type, this.displayValue);
+
+  final PositionItemType type;
+  final String displayValue;
 }

@@ -260,7 +260,8 @@ class Person extends Equatable {
       isEmpty ? '' : '${firstName.trim()} ${lastName.trim()}';
 
   static String _getAcronym(String firstName, String lastName) {
-    final String acronym = firstName.substring(0, 1) + lastName.substring(0, 1);
+    final String acronym =
+        firstName.trim().substring(0, 1) + lastName.trim().substring(0, 1);
     return acronym.toUpperCase();
   }
 }

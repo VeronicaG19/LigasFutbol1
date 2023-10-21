@@ -1,4 +1,3 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,8 +6,6 @@ import 'package:ligas_futbol_flutter/src/domain/lookupvalue/entity/lookupvalue.d
 import 'package:ligas_futbol_flutter/src/presentation/app/app.dart';
 import 'package:ligas_futbol_flutter/src/presentation/league_manager/category/category_lm/detail/cubit/category_lm_cubit.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class DetailCategoryPage extends StatelessWidget {
   const DetailCategoryPage({Key? key, required this.type}) : super(key: key);
@@ -16,12 +13,11 @@ class DetailCategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
-    final Color? color = Colors.blue[800];
-    final Color? color2 = Colors.green[800];
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
+
     return BlocConsumer<CategoryLmCubit, CategoryLmState>(
-      listener: (context, state) {
-       /* if (state.status == FormzStatus.submissionSuccess) {
+        listener: (context, state) {
+      /* if (state.status == FormzStatus.submissionSuccess) {
           showTopSnackBar(
             context,
             CustomSnackBar.success(
@@ -31,157 +27,162 @@ class DetailCategoryPage extends StatelessWidget {
             ),
           );
         }*/
-      },
-      builder: (context, state) {
-        if (state.screenStatus == ScreenStatus.loading) {
-          return Center(
-            child: LoadingAnimationWidget.fourRotatingDots(
-              color: const Color(0xff358aac),
-              size: 50,
+    }, builder: (context, state) {
+      if (state.categoryInfo.categoryId == null) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              SizedBox(
+                width: 15,
+              ),
+              Icon(Icons.info, color: Colors.blueAccent, size: 200),
+              SizedBox(
+                width: 15,
+              ),
+              Text(
+                'Selecciona una categoría.',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
+              )
+            ],
+          ),
+        );
+      }
+      if (state.screenStatus == ScreenStatus.loading) {
+        return Center(
+          child: LoadingAnimationWidget.fourRotatingDots(
+            color: const Color(0xff358aac),
+            size: 50,
+          ),
+        );
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (type == "update")
+            const Text("Editar categoría",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+          const Padding(
+            padding: EdgeInsets.only(
+              top: 10,
+              bottom: 10,
             ),
-          );
-        } else if (state.screenStatus == ScreenStatus.infoLoading ||
-            state.screenStatus == ScreenStatus.tournamentloaded) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (type == "update")
-                const Text("Editar categoría",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-              const Padding(
+            child: _CategoryNameInput(),
+          ),
+          Row(
+            children: const <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 15, right: 15),
+                  child: _MinAgeInput(),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 15, right: 15),
+                  child: _MaxAgeInput(),
+                ),
+              ),
+              Expanded(
+                  child: Padding(
                 padding: EdgeInsets.only(
-                  top: 10,
                   bottom: 10,
                 ),
-                child: _CategoryNameInput(),
+                child: _TypeInput(),
+              )),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: _CommentInput(),
+          ),
+          Row(
+            children: const <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 15, right: 15),
+                  child: _YellowForPunishmentInput(),
+                ),
               ),
-              Row(
-                children: const <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 15, right: 15),
-                      child: _MinAgeInput(),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 15, right: 15),
-                      child: _MaxAgeInput(),
-                    ),
-                  ),
-                  Expanded(
-                      child: Padding(
-                    padding: EdgeInsets.only(
-                      bottom: 10,
-                    ),
-                    child: _TypeInput(),
-                  )),
-                ],
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 15, right: 15),
+                  child: _RedForPunishmentInput(),
+                ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 10),
-                child: _CommentInput(),
-              ),
-              Row(
-                children: const <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 15, right: 15),
-                      child: _YellowForPunishmentInput(),
-                    ),
+            ],
+          ),
+          state.status.isSubmissionInProgress
+              ? Center(
+                  child: LoadingAnimationWidget.fourRotatingDots(
+                    color: const Color(0xff358aac),
+                    size: 50,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 15, right: 15),
-                      child: _RedForPunishmentInput(),
-                    ),
-                  ),
-                ],
-              ),
-              state.status.isSubmissionInProgress
-                  ? Center(
-                      child: LoadingAnimationWidget.fourRotatingDots(
-                        color: const Color(0xff358aac),
-                        size: 50,
+                )
+              : Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () async {
+                          context.read<CategoryLmCubit>().deleteCategoryId(
+                              state.categoryInfo?.categoryId,
+                              leagueManager.leagueId);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding:
+                              const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
+                          decoration: const BoxDecoration(
+                            color: Color(0xff740404),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                          child: Text(
+                            'Eliminar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'SF Pro',
+                              color: Colors.grey[200],
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10.0,
+                            ),
+                          ),
+                        ),
                       ),
-                    )
-                  : Row(
-                      children: [
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () async {
-                              context.read<CategoryLmCubit>().deleteCategoryId(
-                                  state.categoryInfo?.categoryId,
-                                  leagueManager.leagueId);
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.fromLTRB(
-                                  16.0, 10.0, 16.0, 10.0),
-                              decoration: const BoxDecoration(
-                                color: Color(0xff740404),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15.0)),
-                              ),
-                              child: Text(
-                                'Eliminar',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'SF Pro',
-                                  color: Colors.grey[200],
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10.0,
-                                ),
-                              ),
+                    ),
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () {
+                          context.read<CategoryLmCubit>().updateCategoryId();
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding:
+                              const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
+                          decoration: const BoxDecoration(
+                            color: Color(0xff045a74),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                          child: Text(
+                            'Guardar cambios',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'SF Pro',
+                              color: Colors.grey[200],
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10.0,
                             ),
                           ),
                         ),
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () {
-                              context
-                                  .read<CategoryLmCubit>()
-                                  .updateCategoryId();
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.fromLTRB(
-                                  16.0, 10.0, 16.0, 10.0),
-                              decoration: const BoxDecoration(
-                                color: Color(0xff045a74),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15.0)),
-                              ),
-                              child: Text(
-                                'Guardar cambios',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'SF Pro',
-                                  color: Colors.grey[200],
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-            ],
-          );
-        } else {
-          return Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Seleccione una categoría",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-            ],
-          ));
-        }
-      },
-    );
+                      ),
+                    ),
+                  ],
+                )
+        ],
+      );
+    });
   }
 }
 
@@ -196,8 +197,9 @@ class _CategoryNameInput extends StatelessWidget {
       builder: (context, state) => TextFormField(
         initialValue: state.categoryInfo.categoryName ?? '',
         key: const Key('name_category_textField'),
-        onChanged: (value) =>
-            context.read<CategoryLmCubit>().onChangeCategoryName(value),
+        onChanged: (value) => context
+            .read<CategoryLmCubit>()
+            .onChangeNameCategoryUpdate(categoryName: value),
         onFieldSubmitted: (value) => state.status.isSubmissionInProgress
             ? null
             : context.read<CategoryLmCubit>().updateCategoryId(),
@@ -206,7 +208,7 @@ class _CategoryNameInput extends StatelessWidget {
           labelStyle: TextStyle(fontSize: 13),
           errorText: state.categoryName.invalid ? "Datos no válidos" : null,
         ),
-        style: TextStyle(fontSize: 13),
+        style: const TextStyle(fontSize: 13),
       ),
     );
   }
@@ -226,17 +228,18 @@ class _MinAgeInput extends StatelessWidget {
           ],
           initialValue: "${state.categoryInfo.ageMin ?? '0'}",
           key: const Key('age_min_textField'),
-          onChanged: (value) =>
-              context.read<CategoryLmCubit>().onChangeMinAge(value),
+          onChanged: (value) => context
+              .read<CategoryLmCubit>()
+              .onChangeMinAgeUpdate(ageMin: value),
           onFieldSubmitted: (value) => state.status.isSubmissionInProgress
               ? null
               : context.read<CategoryLmCubit>().updateCategoryId(),
           decoration: InputDecoration(
-            labelText: "Edad minima",
-            labelStyle: TextStyle(fontSize: 13),
+            labelText: "Edad mínima",
+            labelStyle: const TextStyle(fontSize: 13),
             errorText: state.minAge.invalid ? "Datos no válidos" : null,
           ),
-          style: TextStyle(fontSize: 13),
+          style: const TextStyle(fontSize: 13),
         );
       },
     );
@@ -257,8 +260,9 @@ class _MaxAgeInput extends StatelessWidget {
           ],
           initialValue: "${state.categoryInfo.ageMax ?? '0'}",
           key: const Key('age_max_textField'),
-          onChanged: (value) =>
-              context.read<CategoryLmCubit>().onChangeMaxAge(value),
+          onChanged: (value) => context
+              .read<CategoryLmCubit>()
+              .onChangeMaxAgeUpdate(ageMax: value),
           onFieldSubmitted: (value) => state.status.isSubmissionInProgress
               ? null
               : context.read<CategoryLmCubit>().updateCategoryId(),
@@ -283,10 +287,11 @@ class _CommentInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.comment != current.comment,
       builder: (context, state) {
         return TextFormField(
-          initialValue: "${state.categoryInfo.categoryComment ?? '-'}",
+          initialValue: state.categoryInfo.categoryComment ?? '-',
           key: const Key('comment_category_textField'),
-          onChanged: (value) =>
-              context.read<CategoryLmCubit>().onChangeComment(value),
+          onChanged: (value) => context
+              .read<CategoryLmCubit>()
+              .onChangeCommentUpdate(categoryComment: value),
           onFieldSubmitted: (value) => state.status.isSubmissionInProgress
               ? null
               : context.read<CategoryLmCubit>().updateCategoryId(),
@@ -319,7 +324,7 @@ class _YellowForPunishmentInput extends StatelessWidget {
           ],
           onChanged: (value) => context
               .read<CategoryLmCubit>()
-              .onChangeYellowForPunishment(value),
+              .onChangeYellowCardUpdate(yellowForPunishment: value),
           onFieldSubmitted: (value) => state.status.isSubmissionInProgress
               ? null
               : context.read<CategoryLmCubit>().updateCategoryId(),
@@ -351,8 +356,9 @@ class _RedForPunishmentInput extends StatelessWidget {
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.digitsOnly
           ],
-          onChanged: (value) =>
-              context.read<CategoryLmCubit>().onChangeRedForPunishment(value),
+          onChanged: (value) => context
+              .read<CategoryLmCubit>()
+              .onChangeRedCardUpdate(redForPunishment: value),
           onFieldSubmitted: (value) => state.status.isSubmissionInProgress
               ? null
               : context.read<CategoryLmCubit>().updateCategoryId(),
@@ -381,87 +387,31 @@ class _TypeInputState extends State<_TypeInput> {
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryLmCubit, CategoryLmState>(
       builder: (context, state) {
-        return DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            isExpanded: true,
-            hint: Row(
-              children: const [
-                Icon(
-                  Icons.app_registration,
-                  size: 16,
-                  color: Colors.white70,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Text(
-                    'Tipo de categoria',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            items: state.lookupValueList
-                .map((item) => DropdownMenuItem<LookUpValue>(
-                      value: item,
-                      child: Text(
-                        item.lookupName!,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[200],
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              context
-                  .read<CategoryLmCubit>()
-                  .onTypeChange(value as LookUpValue);
-            },
-            value: state.selectedLookupValue,
-            icon: const Icon(
-              Icons.arrow_forward_ios_outlined,
-            ),
-            iconSize: 14,
-            iconEnabledColor: Colors.white70,
-            itemHighlightColor: Colors.white70,
-            iconDisabledColor: Colors.white70,
-            buttonHeight: 40,
-            buttonWidth: double.infinity,
-            buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-            buttonDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: Colors.blueGrey,
-              ),
-              color: Colors.blueGrey,
-            ),
-            buttonElevation: 2,
-            itemHeight: 40,
-            itemPadding: const EdgeInsets.only(left: 14, right: 14),
-            dropdownPadding: null,
-            dropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: const Color(0xff358aac),
-              ),
-              color: Colors.black54,
-            ),
-            dropdownElevation: 8,
-            scrollbarRadius: const Radius.circular(40),
-            scrollbarThickness: 6,
-            selectedItemHighlightColor: const Color(0xff358aac),
-            scrollbarAlwaysShow: true,
-            offset: const Offset(-20, 0),
+        return DropdownButtonFormField<LookUpValue>(
+          value: state.lookupValueList[state.lookupValueList.indexWhere(
+              (element) => element.lookupValue == state.categoryInfo.gender)],
+          decoration: const InputDecoration(
+            label: Text('Género'),
+            border: OutlineInputBorder(),
           ),
+          isExpanded: true,
+          hint: const Text('Selecciona el género'),
+          items: List.generate(
+            state.lookupValueList.length,
+            (index) {
+              final content = state.lookupValueList[index].lookupName!;
+              return DropdownMenuItem(
+                value: state.lookupValueList[index],
+                child: Text(
+                    content.trim().isEmpty ? 'Selecciona el género' : content),
+              );
+            },
+          ),
+          onChanged: (value) {
+            context
+                .read<CategoryLmCubit>()
+                .onChangeTypeGenderUpdate(typeGender: value!);
+          },
         );
       },
     );

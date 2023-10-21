@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:ligas_futbol_flutter/src/domain/countResponse/entity/register_count_interface.dart';
+import 'package:ligas_futbol_flutter/src/domain/matches/dto/detail_eliminatory_dto/qualifying_match_detail_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/detail_match/detailMatchDTO.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/detail_rol_match_dto/detail_rol_match_DTO.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/edit_match_dto/edit_match_dto.dart';
@@ -27,8 +28,9 @@ class MatchesServiceImpl implements IMatchesService {
 
   @override
   RepositoryResponse<List<MatchesByTournamentsInterface>>
-      getMatchesByTournament(int tournamenId) {
-    return _repository.getMatchesByTournament(tournamenId);
+      getMatchesByTournament(int tournamenId, {bool requiresAuthToken = true}) {
+    return _repository.getMatchesByTournament(tournamenId,
+        requiresAuthToken: requiresAuthToken);
   }
 
   @override
@@ -49,7 +51,8 @@ class MatchesServiceImpl implements IMatchesService {
   }
 
   @override
-  RepositoryResponse<ResultDTO> createRolesGamesByTournamentId(int tournamentId) {
+  RepositoryResponse<ResultDTO> createRolesGamesByTournamentId(
+      int tournamentId) {
     return _repository.createRolesGamesByTournamentId(tournamentId);
   }
 
@@ -136,8 +139,8 @@ class MatchesServiceImpl implements IMatchesService {
 
   @override
   RepositoryResponse<MatchTeamMatchesRefereeDTO> createRolesClass(
-      List<MatchTeamMatchesRefereeDTO> listMatchRoleDTO,int tournamentId) {
-    return _repository.createRolesClass(listMatchRoleDTO,tournamentId);
+      List<MatchTeamMatchesRefereeDTO> listMatchRoleDTO, int tournamentId) {
+    return _repository.createRolesClass(listMatchRoleDTO, tournamentId);
   }
 
   @override
@@ -169,5 +172,16 @@ class MatchesServiceImpl implements IMatchesService {
   @override
   RepositoryResponse<String> updateMatchReferee(int matchId, int refereeId) {
     return _repository.updateMatchReferee(matchId, refereeId);
+  }
+
+  @override
+  RepositoryResponse<QualifyingMatchDetailDTO> getDetailEliminatory(
+      int matchId) {
+    return _repository.getDetailEliminatory(matchId);
+  }
+
+  @override
+  RepositoryResponse<MatchSpr> getMatchDetailByEventId(int eventId) {
+    return _repository.getMatchDetailByEventId(eventId);
   }
 }

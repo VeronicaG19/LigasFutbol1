@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/core/enums.dart';
 import 'package:ligas_futbol_flutter/src/presentation/app/app.dart';
 import 'package:ligas_futbol_flutter/src/presentation/splash/responsive_widget.dart';
+import 'package:ligas_futbol_flutter/src/presentation/widgets/only_mobile_app/button_alert_only_web.dart';
 
 import '../../../../service_locator/injection.dart';
 import '../../../league_manager/home/request/request_leage_admin_league_manager.dart';
@@ -51,11 +53,21 @@ class _RolPageContent extends StatelessWidget {
       backgroundColor: Colors.grey[200],
       body: BlocConsumer<RoleCubit, RoleState>(
         listenWhen: (previous, current) =>
-            previous.rolChanged != current.rolChanged,
+            previous.rolChanged != current.rolChanged ||
+            current.screenState == BasicCubitScreenState.error,
         listener: (context, state) {
-          context
-              .read<AuthenticationBloc>()
-              .add(AuthenticationRolChanged(state.rolChanged));
+          if (state.screenState == BasicCubitScreenState.error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                    Text(state.errorMessage ?? 'Ah ocurrido un inconveniente'),
+              ),
+            );
+          } else {
+            context
+                .read<AuthenticationBloc>()
+                .add(AuthenticationRolChanged(state.rolChanged));
+          }
         },
         builder: (context, state) {
           final cubit = context.read<RoleCubit>();
@@ -355,10 +367,38 @@ class _RolSectionMenu extends StatelessWidget {
         return const ListTile(
           leading: Icon(Icons.edit),
           title: Text('Cambiar Rol'),
+          subtitle: Align(
+            alignment: Alignment.centerLeft,
+            child: ButtonAlertOnlyWeb(),
+          ),
         );
       } else {
+        int cDevice = context.read<RoleCubit>().allowedDevice(index - 1);
+
         return ListTile(
-          title: Text(associatedRoles[index - 1].rol.roleDescription ?? ''),
+          title: Row(
+            children: [
+              Text(associatedRoles[index - 1].rol.roleDescription ?? ''),
+              Container(
+                margin: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: (kIsWeb)
+                      ? (cDevice == 1)
+                          ? Colors.red
+                          : Colors.cyan.shade700
+                      : (cDevice == 0)
+                          ? Colors.red
+                          : Colors.cyan.shade700,
+                ),
+                child: Text(
+                  style: const TextStyle(color: Colors.white),
+                  context.read<RoleCubit>().allowedDeviceLabel(cDevice),
+                ),
+              ),
+            ],
+          ),
           leading: Radio<int>(
             value: index - 1,
             groupValue: associatedRoles[index - 1].rol == currentRol.rol
@@ -366,7 +406,7 @@ class _RolSectionMenu extends StatelessWidget {
                 : -1,
             onChanged: (value) {
               Navigator.pop(context);
-              context.read<RoleCubit>().changeRol(index - 1);
+              context.read<RoleCubit>().onChangeRol(index - 1);
             },
             activeColor: Colors.green,
           ),

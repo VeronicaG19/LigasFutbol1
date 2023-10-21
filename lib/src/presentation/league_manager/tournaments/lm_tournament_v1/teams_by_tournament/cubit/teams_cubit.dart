@@ -40,7 +40,6 @@ class TeamsLMCubit extends Cubit<TeamsLMState> {
 
   Future<void> getTournamentTeamDataBytournament(
       {required Tournament tournament}) async {
-    print('-------->getTournamentTeamDataBytournament<---------');
     emit(state.copyWith(
         screenStatus: ScreenStatus.loading, tournament: tournament));
     final response = await _teamTournamentService
@@ -87,22 +86,24 @@ class TeamsLMCubit extends Cubit<TeamsLMState> {
 
   Future<void> markTeamToSuscribe(bool val, int index) async {
     int cont = state.countSelected;
+    final cardsteams = state.cardTeamsSlc;
+    final card = cardsteams[index];
+
+    emit(state.copyWith(cardTeamsSlc: [], countSelected: 0));
+    cardsteams.removeAt(index);
+
+    print(
+        '$cont  < ${state.tournament.maxTeams! - state.inscribedTeams.coundt1!}');
+
     if (cont < (state.tournament.maxTeams! - state.inscribedTeams.coundt1!)) {
-      final cardsteams = state.cardTeamsSlc;
-      final card = cardsteams[index];
-
-      if (val) {
-        cont = cont + 1;
-      } else {
-        cont = cont - 1;
-      }
-
-      emit(state.copyWith(cardTeamsSlc: [], countSelected: 0));
-      cardsteams.removeAt(index);
+      cont = val ? (cont + 1) : (cont - 1);
       cardsteams.insert(index, card.copyWith(isSelected: val));
+    } else {
+      cont = val ? cont : (cont - 1);
+      cardsteams.insert(index, card.copyWith(isSelected: false));
+    }
 
-      emit(state.copyWith(cardTeamsSlc: cardsteams, countSelected: cont));
-    } else {}
+    emit(state.copyWith(cardTeamsSlc: cardsteams, countSelected: cont));
   }
 
   Future<void> getCountInscribedTeams(int tournamnetId) async {
@@ -116,10 +117,9 @@ class TeamsLMCubit extends Cubit<TeamsLMState> {
     });
   }
 
-  Future<void> suscribeTeams() async {
+  Future<void> subscribeTeams() async {
     emit(state.copyWith(screenStatus: ScreenStatus.teamsGetting));
     List<TeamTournament> teamsToInscribe = [];
-
     if (state.countSelected > 0) {
       state.cardTeamsSlc.forEach((card) {
         if (card.isSelected!) {
@@ -141,9 +141,11 @@ class TeamsLMCubit extends Cubit<TeamsLMState> {
       }, (r) {
         //getTeamsTournamentByTournament(tournament: state.tournament);
       });
+      emit(state.copyWith(screenStatus: ScreenStatus.success));
     } else {
-      emit(state.copyWith(screenStatus: ScreenStatus.teamsGetted));
+      emit(state.copyWith(screenStatus: ScreenStatus.success));
     }
+    getTournamentTeamDataBytournament(tournament: state.tournament);
   }
 
   Future<void> unSuscribeTeams(int teamTournamentId) async {
@@ -155,6 +157,8 @@ class TeamsLMCubit extends Cubit<TeamsLMState> {
           screenStatus: ScreenStatus.error, errorMessage: l.errorMessage));
       //getTeamsTournamentByTournament(tournament: state.tournament);
     }, (r) {
+      emit(state.copyWith(screenStatus: ScreenStatus.success));
+      getTournamentTeamDataBytournament(tournament: state.tournament);
       //getTeamsTournamentByTournament(tournament: state.tournament);
       // emit(state.copyWith(screenStatus: ScreenStatus.teamsGetted));
     });

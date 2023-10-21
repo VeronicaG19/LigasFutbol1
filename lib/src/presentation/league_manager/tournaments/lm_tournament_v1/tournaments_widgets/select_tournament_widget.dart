@@ -26,7 +26,7 @@ class SelectTournamentWidget extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CreateTournamentPage(),
+                      builder: (context) =>  CreateTournamentPage(fromPage:1),
                     ),
                   );
                 },

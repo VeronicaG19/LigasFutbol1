@@ -3,25 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../service_locator/injection.dart';
 import '../../../app/bloc/authentication_bloc.dart';
-import '../../../widgets/notification_icon/cubit/notification_count_cubit.dart';
 import '../cubit/referee_request_cubit.dart';
 import 'ref_requests_content.dart';
 
 class RefRequestsPage extends StatelessWidget {
   const RefRequestsPage({Key? key}) : super(key: key);
 
-  static Route route(NotificationCountCubit notificationCountCubit) =>
-      MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: notificationCountCubit,
-          child: const RefRequestsPage(),
-        ),
+  static Route route() => MaterialPageRoute(
+        builder: (_) => const RefRequestsPage(),
       );
 
   @override
   Widget build(BuildContext context) {
     final person = context.read<AuthenticationBloc>().state.user.person;
-    final referee = context.select((AuthenticationBloc bloc) => bloc.state.refereeData);
+    final referee =
+        context.select((AuthenticationBloc bloc) => bloc.state.refereeData);
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -124,7 +120,8 @@ class RefRequestsPage extends StatelessWidget {
         ),
         body: BlocProvider(
           create: (_) => locator<RefereeRequestCubit>()
-            ..loadUserRequests(personId: person.personId!, refereeId: referee.refereeId!),
+            ..loadUserRequests(
+                personId: person.personId!, refereeId: referee.refereeId ?? 0),
           child: const RefRequestsContent(),
         ),
       ),

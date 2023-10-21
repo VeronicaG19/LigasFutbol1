@@ -10,16 +10,14 @@ class NeedSlctTournamentPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-         Image.asset('assets/images/informacion.png',
-         width: 200,
-         height: 200,),
-           const SizedBox(
-                              width: 15,
-                            ),
-          const Text('Seleccione algún torneo para poder editar su información.', 
-          style: TextStyle(
-            fontSize: 30
-          ),)
+          Icon(Icons.warning_rounded, color: Colors.deepOrange, size: 230),
+          const SizedBox(
+            width: 15,
+          ),
+          const Text(
+            'Seleccione algún torneo para poder editar su información.',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
+          )
         ],
       ),
     );

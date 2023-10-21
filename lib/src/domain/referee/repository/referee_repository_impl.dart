@@ -1,11 +1,11 @@
 import 'package:datasource_client/datasource_client.dart';
 import 'package:injectable/injectable.dart';
-import 'package:intl/intl.dart';
 import 'package:ligas_futbol_flutter/src/core/extensions.dart';
 import 'package:ligas_futbol_flutter/src/domain/referee/dto/referee_by_address.dart';
 import 'package:ligas_futbol_flutter/src/domain/referee/entity/count_tournament_event.dart';
 
 import '../../../core/endpoints.dart';
+import '../../../core/models/address_filter.dart';
 import '../../../core/typedefs.dart';
 import '../dto/create_referee_dto.dart';
 import '../entity/rating_referee_dto.dart';
@@ -127,24 +127,12 @@ class RefereeRepositoryImpl implements IRefereeRepository {
   }
 
   @override
-  RepositoryResponse<List<RefereeByAddress>> getRefereeByAddress(int matchId,
-      {String? state, DateTime? matchDate}) {
-    final params = <String, dynamic>{};
-    params.addAll({
-      'city': '',
-      'countryCode': '',
-      'county': '',
-      'datematch': matchDate != null
-          ? DateFormat('yyy/MM/dd HH:mm:ss').format(matchDate)
-          : '',
-      'postalCOde': '',
-      'state': state ?? '',
-      'town': '',
-    });
+  RepositoryResponse<List<RefereeByAddress>> searchByFiltersReferee(
+      AddressFilter filter) {
     return _apiClient.network
         .getCollectionData(
-            endpoint: '$getRefereeByAddressEndpoint/$matchId',
-            queryParams: params,
+            endpoint: getRefereeByAddressEndpoint,
+            queryParams: filter.toMap(),
             converter: RefereeByAddress.fromJson)
         .validateResponse();
   }

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../service_locator/injection.dart';
 import '../../app/app.dart';
-import '../../widgets/notification_icon/cubit/notification_count_cubit.dart';
 import '../cubit/user_requests_cubit.dart';
 import 'user_requests_content.dart';
 
@@ -12,12 +11,8 @@ class UserRequestsPage extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  static Route route(NotificationCountCubit notificationCountCubit) =>
-      MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: notificationCountCubit,
-          child: const UserRequestsPage(),
-        ),
+  static Route route() => MaterialPageRoute(
+        builder: (_) => const UserRequestsPage(),
       );
 
   @override

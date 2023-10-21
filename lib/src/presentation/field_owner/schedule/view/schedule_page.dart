@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ligas_futbol_flutter/src/presentation/field_owner/schedule/view/widgets/ratting_row.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -8,6 +9,7 @@ import '../../../../domain/agenda/entity/availability.dart';
 import '../../../../domain/agenda/entity/qra_event.dart';
 import '../../../../service_locator/injection.dart';
 import '../../../app/app.dart';
+import '../../matchs_info/match_detail_page.dart';
 import '../cubit/field_owner_schedule_cubit.dart';
 import 'm_new_event.dart';
 
@@ -24,7 +26,7 @@ class SchedulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final leagueId =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return BlocProvider(
       create: (_) => locator<FieldOwnerScheduleCubit>(),
       child: _PageContent(
@@ -154,6 +156,75 @@ class _PageContentState extends State<_PageContent> {
                               style: const TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 10),
                             ),
+                          ),
+                          const SizedBox(width: 5),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    RattingRow(
+                                        rating: context
+                                            .read<FieldOwnerScheduleCubit>()
+                                            .getQualificationPerEventAndType(
+                                                state.selectedEvents[index]
+                                                    .eventId!,
+                                                'PLAYER_TO_FIELD'),
+                                        subTitle: 'Jugadores'),
+                                    const SizedBox(height: 5),
+                                    RattingRow(
+                                        rating: context
+                                            .read<FieldOwnerScheduleCubit>()
+                                            .getQualificationPerEventAndType(
+                                                state.selectedEvents[index]
+                                                    .eventId!,
+                                                'REFEREE_TO_FIELD'),
+                                        subTitle: 'Arbitro'),
+                                    const SizedBox(height: 19),
+                                  ],
+                                ),
+                              ),
+                              Visibility(
+                                visible: (context
+                                        .read<FieldOwnerScheduleCubit>()
+                                        .getMatchId(state
+                                            .selectedEvents[index].eventId!)) >
+                                    0,
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      int matchiD = context
+                                          .read<FieldOwnerScheduleCubit>()
+                                          .getMatchId(state
+                                              .selectedEvents[index].eventId!);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              MatchDetailTabBar(
+                                            matchId: matchiD,
+                                            fieldId: state
+                                                .selectedEvents[index].fieldId!,
+                                            eventId: state
+                                                .selectedEvents[index].eventId!,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: CircleAvatar(
+                                      child: Icon(
+                                        Icons.info,
+                                        color: Colors.white,
+                                      ),
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 19),
+                            ],
                           ),
                         ],
                       ),

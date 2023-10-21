@@ -18,60 +18,82 @@ class DeleteTeamTournamentModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: const Text('Eliminar equipo'),
+      title: const Text('Eliminar equipo',
+          style: TextStyle(fontWeight: FontWeight.w900)),
       children: [
-        BlocBuilder<TeamsLMCubit, TeamsLMState>(
+        BlocConsumer<TeamsLMCubit, TeamsLMState>(
+          listenWhen: (previous, current) =>
+              previous.screenStatus != current.screenStatus,
+          listener: (context, state) {
+            if (state.screenStatus == ScreenStatus.success) {
+              Navigator.of(context).pop();
+            }
+          },
           builder: (context, state) {
             return Column(
               children: [
-                Text('Deseas eliminar al equipo ${teamTournament.teamName}'),
                 const SizedBox(
-                  height: 25,
+                  height: 30,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.grey)),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: Icon(
-                          // <-- Icon
-                          Icons.backspace,
-                          size: 24.0,
+                Text(
+                  '¿Deseas eliminar al equipo ${teamTournament.teamName}?',
+                  style: const TextStyle(fontSize: 15),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                if (state.screenStatus == ScreenStatus.teamsGetting)
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 15, bottom: 10, right: 15),
+                  child: Visibility(
+                    visible: state.screenStatus != ScreenStatus.teamsGetting,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.blueGrey)),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: const Icon(
+                              // <-- Icon
+                              Icons.arrow_back_outlined,
+                              size: 20.0,
+                            ),
+                            label: const Text('Regresar',
+                                style: TextStyle(fontSize: 12)), // <-- Text
+                          ),
                         ),
-                        label: const Text('Regresar'), // <-- Text
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.red)),
-                        onPressed: () async {
-                          await context.read<TeamsLMCubit>().unSuscribeTeams(
-                              teamTournament.teamTournamentId!);
-                          await context
-                              .read<TeamsLMCubit>()
-                              .getTournamentTeamDataBytournament(
-                                  tournament: tournament);
-                          Navigator.of(context).pop();
-                        },
-                        icon: Icon(
-                          // <-- Icon
-                          Icons.save,
-                          size: 24.0,
+                        const SizedBox(
+                          width: 25,
                         ),
-                        label: const Text('Eliminar equipo'), // <-- Text
-                      ),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.red)),
+                            onPressed: () {
+                              context.read<TeamsLMCubit>().unSuscribeTeams(
+                                  teamTournament.teamTournamentId!);
+                            },
+                            icon: const Icon(
+                              // <-- Icon
+                              Icons.delete,
+                              size: 20.0,
+                            ),
+                            label: const Text('Eliminar equipo',
+                                style: TextStyle(fontSize: 12)), // <-- Text
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 )
               ],
             );

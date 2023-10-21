@@ -112,9 +112,9 @@ class TournamentRolePlayingTab extends StatelessWidget {
                         DataCell(
                           Text(
                             state.matchmakingList[index].estadoJuego == "Pendiente"
-                                ? "0"
-                                : "${state.matchmakingList[index].marcadorLocal} -"
-                                " ${state.matchmakingList[index].marcadorVisita}",
+                                ? "vs"
+                                : "${state.matchmakingList[index].marcadorLocal??''} -"
+                                " ${state.matchmakingList[index].marcadorVisita??''}",
                             textAlign: TextAlign.center,
                           ),
                         ),

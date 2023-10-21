@@ -6,7 +6,6 @@ import 'package:ligas_futbol_flutter/src/presentation/representative/manage_team
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../../service_locator/injection.dart';
-import 'team_info_bar.dart';
 import 'team_player_list.dart';
 
 class ManageTeamPage extends StatelessWidget {
@@ -16,66 +15,86 @@ class ManageTeamPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: ListView(
         children: [
-          Expanded(flex: 2, child: TeamInfoBar(teamId: teamId!)),
-          Expanded(
-            flex: 8,
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: ListView(
-                children: [
-                  const SizedBox(height: 10),
-                  // * Uniformes
-                  BlocProvider(
-                    create: (_) => locator<ManageTeamCubit>()
-                      ..getUniformsOfTeamById(teamId: teamId!),
-                    child: BlocBuilder<ManageTeamCubit, ManageTeamState>(
-                      builder: (context, state) {
-                        if (state.screenStatus ==
-                            ScreenStatus.loadingUniforms) {
-                          return Center(
-                            child: LoadingAnimationWidget.fourRotatingDots(
-                              color: const Color(0xff358aac),
-                              size: 50,
-                            ),
-                          );
-                        } else {
-                          String? unifType;
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: List.generate(2, (index) {
-                              if (index < state.uniformsList.length) {
-                                unifType =
-                                    state.uniformsList[index].uniformType!;
-                                return TeamUniformButton(
-                                  uniformDto: state.uniformsList[index],
-                                );
-                              } else {
-                                return TeamUniformButton(
-                                  uniformDto: UniformDto(
-                                    teamId: teamId,
-                                    teamName: state.teamInfo.teamName,
-                                    uniformType: (unifType == "LOCAL")
-                                        ? "VISIT"
-                                        : "LOCAL",
-                                  ),
-                                );
-                              }
-                            }),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // * Jugadores
-                  TeamPlayerList(teamId: teamId),
-                ],
-              ),
+          const SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            child: _UniformsTeam(
+              teamId: teamId,
             ),
           ),
+          TeamPlayerList(teamId: teamId),
         ],
+      ),
+    );
+  }
+}
+
+class _UniformsTeam extends StatelessWidget {
+  const _UniformsTeam({
+    Key? key,
+    this.teamId,
+  }) : super(key: key);
+
+  final int? teamId;
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => locator<ManageTeamCubit>()
+        ..getUniformsOfTeamById(teamId: teamId ?? 0),
+      child: BlocBuilder<ManageTeamCubit, ManageTeamState>(
+        builder: (context, state) {
+          if (state.screenStatus == ScreenStatus.loadingUniforms) {
+            return Center(
+              child: LoadingAnimationWidget.fourRotatingDots(
+                color: const Color(0xff358aac),
+                size: 50,
+              ),
+            );
+          } else {
+            String? unifType;
+            List<String> listTeamType = ['LOCAL', 'VISIT'];
+            if (state.uniformsList.isNotEmpty) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(2, (index) {
+                  if (index < state.uniformsList.length) {
+                    unifType = state.uniformsList[index].uniformType!;
+                    return TeamUniformButton(
+                      uniformDto: state.uniformsList[index],
+                      rutaImage: 'assets/images/playera2.png',
+                    );
+                  } else {
+                    return TeamUniformButton(
+                      uniformDto: UniformDto(
+                        teamId: teamId,
+                        teamName: state.teamInfo.teamName,
+                        uniformType: (unifType == "LOCAL") ? "VISIT" : "LOCAL",
+                      ),
+                      rutaImage: 'assets/images/playera2.png',
+                    );
+                  }
+                }),
+              );
+            } else {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(2, (index) {
+                  return TeamUniformButton(
+                    rutaImage: 'assets/images/playera2.png',
+                    uniformDto: UniformDto(
+                      teamId: teamId,
+                      teamName: state.teamInfo.teamName,
+                      uniformType: listTeamType[index],
+                    ),
+                  );
+                }),
+              );
+            }
+          }
+        },
       ),
     );
   }

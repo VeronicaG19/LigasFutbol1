@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,10 +8,11 @@ import 'package:ligas_futbol_flutter/src/presentation/league_manager/category/ca
 import 'package:ligas_futbol_flutter/src/presentation/league_manager/home/home.dart';
 import 'package:ligas_futbol_flutter/src/presentation/league_manager/teams/lm_teams_page.dart';
 import 'package:ligas_futbol_flutter/src/presentation/player/profile/profile_page.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../service_locator/injection.dart';
-import '../../widgets/notification_icon/cubit/notification_count_cubit.dart';
+import '../../../core/constans.dart';
+import '../../../domain/leagues/entity/league.dart';
 import '../../widgets/notification_icon/view/notification_icon.dart';
 import '../tournaments/lm_tournament_v2/main_page/view/lm_tournament_page.dart';
 
@@ -24,11 +27,41 @@ class LeagueManagerMainPage extends StatefulWidget {
 }
 
 class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
+   @override
+  void initState(){
+
+    final newvVersion = NewVersionPlus(
+      iOSId: 'dev.ias.swat.ccs.com.Wiplif',
+      androidId: 'com.ccs.swat.iaas.spr.ligas_futbol.ligas_futbol_flutter'
+    );
+
+    Timer(const Duration(milliseconds: 800),(){
+      checkNewVersion(newvVersion);
+
+    });
+
+    super.initState();
+  }
+
+  void checkNewVersion(NewVersionPlus newVersion ) async{
+    final status = await newVersion.getVersionStatus();
+      if(status != null) {
+        if (status.canUpdate) {
+          newVersion.showUpdateDialog(
+            context: context, 
+            versionStatus: status,
+            dialogText: 'Nueva version disponible en la tienda (${status.storeVersion}), Actualiza ahora',
+            dialogTitle: 'Actualización disponible',
+
+            );
+        }
+      }
+  }
   @override
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     final List<String> items = [
       'Mi liga',
       'Cerrar sesión',
@@ -74,43 +107,40 @@ class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
             colors: [Color(0xff06748b), Color(0xff078995), Color(0xff058299)],
           ))),*/
           actions: [
-            TextButton(
-              onPressed: () async {},
-              child: Container(
-                  height: 50,
-                  padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.beenhere,
-                        size: 15,
-                        color: Colors.grey[200],
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Liga: ${leagueManager.leagueName}',
-                        style: TextStyle(
-                          fontFamily: 'SF Pro',
-                          color: Colors.grey[200],
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12.0,
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
-            BlocProvider(
-              create: (contextC) => locator<NotificationCountCubit>()
-                ..onLoadNotificationCount(
-                    leagueManager.leagueId, user.applicationRol),
-              child: NotificationIcon(
-                applicationRol: user.applicationRol,
-              ),
+            const _ChangeLeagueOption(),
+            // TextButton(
+            //   onPressed: () async {},
+            //   child: Container(
+            //       height: 50,
+            //       padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
+            //       decoration: const BoxDecoration(
+            //         borderRadius: BorderRadius.all(Radius.circular(15.0)),
+            //       ),
+            //       child: Row(
+            //         children: [
+            //           Icon(
+            //             Icons.beenhere,
+            //             size: 15,
+            //             color: Colors.grey[200],
+            //           ),
+            //           const SizedBox(
+            //             width: 10,
+            //           ),
+            //           Text(
+            //             'Liga: ${leagueManager.leagueName}',
+            //             style: TextStyle(
+            //               fontFamily: 'SF Pro',
+            //               color: Colors.grey[200],
+            //               fontWeight: FontWeight.w500,
+            //               fontSize: 12.0,
+            //             ),
+            //           ),
+            //         ],
+            //       )),
+            // ),
+            NotificationIcon(
+              key: CoachKey.notificationAdKey,
+              applicationRol: user.applicationRol,
             ),
             TextButton(
               child: Row(
@@ -202,13 +232,16 @@ class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
                     .toList(),
                 value: selectedValue,
                 onChanged: (value) {
-                  setState(() {
-                    selectedValue = value as String;
-                  });
-                  if (value == "Cerrar sesión") Navigator.pop(context);
-                  context
-                      .read<AuthenticationBloc>()
-                      .add(AuthenticationLogoutRequested());
+                  if (value != 'Mi liga') {
+                    setState(() {
+                      selectedValue = value as String;
+                    });
+                    print("valor $value");
+                    if (value == "Cerrar sesión") Navigator.pop(context);
+                    context
+                        .read<AuthenticationBloc>()
+                        .add(AuthenticationLogoutRequested());
+                  }
                 },
                 buttonHeight: 40,
                 buttonWidth: 250,
@@ -226,7 +259,7 @@ class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
           ],
           elevation: 0.0,
           bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(85),
+              preferredSize: const Size.fromHeight(60),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -287,6 +320,7 @@ class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
                             ),
                           ),
                           Tab(
+                            key: CoachKey.catMainPageLeageAdm,
                             height: 25,
                             child: Container(
                               decoration: BoxDecoration(
@@ -302,6 +336,7 @@ class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
                             ),
                           ),
                           Tab(
+                            key: CoachKey.teamMainPageLeageAdm,
                             height: 25,
                             child: Container(
                               decoration: BoxDecoration(
@@ -317,6 +352,7 @@ class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
                             ),
                           ),
                           Tab(
+                            key: CoachKey.tournamentMainPageLeageAdm,
                             height: 25,
                             child: Container(
                               decoration: BoxDecoration(
@@ -366,6 +402,67 @@ class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ChangeLeagueOption extends StatelessWidget {
+  const _ChangeLeagueOption({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final leagues =
+        context.select((AuthenticationBloc bloc) => bloc.state.managerLeagues);
+    final items = List.generate(
+      leagues.length,
+      (index) => PopupMenuItem<League>(
+        value: leagues[index],
+        child: Text(leagues[index].leagueName),
+      ),
+    );
+
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: PopupMenuButton<League>(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            onSelected: (option) {
+              context
+                  .read<AuthenticationBloc>()
+                  .add(ChangeSelectedLeague(option));
+            },
+            itemBuilder: (context) => items,
+            initialValue: state.selectedLeague,
+            tooltip: 'Cambiar de liga',
+            child: Row(
+              children: [
+                Icon(
+                  Icons.beenhere,
+                  size: 15,
+                  color: Colors.grey[200],
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Liga: ${state.selectedLeague.leagueName}',
+                  style: TextStyle(
+                    fontFamily: 'SF Pro',
+                    color: Colors.grey[200],
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12.0,
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                const Icon(Icons.arrow_drop_down, size: 30),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

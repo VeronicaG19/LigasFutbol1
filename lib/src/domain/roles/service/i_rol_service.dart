@@ -9,11 +9,12 @@ abstract class IRolService {
   Future<List<Rol>> getAvailableRolesForUser(int userId);
   RepositoryResponse<List<Rol>> getRolesAssociatedToUser(int userId);
   RepositoryResponse<List<UserRol>> getUserRoles(int userId, int orgId);
-  UserRol getPrimaryRol(List<UserRol> roles);
+  Future<UserRol> getPrimaryRol(List<UserRol> roles);
   ApplicationRol getApplicationRol(String rol);
   RepositoryResponse<UserRol> changePrimaryRol(int userRolId);
   RepositoryResponse<UserRol> createUserRol(UserRol userRol);
   RepositoryResponse<UserRol> createUserRolAndUpdate(UserRol userRol);
 
-  RepositoryResponse<UserRol> createUserRolAndUpdateByNames(int personId, String rolName);
+  RepositoryResponse<UserRol> createUserRolAndUpdateByNames(
+      int personId, String rolName);
 }

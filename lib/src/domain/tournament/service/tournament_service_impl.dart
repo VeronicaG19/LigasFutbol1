@@ -23,20 +23,26 @@ class TournamentServiceImpl implements ITournamentService {
   TournamentServiceImpl(this._repository);
 
   @override
-  RepositoryResponse<List<Tournament>> getTournamentByLeagueId(int leagueId) {
-    return _repository.getTournamentByLeagueId(leagueId);
+  RepositoryResponse<List<Tournament>> getTournamentByLeagueId(int leagueId,
+      {bool requiresAuthToken = true}) {
+    return _repository.getTournamentByLeagueId(leagueId,
+        requiresAuthToken: requiresAuthToken);
   }
 
   @override
   RepositoryResponse<List<ScoringTournamentDTO>> getScoringTournamentId(
-      int tournamentId) {
-    return _repository.getScoringTournamentId(tournamentId);
+      int tournamentId,
+      {bool requiresAuthToken = true}) {
+    return _repository.getScoringTournamentId(tournamentId,
+        requiresAuthToken: requiresAuthToken);
   }
 
   @override
   RepositoryResponse<List<GoalsTournamentDTO>> getGoalsTournamentId(
-      int tournamentId) {
-    return _repository.getGoalsTournamentId(tournamentId);
+      int tournamentId,
+      {bool requiresAuthToken = true}) {
+    return _repository.getGoalsTournamentId(tournamentId,
+        requiresAuthToken: requiresAuthToken);
   }
 
   @override
@@ -128,19 +134,25 @@ class TournamentServiceImpl implements ITournamentService {
 
   @override
   RepositoryResponse<Tournament> getFindByNameAndCategory(
-      int categoryId, String tournamentName) {
-    return _repository.getFindByNameAndCategory(categoryId, tournamentName);
+      int categoryId, String tournamentName,
+      {bool requiresAuthToken = true}) {
+    return _repository.getFindByNameAndCategory(categoryId, tournamentName,
+        requiresAuthToken: requiresAuthToken);
   }
 
   @override
   RepositoryResponse<TournamentChampionDTO> getTournamentChampion(
-      int tournamentId) {
-    return _repository.getTournamentChampion(tournamentId);
+      int tournamentId,
+      {bool requiresAuthToken = true}) {
+    return _repository.getTournamentChampion(tournamentId,
+        requiresAuthToken: requiresAuthToken);
   }
 
   @override
-  RepositoryResponse<String> getTournamentMatchesStatus(int tournamentId) {
-    return _repository.getTournamentMatchesStatus(tournamentId);
+  RepositoryResponse<String> getTournamentMatchesStatus(int tournamentId,
+      {bool requiresAuthToken = true}) {
+    return _repository.getTournamentMatchesStatus(tournamentId,
+        requiresAuthToken: requiresAuthToken);
   }
 
   @override

@@ -7,12 +7,14 @@ enum ScreenStatus {
   error,
 }
 
-class RepresentantiveRequestsState extends Equatable{
+class RepresentantiveRequestsState extends Equatable {
   final List<UserRequests> receivedRequestsList;
   final List<UserRequests> sentRequestsList;
   final List<UserRequests> adminRequestList;
   final String? errorMessage;
   final ScreenStatus screenStatus;
+  //final List<TeamPlayer> teamPlayer;
+  final ValidateRequestDTO validationrequet;
 
   const RepresentantiveRequestsState({
     this.receivedRequestsList = const [],
@@ -20,6 +22,8 @@ class RepresentantiveRequestsState extends Equatable{
     this.adminRequestList = const [],
     this.errorMessage,
     this.screenStatus = ScreenStatus.initial,
+    //this.teamPlayer = const [],
+    this.validationrequet = ValidateRequestDTO.empty,
   });
 
   RepresentantiveRequestsState copyWith({
@@ -28,6 +32,8 @@ class RepresentantiveRequestsState extends Equatable{
     List<UserRequests>? adminRequestList,
     String? errorMessage,
     ScreenStatus? screenStatus,
+    List<TeamPlayer>? teamPlayer,
+    ValidateRequestDTO? validationrequet,
   }) {
     return RepresentantiveRequestsState(
       receivedRequestsList: receivedRequestsList ?? this.receivedRequestsList,
@@ -35,14 +41,18 @@ class RepresentantiveRequestsState extends Equatable{
       adminRequestList: adminRequestList ?? this.adminRequestList,
       errorMessage: errorMessage ?? this.errorMessage,
       screenStatus: screenStatus ?? this.screenStatus,
+      //teamPlayer: teamPlayer ?? this.teamPlayer,
+      validationrequet: validationrequet ?? this.validationrequet,
     );
   }
 
   @override
   List<Object?> get props => [
-    receivedRequestsList,
-    sentRequestsList,
-    adminRequestList,
-    screenStatus,
-  ];
+        receivedRequestsList,
+        sentRequestsList,
+        adminRequestList,
+        screenStatus,
+        //teamPlayer,
+        validationrequet,
+      ];
 }

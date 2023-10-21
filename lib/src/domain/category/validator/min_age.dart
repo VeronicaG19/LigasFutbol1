@@ -9,17 +9,15 @@ enum MinAgeValidationError {
 /// {@template password}
 /// Form input for a password input.
 /// {@endtemplate}
-class MinAge extends FormzInput<String, MinAgeValidationError> {
+class MinAge extends FormzInput<int, MinAgeValidationError> {
   /// {@macro password}
-  const MinAge.pure() : super.pure('');
+  const MinAge.pure() : super.pure(0);
 
   /// {@macro password}
-  const MinAge.dirty([String value = '']) : super.dirty(value);
+  const MinAge.dirty([int value = 0]) : super.dirty(value);
 
   @override
-  MinAgeValidationError? validator(String? value) {
-    return value?.trim().isNotEmpty == true && int.parse(value!.trim()) > 0
-        ? null
-        : MinAgeValidationError.invalid;
+  MinAgeValidationError? validator(int? value) {
+    return value! > 0 ? null : MinAgeValidationError.invalid;
   }
 }

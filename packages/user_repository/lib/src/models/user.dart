@@ -10,6 +10,7 @@ import 'package:pointycastle/digests/sha512.dart';
 import 'person.dart';
 
 enum ApplicationRol {
+  unknown,
   player,
   leagueManager,
   superAdmin,

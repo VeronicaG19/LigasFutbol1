@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/presentation/app/bloc/authentication_bloc.dart';
+import 'package:ligas_futbol_flutter/src/presentation/player/soccer_team/matches_by_player/matches_by_player_page.dart';
+import 'package:ligas_futbol_flutter/src/presentation/player/user_menu/widget/tutorial_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:user_repository/user_repository.dart';
 
+import '../../../core/constans.dart';
 import '../../referee/referee_calendar/view/referee_calendar_page.dart';
 import '../../referee/referee_profile/referee_profile/view/referee_profile_page.dart';
 import '../../referee/report_history/view/report_history_page.dart';
-import '../../representative/teams/view/representative_teams_page.dart';
+import '../../representative/recomended_players/view/recomended_players_page.dart';
+import '../../representative/user_posts/view/user_post_page.dart';
 import '../../widgets/edit_profile_image/view/profile_image_widget.dart';
 import '../player_profile/view/player_profile_page.dart';
 import '../profile/profile_page.dart';
@@ -24,7 +28,7 @@ class UserMenu extends StatefulWidget {
 
 class _UserMenuState extends State<UserMenu> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context2) {
     final user = context.read<AuthenticationBloc>().state.user;
     final refereeLeague =
         context.read<AuthenticationBloc>().state.refereeLeague;
@@ -71,6 +75,7 @@ class _UserMenuState extends State<UserMenu> {
                   color: Color(0xff358aac),
                 ),
                 _MenuCard(
+                  keyOnIcon: CoachKey.myProfile,
                   icon: Icons.person_rounded,
                   title: 'Mi perfil',
                   subtitle: 'Visualice o edite los datos de su cuenta',
@@ -85,6 +90,7 @@ class _UserMenuState extends State<UserMenu> {
                 //   ),
                 if (user.applicationRol == ApplicationRol.player)
                   _MenuCard(
+                    keyOnIcon: CoachKey.playerData,
                     icon: Icons.sports_volleyball,
                     title: 'Ficha de jugador',
                     subtitle: 'Visualice o edite la ficha de jugador',
@@ -93,6 +99,7 @@ class _UserMenuState extends State<UserMenu> {
                   ),
                 if (user.applicationRol == ApplicationRol.referee)
                   _MenuCard(
+                    keyOnIcon: CoachKey.refereeProfile,
                     icon: Icons.sports_volleyball,
                     title: 'Ficha de árbitro',
                     subtitle: 'Visualice o edite la ficha de árbitro',
@@ -102,6 +109,7 @@ class _UserMenuState extends State<UserMenu> {
                 if (user.applicationRol == ApplicationRol.referee)
                   _MenuCard(
                     icon: Icons.calendar_month,
+                    keyOnIcon: CoachKey.showCalendar,
                     title: 'Ver calendario',
                     subtitle: 'Calendario de partidos por arbitrar',
                     onTap: () =>
@@ -110,19 +118,41 @@ class _UserMenuState extends State<UserMenu> {
                 if (user.applicationRol == ApplicationRol.referee)
                   _MenuCard(
                     icon: Icons.newspaper,
+                    keyOnIcon: CoachKey.reportHistory,
                     title: 'Ver historial de reportes',
                     subtitle: 'Visualice el historial de reportes arbitrales',
                     onTap: () =>
                         Navigator.push(context, ReportHistoryPage.route()),
                   ),
-                if (user.applicationRol == ApplicationRol.teamManager)
+                /*  if (user.applicationRol == ApplicationRol.teamManager)
                   _MenuCard(
                     icon: Icons.shield,
+                    keyOnIcon: CoachKey.miteamsTemM,
                     title: 'Mis equipos',
                     subtitle: 'Ver los equipos creados.',
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(context, RepresentativeTeamsPage.route());
+                    },
+                  ),*/
+                if (user.applicationRol == ApplicationRol.teamManager)
+                  _MenuCard(
+                    icon: Icons.person_search,
+                    title: 'Buscando jugadores',
+                    subtitle: 'Crea publicaciones para buscar jugadores',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, UserPostPage.route());
+                    },
+                  ),
+                if (user.applicationRol == ApplicationRol.teamManager)
+                  _MenuCard(
+                    icon: Icons.person_add_alt,
+                    title: 'Jugadores recomendados',
+                    subtitle: 'Consulta los jugadores que te han recomendado',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, RecomendedPlayersPage.route());
                     },
                   ),
                 _MenuCard(
@@ -131,11 +161,63 @@ class _UserMenuState extends State<UserMenu> {
                   subtitle: 'Consulta la información legal sobre ligas fútbol',
                   onTap: () => launchUrl(_url),
                 ),
-                _MenuCard(
-                  icon: Icons.help,
-                  title: 'Ayuda',
-                  subtitle: '¿Necesita ayuda con la aplicación?',
-                  onTap: () {},
+                if (user.applicationRol == ApplicationRol.referee)
+                  const TutorialWidget(
+                    tuto: TutorialType.referee,
+                    icon: Icons.help,
+                    title: 'Ayuda',
+                    subtitle: 'Ver tutorial de la app',
+                  ),
+                if (user.applicationRol == ApplicationRol.player)
+                  const TutorialWidget(
+                    tuto: TutorialType.player,
+                    icon: Icons.help,
+                    title: 'Ayuda',
+                    subtitle: 'Ver tutorial de la app',
+                  ),
+                if (user.applicationRol == ApplicationRol.teamManager)
+                  const TutorialWidget(
+                    tuto: TutorialType.adminTeam,
+                    icon: Icons.help,
+                    title: 'Ayuda',
+                    subtitle: 'Ver tutorial de la app',
+                  ),
+                if (user.applicationRol == ApplicationRol.fieldOwner)
+                  const TutorialWidget(
+                    tuto: TutorialType.filedOwner,
+                    icon: Icons.help,
+                    title: 'Ayuda',
+                    subtitle: 'Ver tutorial de la app',
+                  ),
+                if (user.applicationRol == ApplicationRol.player)
+                  _MenuCard(
+                    icon: Icons.star_rate,
+                    title: 'Calificar',
+                    subtitle:
+                        'Calificar árbitros y campos apartir del partido del equipo seleccionado',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MatchesByPlayerPage.route(0),
+                      );
+                    },
+                  ),
+                /* if (user.applicationRol == ApplicationRol.referee)
+                  _MenuCard(
+                    icon: Icons.star_rate,
+                    title: 'Calificar',
+                    subtitle: 'Calificar equipos y campos del partido',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context2) => OtherMatchesPage()),
+                      );
+                    },
+                  ),*/
+                const SizedBox(
+                  height: 50,
                 ),
                 const Divider(color: Color(0xff358aac)),
               ],
@@ -179,8 +261,10 @@ class _MenuCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.keyOnIcon,
   }) : super(key: key);
 
+  final Key? keyOnIcon;
   final IconData icon;
   final String title;
   final String subtitle;
@@ -192,6 +276,7 @@ class _MenuCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: ListTile(
         leading: CircleAvatar(
+          key: keyOnIcon,
           radius: 15,
           backgroundColor: const Color(0xff358aac),
           child: Icon(

@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Ligas Futbol Flutter</string>
+	<string>$(APP_DISPLAY_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -35,22 +35,23 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Ligas futbol quiere acceder a tu ubicación para buscar direcciones</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Ligas futbol quiere acceder a tu ubicación para buscar direcciones</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Ligas futbol quiere acceder a la galeria para funcionar correctamente</string>
+	<string>Ligas futbol quiere acceder a tu ubicación para poder cargar logos, imagenes de perfil y fotos en la aplicacion</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Ligas futbol quiere acceder a la ubicacion para ver el mapa.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Ligas futbol quiere acceder a la ubicacion para ver el mapa para la direccion.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Ligas futbol quiere acceder a la galeria para poder cargar logos, imagenes de perfil y fotos en la aplicacion</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UISceneConfigurations</key>
 		<dict/>
 	</dict>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
-		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -72,7 +73,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 </dict>
 </plist>

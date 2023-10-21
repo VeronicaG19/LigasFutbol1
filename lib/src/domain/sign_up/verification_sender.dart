@@ -26,7 +26,7 @@ class VerificationSender extends FormzInput<String, VerificationSenderError> {
     if (value != null && value.isNotEmpty) {
       if (_phoneRegExp.hasMatch(value) && value.length == 10) {
         return null;
-      } else if (_emailRegex.hasMatch(value)) {
+      } else if (_emailRegex.hasMatch(value) && value.length > 5) {
         return null;
       } else {
         return VerificationSenderError.invalid;

@@ -30,21 +30,11 @@ class HeaderStep1 extends StatelessWidget {
             ),
           ),
         ),
-        const Text(
-          "Paso 1",
-          style: TextStyle(
-            fontFamily: 'SF Pro',
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 30.0,
-          ),
-        ),
-        const Divider(indent: 1),
         const SizedBox(
           height: 5,
         ),
         const Text(
-          "Estado del torneo ",
+          "Paso 1",
           style: TextStyle(
             fontFamily: 'SF Pro',
             color: Colors.black,
@@ -52,18 +42,28 @@ class HeaderStep1 extends StatelessWidget {
             fontSize: 20.0,
           ),
         ),
-        const SizedBox(
-          height: 5,
-        ),
-        Text("Ayuda",
+        const Divider(indent: 1),
+        const Text(
+          "Estado del torneo",
           style: TextStyle(
             fontFamily: 'SF Pro',
             color: Colors.black,
             fontWeight: FontWeight.bold,
-            fontSize: 15.0,
+            fontSize: 16.0,
           ),
-
         ),
+        const SizedBox(
+          height: 8,
+        ),
+        /* const Text(
+          "Estado del torneo ",
+          style: TextStyle(
+            fontFamily: 'SF Pro',
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20.0,
+          ),
+        ),*/
       ],
     );
   }

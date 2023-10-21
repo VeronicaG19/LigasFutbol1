@@ -9,6 +9,4 @@ Future<void> initializeApp() async {
   await configureDependencies();
   setPathUrlStrategy();
   runApp(const App());
-  // BlocOverrides.runZoned(() => runApp(const App()),
-  //     blocObserver: AppBlocObserver());
 }

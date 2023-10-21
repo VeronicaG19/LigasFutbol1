@@ -1,12 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:formz/formz.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:here_repository/here_repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:ligas_futbol_flutter/src/presentation/referee/referee_profile/referee_profile/view/referee_profile_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../../core/validators/simple_text_validator.dart';
 import '../../../../../domain/agenda/agenda.dart';
@@ -21,18 +23,27 @@ part 'referee_profile_state.dart';
 class RefereeProfileCubit extends Cubit<RefereeProfileState> {
   RefereeProfileCubit(
       this._refereeService, this._agendaService, this._apiHereReposiTory)
-      : super(const RefereeProfileState());
+      : super(RefereeProfileState());
 
   final IRefereeService _refereeService;
   final IAgendaService _agendaService;
   final ApiHereReposiTory _apiHereReposiTory;
-
+  double? lat;
+  double? long;
   final _mapController = MapController();
   final TextEditingController _textEditingController = TextEditingController();
   MapController get getMapController => _mapController;
 
   TextEditingController get getTextAddresController => _textEditingController;
-
+  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+  final List<PositionItem> _positionItems = <PositionItem>[];
+  bool positionStreamStarted = false;
+  static const String _kLocationServicesDisabledMessage =
+      'Los servicios de ubicación están deshabilitados.';
+  static const String _kPermissionDeniedMessage = 'Permiso denegado.';
+  static const String _kPermissionDeniedForeverMessage =
+      'Permiso denegado para siempre.';
+  static const String _kPermissionGrantedMessage = 'Permiso concedido.';
   void onAddressChanged(String value) {
     final address = SimpleTextValidator.dirty(value);
     emit(state.copyWith(
@@ -49,6 +60,17 @@ class RefereeProfileCubit extends Cubit<RefereeProfileState> {
     request.fold(
         (l) => emit(state.copyWith(status: FormzStatus.submissionFailure)),
         (r) => emit(state.copyWith(status: FormzStatus.submissionSuccess)));
+  }
+
+  Future<void> onGetAddressse(String text) async {
+    emit(state.copyWith(screenStatus: ScreenStatus.addresGeting));
+    final response = await _apiHereReposiTory.getAddresssesWithText(text);
+    response.fold((l) => null, (r) {
+      emit(state.copyWith(
+          apiHereResponseAddresses: r,
+          addreses: r.result,
+          screenStatus: ScreenStatus.addresGeted));
+    });
   }
 
   Future<void> updateAddresAsset() async {
@@ -91,7 +113,9 @@ class RefereeProfileCubit extends Cubit<RefereeProfileState> {
     final response =
         await _agendaService.getAddressesByActive(referee.activeId!);
 
-    response.fold((l) => null, (r) {
+    response.fold(
+        (l) => emit(state.copyWith(
+            referee: referee, screenStatus: ScreenStatus.loaded)), (r) {
       print('>>> ------------------------------------------------------------');
       print('>>> getAddressesDetail');
       print('>>> ------------------------------------------------------------');
@@ -107,6 +131,7 @@ class RefereeProfileCubit extends Cubit<RefereeProfileState> {
 
   Future<void> onUpdateLatLeng(double lat, double lengt) async {
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
+    print("Datos de la latitude y longitude");
     print(lat);
     print(lengt);
     emit(state.copyWith(
@@ -114,8 +139,6 @@ class RefereeProfileCubit extends Cubit<RefereeProfileState> {
   }
 
   Future<void> getRefreeInfo(int personId, String personName) async {
-    emit(state.copyWith(screenStatus: ScreenStatus.loading));
-
     final response =
         await _refereeService.getRefereeDataByPersonId(personId, personName);
     /**
@@ -124,9 +147,9 @@ class RefereeProfileCubit extends Cubit<RefereeProfileState> {
      */
     if (response.refereeLatitude != null) {
       emit(state.copyWith(
-        leng: response.refereeLatitude!.length > 0
+        lat: response.refereeLatitude!.length > 0
             ? double.parse(response.refereeLatitude!)
-            : -99.6389653,
+            : lat,
       ));
     }
 
@@ -134,7 +157,7 @@ class RefereeProfileCubit extends Cubit<RefereeProfileState> {
       emit(state.copyWith(
         leng: response.refereeLength!.length > 0
             ? double.parse(response.refereeLength!)
-            : -99.6389653,
+            : long,
       ));
     }
 
@@ -143,7 +166,36 @@ class RefereeProfileCubit extends Cubit<RefereeProfileState> {
       referee: response,
     ));
 
-    getAddressesDetail(response);
+    await getAddressesDetail(response);
+  }
+
+  Future<void> getCurrentPosition(int personId, String personName) async {
+    emit(state.copyWith(screenStatus: ScreenStatus.loading));
+
+    if (await Permission.location.isGranted) {
+      final position = await _geolocatorPlatform.getCurrentPosition();
+      lat = position.latitude;
+      long = position.longitude;
+      emit(state.copyWith(lat: lat, leng: long));
+      if (position.longitude != null && position.latitude != null) {
+        await _updatePositionList(PositionItemType.position,
+            position.toString(), personId, personName);
+        emit(state.copyWith(
+            lat: lat, leng: long, screenStatus: ScreenStatus.loaded));
+      }
+    } else {
+      lat = 23.634501;
+      long = -102.552784;
+      emit(state.copyWith(
+          lat: lat, leng: long, screenStatus: ScreenStatus.loaded));
+    }
+  }
+
+  Future<void> _updatePositionList(PositionItemType type, String displayValue,
+      int personId, String personName) async {
+    _positionItems.add(PositionItem(type, displayValue));
+    emit(state.copyWith(lat: lat, leng: long));
+    await getRefreeInfo(personId, personName);
   }
 
   void onUpdateAssetAddres(ReverseHeoApiHere reverseHeoApiHere) {
@@ -151,7 +203,7 @@ class RefereeProfileCubit extends Cubit<RefereeProfileState> {
         qraAddresses: state.qraAddresses.copyWith(
             city: reverseHeoApiHere.items.first.address!.city!,
             postalCode: reverseHeoApiHere.items.first.address!.postalCode!,
-            state: reverseHeoApiHere.items.first.address!.state,
+            state: reverseHeoApiHere.items.first.address!.stateCode,
             countryCode: reverseHeoApiHere.items.first.address!.countryCode,
             addressLine1:
                 '${reverseHeoApiHere.items.first.address!.street} ${reverseHeoApiHere.items.first.address?.houseNumber ?? ''}',

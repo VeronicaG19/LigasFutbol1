@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 import 'package:ligas_futbol_flutter/src/domain/category/category.dart';
 import 'package:ligas_futbol_flutter/src/domain/leagues/leagues.dart';
 import 'package:ligas_futbol_flutter/src/domain/tournament/entity/tournament.dart';
@@ -61,6 +62,10 @@ class CreateTournamentCubit extends Cubit<CreateTournamentState> {
           createTournament:
               state.createTournament.copyWith(unlimitedChanges: 'Y')));
     });
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(DateTime.now());
+    onInscriptionDateChange(formatted);
+    validateCategoriesSelected();
   }
 
   Future<void> getTypeFutbol() async {
@@ -138,30 +143,23 @@ class CreateTournamentCubit extends Cubit<CreateTournamentState> {
         typeFotbol: value,
         createTournament: state.createTournament
             .copyWith(typeOfGame: value.lookupValue.toString())));
-    getValuesFutbolType();
+    //getValuesFutbolType();
   }
 
-  void getValuesFutbolType(){
-    print("dentro del poderoso");
-    if (state.typeFotbol.lookupName == 'Soccer'){
-      print("cubit 4 ${state.typeFotbol.lookupName}");
+  void getValuesFutbolType() {
+    if (state.typeFotbol.lookupName == 'Soccer') {
       emit(state.copyWith(
-          timeMatchD: "4"
+        gamesTimes: const GamesTimes.dirty("2"),
       ));
-    }else if( state.typeFotbol.lookupName == 'Futbol Rapido'){
-      print("cubit 2 ${state.typeFotbol.lookupName}");
+    } else if (state.typeFotbol.lookupName == 'Futbol Rapido') {
       emit(state.copyWith(
-          timeMatchD: "2"
+        gamesTimes: const GamesTimes.dirty("4"),
       ));
-    }else {
-      print("cubit 2 ${state.typeFotbol.lookupName}");
+    } else {
       emit(state.copyWith(
-          timeMatchD: "6"
+        gamesTimes: const GamesTimes.dirty("0"),
       ));
     }
-    print("cubit valor timeMatchd ${state.timeMatchD}");
-    //emit(state.copyWith(timeMatchD: "9"));
-    //print("cubit 2 ${state.timeMatchD}");
   }
 
   void onMaxTeamsChange(String value) {
@@ -311,23 +309,76 @@ class CreateTournamentCubit extends Cubit<CreateTournamentState> {
     category.insert(index, value1);
 
     emit(state.copyWith(categorySelect: category));
+
+    validateCategoriesSelected();
+  }
+
+  void validateCategoriesSelected() {
+    print('>>> ------------------------------------------------------------');
+    print('>>> validateCategoriesSelected');
+    print('>>> ------------------------------------------------------------');
+    print(
+        '>>> categorySelect : ${state.categorySelect.any((e) => e.isSelect!)}');
+    print('>>> ------------------------------------------------------------');
+    emit(state.copyWith(
+      flagCategorySelect: state.categorySelect.any((e) => e.isSelect!),
+    ));
   }
 
   Future<void> onUnlimitedChangesChange(bool value) async {
-    emit(state.copyWith(
-        createTournament: state.createTournament
-            .copyWith(unlimitedChanges: (value) ? 'Y' : 'N')));
-    print(state.createTournament.unlimitedChanges);
+    const gamesChanges = GamesChanges.dirty("6");
+    if (value) {
+      emit(state.copyWith(
+        createTournament: state.createTournament.copyWith(
+          unlimitedChanges: (value) ? 'Y' : 'N',
+        ),
+        gamesChanges: const GamesChanges.pure(),
+      ));
+    } else {
+      emit(state.copyWith(
+        createTournament: state.createTournament.copyWith(
+          unlimitedChanges: (value) ? 'Y' : 'N',
+        ),
+        gamesChanges: gamesChanges,
+      ));
+    }
   }
 
   Future<void> onshooutOutFlagChange(bool value) async {
-    print(value);
-    emit(state.copyWith(shooutOutFlag: value));
+    const pointsPerWinShootOut = PointsPerWinShootOut.dirty('2');
+    const pointsPerLossShootOut = PointsPerLossShootOut.dirty('1');
+    const gamesTimes = GamesTimes.dirty('2');
+    if (value) {
+      emit(state.copyWith(
+          shooutOutFlag: value,
+          pointsPerWinShootOut: pointsPerWinShootOut,
+          pointsPerLossShootOut: pointsPerLossShootOut,
+          gamesTimes: gamesTimes));
+    } else {
+      emit(state.copyWith(
+        shooutOutFlag: value,
+        pointsPerWinShootOut: const PointsPerWinShootOut.pure(),
+        pointsPerLossShootOut: const PointsPerLossShootOut.pure(),
+      ));
+    }
+    //emit(state.copyWith(shooutOutFlag: value));
   }
 
   Future<void> oncardsFlagChange(bool value) async {
-    print("oncardsFlagChange $value");
-    emit(state.copyWith(cardsflag: value));
+    const yellowCardFine = YellowCardFine.dirty("3");
+    const redCardFine = RedCardFine.dirty("1");
+    if (value) {
+      emit(state.copyWith(
+          cardsflag: value,
+          yellowCardFine: yellowCardFine,
+          redCardFine: redCardFine));
+    } else {
+      emit(state.copyWith(
+        cardsflag: value,
+        yellowCardFine: const YellowCardFine.pure(),
+        redCardFine: const RedCardFine.pure(),
+      ));
+    }
   }
 
   Tournament validationNewTournament(
@@ -493,9 +544,11 @@ class CreateTournamentCubit extends Cubit<CreateTournamentState> {
       allFormIsValid: allFormIsValid,
     ));
 
+    validateCategoriesSelected();
+
     print('fuera del if $allFormIsValid');
 
-    if (state.allFormIsValid) {
+    if (state.allFormIsValid && state.flagCategorySelect) {
       print("dentro del if $allFormIsValid");
       emit(state.copyWith(formzStatus: FormzStatus.submissionInProgress));
       final categories = state.categorySelect;
@@ -510,17 +563,21 @@ class CreateTournamentCubit extends Cubit<CreateTournamentState> {
 
       print(lisTournament);
       final response = await _service.createTournamentPresident(lisTournament);
-      response.fold((l) {
+      emit(state.copyWith(
+            formzStatus: FormzStatus.submissionSuccess, allFormIsValid: true));
+      /*response.fold((l) {
+       print('error desconocido');
         print("Error ${l.errorMessage}");
+        print("Error ${l.data}");
         emit(state.copyWith(
-            formzStatus: FormzStatus.submissionFailure,
+            formzStatus: FormzStatus.submissionSuccess,
             screenStatus: ScreenStatus.error,
             errorMessage: l.errorMessage));
       }, (r) {
         print("Datos ${r}");
         emit(state.copyWith(
             formzStatus: FormzStatus.submissionSuccess, allFormIsValid: true));
-      });
+      });*/
     }
   }
 }

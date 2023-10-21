@@ -67,6 +67,37 @@ class UpdateRefereeData extends AuthenticationEvent {
   List<Object?> get props => [referee];
 }
 
+class UpdateLeagueManagerLeagues extends AuthenticationEvent {
+  final League league;
+  const UpdateLeagueManagerLeagues(this.league);
+
+  @override
+  List<Object?> get props => [league];
+}
+
+class ChangeSelectedLeague extends AuthenticationEvent {
+  final League league;
+  const ChangeSelectedLeague(this.league);
+
+  @override
+  List<Object?> get props => [league];
+}
+
+class ChangeSelectedTeam extends AuthenticationEvent {
+  final Team team;
+  const ChangeSelectedTeam(this.team);
+
+  @override
+  List<Object?> get props => [team];
+}
+
+class UpdateTeamList extends AuthenticationEvent {
+  const UpdateTeamList();
+
+  @override
+  List<Object?> get props => [];
+}
+
 /*class AuthenticationUserDataChanged extends AuthenticationEvent {
   const AuthenticationUserDataChanged(this.user);
   final User user;

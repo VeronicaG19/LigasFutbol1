@@ -1,6 +1,14 @@
 part of 'teams_cubit.dart';
 
-enum ScreenStatus { initial, loading, loaded, error, teamsGetting, teamsGetted }
+enum ScreenStatus {
+  initial,
+  loading,
+  loaded,
+  error,
+  teamsGetting,
+  teamsGetted,
+  success
+}
 
 class TeamsLMState extends Equatable {
   final Tournament tournament;

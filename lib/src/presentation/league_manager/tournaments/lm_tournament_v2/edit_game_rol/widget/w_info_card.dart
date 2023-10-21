@@ -36,33 +36,37 @@ class InfoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 10,
-                bottom: 8,
-              ),
-              child: Image.asset(
-                isReferee
-                    ? 'assets/images/referee.png'
-                    : 'assets/images/footballfield.png',
-                fit: BoxFit.cover,
-                height: 35,
-                width: 35,
-                color: Colors.black54,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 8,
+                ),
+                child: Image.asset(
+                  isReferee
+                      ? 'assets/images/referee.png'
+                      : 'assets/images/footballfield.png',
+                  fit: BoxFit.cover,
+                  height: 35,
+                  width: 35,
+                  color: Colors.black54,
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 8),
-              child: Text(
-                isReferee ? referee!.firstName ?? '' : field!.fieldName ?? '',
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                softWrap: true,
-                style: TextStyle(
-                    color: Colors.grey[800],
-                    fontSize: 12,
-                    fontWeight: FontWeight.w900),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: Text(
+                  isReferee ? referee!.name ?? '' : field!.fieldName ?? '',
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  softWrap: true,
+                  style: TextStyle(
+                      color: Colors.grey[800],
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900),
+                ),
               ),
             ),
           ],

@@ -17,7 +17,7 @@ class Minut extends FormzInput<String, MinutValidationError> {
 
   @override
   MinutValidationError? validator(String? value) {
-    return value?.trim().isNotEmpty == true
+    return value?.trim().isNotEmpty == true && int.parse(value!.trim()) <= 150
         ? null
         : MinutValidationError.invalid;
   }

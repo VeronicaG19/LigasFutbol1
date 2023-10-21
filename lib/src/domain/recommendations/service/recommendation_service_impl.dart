@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:ligas_futbol_flutter/src/domain/recommendations/dto/recomendationDTO.dart';
 
 import '../../../core/typedefs.dart';
 import '../entity/recommendations.dart';
@@ -14,5 +15,15 @@ class RecommendationServiceImpl implements IRecommendationService {
   RepositoryResponse<Recommendations> postRecommendation(
       Recommendations recommendations) {
     return _repository.createRecommendation(recommendations);
+  }
+
+  @override
+  RepositoryResponse<List<RecomendationDto>> getRecomendationsByTeam(int teamId) {
+    return _repository.getRecomendationsByTeam(teamId);
+  }
+
+  @override
+  RepositoryResponse<String> responseRecomendation(int recomendationId, bool response) {
+    return _repository.responseRecomendation(recomendationId, response);
   }
 }

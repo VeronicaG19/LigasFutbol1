@@ -8,7 +8,12 @@ enum TypeEvent{goal, card}
 enum TypeCardColor{red, yellow, blue}
 
 class MatchEventsListContent extends StatelessWidget {
-  const MatchEventsListContent({Key? key,}) : super(key: key);
+  const MatchEventsListContent({Key? key, required this.teamName, required this.teamMatchId, required this.teamMatchId2, required this.teamName2,}) : super(key: key);
+
+  final int teamMatchId;
+  final int teamMatchId2;
+  final String teamName;
+  final String teamName2;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +36,10 @@ class MatchEventsListContent extends StatelessWidget {
                 itemCount: state.eventsList.length,
                 itemBuilder: (BuildContext context, index) {
                   return Container(
-                    height: 100,
+                    height: 115,
                     margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5.0),
                     decoration: BoxDecoration(
+                        color: state.eventsList[index].teamMatchId== teamMatchId ? Colors.white : const Color(0xFFE0E0E0),
                         border: Border.all(color: const Color(0xFFE0E0E0)),
                         borderRadius: BorderRadius.circular(8.0)),
                     padding: const EdgeInsets.all(8),
@@ -62,6 +68,8 @@ class MatchEventsListContent extends StatelessWidget {
                             Text(state.eventsList[index].eventType!,),
                             const SizedBox(height: 5),
                             Text("Minuto: ${state.eventsList[index].matchEventTime.toString()}",),
+                            const SizedBox(height: 5),
+                            Text("Equipo: ${state.eventsList[index].teamMatchId== teamMatchId ? teamName : teamName2}",),
                           ],
                         )
                       ],

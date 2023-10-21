@@ -1,3 +1,4 @@
+import '../../../core/models/address_filter.dart';
 import '../../../core/typedefs.dart';
 import '../entity/field.dart';
 
@@ -24,18 +25,9 @@ abstract class IFieldService {
   /// *@return [Field]
   /// * @param [fieldId]
   RepositoryResponse<Field> getFieldByFieldId(int fieldId);
-  RepositoryResponse<Field> getFieldByMatchId(int teamId);
-  RepositoryResponse<List<Field>> getFieldsRent();
+  RepositoryResponse<Field> getFieldByMatchId(int teamId,
+      {bool requiresAuthToken = true});
+  RepositoryResponse<List<Field>> getFieldsRent(int leagueId);
   Future<List<Field>> getRentalFields();
-  Future<List<Field>> searchFieldByAddress(
-    int matchId, {
-    String? state,
-    DateTime? datematch,
-  }
-      //String town,
-      //int postalCOde,
-      //String county,
-      //int countryCode,
-      //String city
-      );
+  Future<List<Field>> searchFieldByFilters(AddressFilter filter);
 }

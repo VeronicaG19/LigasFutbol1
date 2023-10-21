@@ -49,8 +49,8 @@ class SendRequestReferee extends StatelessWidget {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(
-                    const SnackBar(
-                      content: Text("Error al enviar la solicitud"),
+                    SnackBar(
+                      content: Text(state.errorMessage??"Error al enviar la solicitud"),
                     ),
                   );
               }

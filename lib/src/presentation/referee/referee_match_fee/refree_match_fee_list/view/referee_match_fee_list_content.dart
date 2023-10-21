@@ -15,11 +15,29 @@ class RefereeMatchFeeListContent extends StatelessWidget{
     return BlocBuilder<RefereeMatchFeeListCubit, RefereeMatchFeeListState>(
         builder: (context, state) {
           if (state.screenState == BasicCubitScreenState.loading) {
-            return Center(
+             return Scaffold(
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(70),
+                child: AppBar(
+                  backgroundColor: Colors.grey[200],
+                  title: Text(
+                    'Tarifas',
+                    style:
+                    TextStyle(color: Colors.grey[200], fontWeight: FontWeight.w900),
+                  ),
+                  flexibleSpace: const Image(
+                    image: AssetImage('assets/images/imageAppBar25.png'),
+                    fit: BoxFit.cover,
+                  ),
+                  elevation: 0.0,
+                ),
+              ),
+              body: Center(
               child: LoadingAnimationWidget.fourRotatingDots(
                 color: const Color(0xff358aac),
                 size: 50,
               ),
+            )
             );
           }
           else {

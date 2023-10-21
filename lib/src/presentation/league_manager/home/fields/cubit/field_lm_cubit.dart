@@ -41,7 +41,7 @@ class FieldLmCubit extends Cubit<FieldLmState> {
 
   Future<void> loadfields({required int leagueId}) async {
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
-    final response = await _service.getFieldsRent();
+    final response = await _service.getFieldsRent(leagueId);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
@@ -80,10 +80,10 @@ class FieldLmCubit extends Cubit<FieldLmState> {
     emit(state.copyWith(screenStatus: ScreenStatus.addresGeting));
     final response = await _apiHereReposiTory.getAddresssesWithText(text);
     response.fold((l) => null, (r) {
-      print(r.response!.view[0].result[0].location!.address!.label!);
+      print(r.result[0].location!.address!.label!);
       emit(state.copyWith(
           apiHereResponseAddresses: r,
-          addreses: r.response!.view[0].result,
+          addreses: r.result,
           screenStatus: ScreenStatus.addresGeted));
     });
   }

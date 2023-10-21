@@ -12,7 +12,8 @@ class GridList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 300,
+      height: 600,
+      width: 400,
       child: SingleChildScrollView(
         physics: const ScrollPhysics(),
         child: BlocBuilder<EditGameRolCubit, EditGameRolState>(
@@ -35,7 +36,7 @@ class GridList extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               //physics: const ScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 6,
+                  crossAxisCount: 5,
                   childAspectRatio: 5 / 7,
                   crossAxisSpacing: 15.0,
                   mainAxisSpacing: 15.0),

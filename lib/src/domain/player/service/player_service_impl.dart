@@ -1,7 +1,8 @@
 import 'package:injectable/injectable.dart';
+import 'package:ligas_futbol_flutter/src/core/models/common_pageable_response.dart';
 import 'package:ligas_futbol_flutter/src/core/typedefs.dart';
+import 'package:ligas_futbol_flutter/src/domain/player/dto/full_player_vs_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/player/dto/player_dto.dart';
-import 'package:ligas_futbol_flutter/src/domain/player/dto/search_player_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/player/dto/validate_request_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/player/entity/player.dart';
 import 'package:ligas_futbol_flutter/src/domain/player/repository/i_player_repository.dart';
@@ -41,9 +42,20 @@ class PlayerServiceImpl implements IPlayerService {
   }
 
   @override
-  RepositoryResponse<List<SearchPlayerDTO>> getSearchPlayer(
-      int teamId, int preferenceposition) {
-    return _repository.getSearchPlayer(teamId, preferenceposition);
+  RepositoryResponse<CommonPageableResponse<FullPlayerVsDTO>> getSearchPlayer({
+    int? page,
+    int? size,
+    int? teamId,
+    String? playerName,
+    int? preferenceposition,
+  }) {
+    return _repository.getSearchPlayer(
+      page: page,
+      size: size,
+      teamId: teamId,
+      playerName: playerName,
+      preferenceposition: preferenceposition,
+    );
   }
 
   @override

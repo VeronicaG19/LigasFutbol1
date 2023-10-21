@@ -7,6 +7,7 @@ import 'package:ligas_futbol_flutter/src/domain/matches/dto/start_match/start_ma
 import 'package:ligas_futbol_flutter/src/domain/result/dto/result_dto.dart';
 
 import '../../countResponse/entity/register_count_interface.dart';
+import '../dto/detail_eliminatory_dto/qualifying_match_detail_dto.dart';
 import '../dto/detail_rol_match_dto/detail_rol_match_DTO.dart';
 import '../dto/edit_match_dto/edit_match_dto.dart';
 import '../dto/finalize_match_dto/finalize_match_dto.dart';
@@ -18,7 +19,7 @@ import '../interface/matches_by_tournament_interface.dart';
 
 abstract class IMatchesRepository {
   RepositoryResponse<List<MatchesByTournamentsInterface>>
-      getMatchesByTournament(int tournamenId);
+      getMatchesByTournament(int tournamenId, {bool requiresAuthToken = true});
   RepositoryResponse<List<MatchesByPlayerDTO>> getMatchesByPlayer(
       int personId, int teamId);
   RepositoryResponse<List<DetailMatchDTO>> getDetailMatchByPlayer(int matchId);
@@ -34,7 +35,8 @@ abstract class IMatchesRepository {
   ///
   /// * @return [string response]
   /// * @param [tournamentId]
-  RepositoryResponse<ResultDTO> createRolesGamesByTournamentId(int tournamentId);
+  RepositoryResponse<ResultDTO> createRolesGamesByTournamentId(
+      int tournamentId);
 
   RepositoryResponse<List<RefereeMatchDTO>> getRefereeMatches(
       {int? leagueId, DateTime? date, int? refereeId, int? tournamentId});
@@ -89,7 +91,7 @@ abstract class IMatchesRepository {
       List<MatchRoleDTO> listMatchRoleDTO);
 
   RepositoryResponse<MatchTeamMatchesRefereeDTO> createRolesClass(
-      List<MatchTeamMatchesRefereeDTO> listMatchRoleDTO,int tournamentId);
+      List<MatchTeamMatchesRefereeDTO> listMatchRoleDTO, int tournamentId);
 
   ///
   /// ? Save the moment the match started
@@ -100,6 +102,12 @@ abstract class IMatchesRepository {
   /// ? Get match detail
   /// @param [matchId]
   RepositoryResponse<MatchDetailDTO> getMatchDetail(int matchId);
+
+  ///
+  /// ? Get match detail by eventId
+  /// @param [eventId]
+  RepositoryResponse<MatchSpr> getMatchDetailByEventId(int eventId);
+
   RepositoryResponse<String> updateMatchDate(
       DateTime day, DateTime hour, int matchId);
   RepositoryResponse<String> updateMatchField(int matchId, int fieldId);
@@ -109,4 +117,7 @@ abstract class IMatchesRepository {
   /// ? game over
   /// @param [matchId]
   RepositoryResponse<ResultDTO> endMatch(EndMatchDTO endMatch);
+
+  RepositoryResponse<QualifyingMatchDetailDTO> getDetailEliminatory(
+      int matchId);
 }

@@ -9,17 +9,15 @@ enum MaxAgeValidationError {
 /// {@template password}
 /// Form input for a password input.
 /// {@endtemplate}
-class MaxAge extends FormzInput<String, MaxAgeValidationError> {
+class MaxAge extends FormzInput<int, MaxAgeValidationError> {
   /// {@macro password}
-  const MaxAge.pure() : super.pure('');
+  const MaxAge.pure() : super.pure(0);
 
   /// {@macro password}
-  const MaxAge.dirty([String value = '']) : super.dirty(value);
+  const MaxAge.dirty([int value = 0]) : super.dirty(value);
 
   @override
-  MaxAgeValidationError? validator(String? value) {
-    return value?.trim().isNotEmpty == true && int.parse(value!.trim()) > 0
-        ? null
-        : MaxAgeValidationError.invalid;
+  MaxAgeValidationError? validator(int? value) {
+    return value! > 0 ? null : MaxAgeValidationError.invalid;
   }
 }

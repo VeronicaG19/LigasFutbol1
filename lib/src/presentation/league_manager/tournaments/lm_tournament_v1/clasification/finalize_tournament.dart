@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'cubit/clasification_cubit.dart';
+import '../../lm_tournament_v2/main_page/cubit/tournament_main_cubit.dart';
 
 class FinalizeTournamentDialog extends StatelessWidget {
+  const FinalizeTournamentDialog({super.key, required this.ttInt});
+  final int ttInt;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,7 +20,7 @@ class FinalizeTournamentDialog extends StatelessWidget {
           const SizedBox(
             height: 35,
           ),
-          BlocBuilder<ClasificationCubit, ClasificationState>(
+          BlocBuilder<TournamentMainCubit, TournamentMainState>(
             builder: (context, state) {
               return Column(
                 children: [
@@ -74,20 +76,21 @@ class FinalizeTournamentDialog extends StatelessWidget {
                               MaterialStateProperty.all(Colors.green)
                           ),
                           onPressed: () async {
+                            print("id tor ${state.selectedTournament.tournamentId}");
                             await context
-                                .read<ClasificationCubit>()
+                                .read<TournamentMainCubit>()
                                 .onUpdateTournamentFinished(
-                                tournamentId: state.tournament.tournamentId ?? 0
+                                tournamentId: state.selectedTournament.tournamentId ?? 0
                             );
                             await context
-                                .read<ClasificationCubit>()
+                                .read<TournamentMainCubit>()
                                 .getTournamentFinishedStatus(
-                                tournamentId: state.tournament.tournamentId ?? 0
+                                tournamentId: state.selectedTournament.tournamentId ?? 0
                             );
                             await context
-                                .read<ClasificationCubit>()
+                                .read<TournamentMainCubit>()
                                 .getTournamentChampion(
-                                tournamentId: state.tournament.tournamentId ?? 0
+                                tournamentId: state.selectedTournament.tournamentId ?? 0
                             );
                             Navigator.of(context).pop();
                           },

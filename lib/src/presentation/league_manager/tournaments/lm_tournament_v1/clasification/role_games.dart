@@ -5,8 +5,6 @@ import 'package:ligas_futbol_flutter/src/presentation/league_manager/tournaments
 import 'package:ligas_futbol_flutter/src/presentation/league_manager/tournaments/lm_tournament_v1/clasification/statics_tournament_clasification.dart';
 
 import '../../../../../domain/countResponse/entity/register_count_interface.dart';
-import '../match_l_roles/match_l_roles_main.dart';
-import 'finalize_tournament.dart';
 import 'matches_report.dart';
 
 class RoleGames extends StatelessWidget {
@@ -16,13 +14,13 @@ class RoleGames extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ClasificationCubit, ClasificationState>(
-        builder: (context, state) {
+        builder: (contextL, state) {
       return Container(
         height: 500,
         color: Colors.grey[200],
         child: Column(
           children: [
-            const Text('Los criterios de puntaje definido son:'),
+            /*   const Text('Los criterios de puntaje definido son:'),
             Text(
                 'Al equipo ganador de un partido se le otorgan ${state.scoringSystem.pointsPerWin ?? 0} puntos.'),
             Text(
@@ -31,27 +29,108 @@ class RoleGames extends StatelessWidget {
                 'En caso de empate al equipo ganador de un partido en shoot out se le otorgan ${state.scoringSystem.pointsPerWinShootOut ?? 0} puntos.'),
             Text(
                 'En caso de empate al equipo perdedor de un partido en shoot out se le otorgan ${state.scoringSystem.pointPerLossShootOut ?? 0} puntos.'),
+           */
             const SizedBox(
               height: 25,
             ),
-            ElevatedButton.icon(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue[300])),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (_) {
-                      final exampleCubit = context.read<ClasificationCubit>();
-                      return BlocProvider<ClasificationCubit>.value(
-                          value: exampleCubit, child: ScoringSystemDialog());
-                    });
-              },
-              icon: const Icon(
-                Icons.edit_road_outlined, // <-- Icon
-                size: 24.0,
-              ),
-              label: const Text('Editar'), // <-- Text
-            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 10, left: 10, right: 10, top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      ElevatedButton.icon(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blueGrey)),
+                        onPressed: () {
+                          showDialog(
+                              context: contextL,
+                              builder: (_) {
+                                return SimpleDialog(
+                                  contentPadding: const EdgeInsets.all(25),
+                                  title: const Text('Información'),
+                                  children: [
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    const Text(
+                                        'Los criterios de puntaje definido son:'),
+                                    Text(
+                                        'Al equipo ganador de un partido se le otorgan ${state.scoringSystem.pointsPerWin ?? 0} puntos.'),
+                                    Text(
+                                        'En caso de empate en un partido, se le otorgan ${state.scoringSystem.pointPerTie ?? 0} punto a cada equipo.'),
+                                    Text(
+                                        'En caso de empate al equipo ganador de un partido en shoot out se le otorgan ${state.scoringSystem.pointsPerWinShootOut ?? 0} puntos.'),
+                                    Text(
+                                        'En caso de empate al equipo perdedor de un partido en shoot out se le otorgan ${state.scoringSystem.pointPerLossShootOut ?? 0} puntos.'),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: ElevatedButton.icon(
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.blueGrey)),
+                                            onPressed: () {
+                                              Navigator.pop(_);
+                                            },
+                                            icon: const Icon(
+                                              // <-- Icon
+                                              Icons.arrow_back_outlined,
+                                              size: 20.0,
+                                            ),
+                                            label: const Text('Regresar',
+                                                style: TextStyle(
+                                                    fontSize: 13)), // <-- Text
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                        icon: const Icon(
+                          Icons.style, // <-- Icon
+                          size: 18.0,
+                        ),
+                        label: const Text('Ver información',
+                            style: TextStyle(fontSize: 14)), // <-- Text
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      ElevatedButton.icon(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blue[800])),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) {
+                                final exampleCubit =
+                                    context.read<ClasificationCubit>();
+                                return BlocProvider<ClasificationCubit>.value(
+                                    value: exampleCubit,
+                                    child: ScoringSystemDialog());
+                              });
+                        },
+                        icon: const Icon(
+                          Icons.settings_sharp, // <-- Icon
+                          size: 18.0,
+                        ),
+                        label: const Text('Configuración',
+                            style: TextStyle(fontSize: 14)), // <-- Text
+                      ),
+                    ],
+                  )),
+            ]),
             (screen == 1)
                 ? Card(
                     child: Column(
@@ -107,7 +186,7 @@ class RoleGames extends StatelessWidget {
                                           MaterialStateProperty.all(
                                               Colors.blue[300])),
                                   onPressed: () {
-                                    showDialog(
+                                    /*showDialog(
                                         context: context,
                                         builder: (_) {
                                           return BlocProvider.value(
@@ -116,7 +195,7 @@ class RoleGames extends StatelessWidget {
                                                   context), //exampleCubit,
                                               child:
                                                   FinalizeTournamentDialog());
-                                        });
+                                        });*/
                                   },
                                   icon: const Icon(
                                     Icons.add_box_rounded, // <-- Icon
@@ -150,7 +229,7 @@ class RoleGames extends StatelessWidget {
                                 ),
                                 label: const Text('Ver campeon'), // <-- Text
                               ),
-                            ),/*
+                            ), /*
                             ElevatedButton.icon(
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
@@ -199,7 +278,7 @@ class RoleGames extends StatelessWidget {
                 : Container(),
             (screen == 1)
                 ? const Expanded(child: MatchesReport())
-                : Expanded(child: StatcisTournamentClasificacion())
+                : const Expanded(child: StatcisTournamentClasificacion())
           ],
         ),
       );

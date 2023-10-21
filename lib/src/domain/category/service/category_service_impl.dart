@@ -15,9 +15,9 @@ class CategoryServiceImpl implements ICategoryService {
 
   @override
   RepositoryResponse<List<Category>> getCategoryByTournamentByAndLeagueId(
-      int leagueId, String tournamentName) {
+      int leagueId, String tournamentName, {bool requiresAuthToken = true}) {
     return _repository.getCategoryByTournamentByAndLeagueId(
-        leagueId, tournamentName);
+        leagueId, tournamentName, requiresAuthToken: requiresAuthToken);
   }
 
   @override

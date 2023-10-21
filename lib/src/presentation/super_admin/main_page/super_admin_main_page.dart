@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../player/user_menu/user_menu.dart';
-import '../../referee/matches_page/view/matches_page.dart';
 import '../../widgets/button_share/button_share_widget.dart';
+import '../requests/cancel_league_c.dart';
 import '../requests/request_field_owner.dart';
 import '../requests/request_page.dart';
 
@@ -13,20 +13,20 @@ class SuperAdminMainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
-      child: Scaffold( 
+      length: 3,
+      child: Scaffold(
         backgroundColor: Colors.grey[200],
         drawer: Drawer(
           backgroundColor: Colors.grey[200],
           child: const UserMenu(),
         ),
-        appBar: AppBar( 
+        appBar: AppBar(
           backgroundColor: Colors.grey[200],
           title: Text(
             'Ligas Fútbol',
             style: TextStyle(
                 color: Colors.grey[200],
-                fontSize: 25, 
+                fontSize: 25,
                 fontWeight: FontWeight.w900),
           ),
           flexibleSpace: const Image(
@@ -77,7 +77,7 @@ class SuperAdminMainPage extends StatelessWidget {
                       child: Text(
                         'Solicitudes de ligas',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 10),
+                        style: TextStyle(fontSize: 12),
                       ),
                     ),
                   ),
@@ -94,7 +94,24 @@ class SuperAdminMainPage extends StatelessWidget {
                       child: Text(
                         'Solicitudes de dueño de cancha',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 10),
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ),
+                ),
+                Tab(
+                  height: 25,
+                  iconMargin: const EdgeInsets.all(5),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white70, width: 1.5)),
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Eliminación de ligas',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12),
                       ),
                     ),
                   ),
@@ -102,14 +119,15 @@ class SuperAdminMainPage extends StatelessWidget {
               ],
             ),
           ),
-        ), 
-        body:  TabBarView( 
+        ),
+        body: TabBarView(
           children: [
             RequestPage(),
             RequestFieldsPage(),
+            const CancelLeagueRequest(),
           ],
         ),
       ),
     );
   }
-  }
+}

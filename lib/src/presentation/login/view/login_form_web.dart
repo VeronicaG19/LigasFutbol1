@@ -75,7 +75,8 @@ class LoginFormWeb extends StatelessWidget {
                   ),
                   Icon(Icons.double_arrow, color: Colors.blueGrey[300])
                 ],
-              )
+              ),
+              const SizedBox(height: 25),
             ],
           ),
         ),

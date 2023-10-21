@@ -25,56 +25,56 @@ class StatictsLmCubit extends Cubit<StatictsLmState> {
 
 
   Future<void> loadStaticts({required int leagueId}) async {
-    emit(state.copyWith(screenStatus: ScreenStatus.loading));
+    emit(state.copyWith(screenStatus: ScreenStatusA.loading));
     final response = await _service.getCountByLeagueId(leagueId);
     response.fold(
             (l) => emit(state.copyWith(
-            screenStatus: ScreenStatus.error,
+            screenStatus: ScreenStatusA.error,
             errorMessage: l.errorMessage)), (r) {
       print("Datos ${r}");
-      emit(state.copyWith(screenStatus: ScreenStatus.loaded, detailTournament: r));
+      emit(state.copyWith(screenStatus: ScreenStatusA.loaded, detailTournament: r));
       loadcategories(leagueId: leagueId);
       loadTeams(leagueId: leagueId);
     });
   }
 
   Future<void> loadcategories({required int leagueId}) async {
-    emit(state.copyWith(screenStatus: ScreenStatus.loading));
+    emit(state.copyWith(screenStatus: ScreenStatusA.loading));
     final response = await _serviceCategory.getCountByLeagueId(leagueId);
     response.fold(
             (l) =>
             emit(state.copyWith(
-                screenStatus: ScreenStatus.error,
+                screenStatus: ScreenStatusA.error,
                 errorMessage: l.errorMessage)), (r) {
       print("Datos ${r}");
       emit(
-          state.copyWith(screenStatus: ScreenStatus.loaded, detailCategory: r));
+          state.copyWith(screenStatus: ScreenStatusA.loaded, detailCategory: r));
 
     });
   }
 
     Future<void> loadTeams({required int leagueId}) async {
-      emit(state.copyWith(screenStatus: ScreenStatus.loading));
+      emit(state.copyWith(screenStatus: ScreenStatusA.loading));
       final response = await _serviceTeam.getCountByLeagueId(leagueId);
       response.fold(
               (l) => emit(state.copyWith(
-              screenStatus: ScreenStatus.error,
+              screenStatus: ScreenStatusA.error,
               errorMessage: l.errorMessage)), (r) {
         print("Datos ${r}");
-        emit(state.copyWith(screenStatus: ScreenStatus.loaded, detailTeam: r));
+        emit(state.copyWith(screenStatus: ScreenStatusA.loaded, detailTeam: r));
       });
     }
 
   Future<void> onSendRequest(int refereeId, int leagueId) async {
-    emit(state.copyWith(screenStatus: ScreenStatus.sending));
+    emit(state.copyWith(screenStatus: ScreenStatusA.sending));
     final request =
     await _requestsService.sendLeagueToRefereeRequest(refereeId, leagueId);
     request.fold(
             (l) => emit(state.copyWith(
-                screenStatus: ScreenStatus.error,
+                screenStatus: ScreenStatusA.error,
             errorMessage: _getErrorMessage(l))),
             (r) =>
-            emit(state.copyWith(screenStatus: ScreenStatus.success)));
+            emit(state.copyWith(screenStatus: ScreenStatusA.success)));
   }
 
   String _getErrorMessage(LFAppFailure failure) {

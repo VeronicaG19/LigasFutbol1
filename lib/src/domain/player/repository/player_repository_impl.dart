@@ -2,9 +2,10 @@ import 'package:datasource_client/datasource_client.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ligas_futbol_flutter/src/core/endpoints.dart';
 import 'package:ligas_futbol_flutter/src/core/extensions.dart';
+import 'package:ligas_futbol_flutter/src/core/models/common_pageable_response.dart';
 import 'package:ligas_futbol_flutter/src/core/typedefs.dart';
+import 'package:ligas_futbol_flutter/src/domain/player/dto/full_player_vs_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/player/dto/player_dto.dart';
-import 'package:ligas_futbol_flutter/src/domain/player/dto/search_player_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/player/dto/validate_request_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/player/entity/player.dart';
 import 'package:ligas_futbol_flutter/src/domain/player/repository/i_player_repository.dart';
@@ -63,16 +64,34 @@ class PlayerRepositoryImpl implements IPlayerRepository {
   }
 
   @override
-  RepositoryResponse<List<SearchPlayerDTO>> getSearchPlayer(
-      int teamId, int preferenceposition) {
+  RepositoryResponse<CommonPageableResponse<FullPlayerVsDTO>> getSearchPlayer({
+    int? page,
+    int? size,
+    int? teamId,
+    String? playerName,
+    int? preferenceposition,
+  }) {
+    final data = <String, dynamic>{};
+    if (page != null) {
+      data.addAll({'page': page});
+    }
+    data.addAll({'size': size ?? 10});
+
+    data.addAll({'playerName': playerName});
+    data.addAll({'preferenceposition': preferenceposition});
+
     return _apiClient.network
-        .getCollectionData(
-            //endpoint: '$getSearchPlayerEndpoint/$teamId/$preferenceposition',
-            endpoint:
-                "${getSearchPlayerEndpoint}/$teamId?preferenceposition=$preferenceposition",
-            /**endpoint: getSearchPlayerEndpoint,
-        queryParams: { 'teamId':teamId, 'preferenceposition':preferenceposition},*/
-            converter: SearchPlayerDTO.fromJson)
+        .getData(
+          endpoint: "$getSearchPlayerEndpoint/$teamId",
+          queryParams: data,
+          converter: (response) {
+            return CommonPageableResponse.fromJson(
+              json: response,
+              converter: FullPlayerVsDTO.fromJson,
+              item: 'fullPlayerVs',
+            );
+          },
+        )
         .validateResponse();
   }
 

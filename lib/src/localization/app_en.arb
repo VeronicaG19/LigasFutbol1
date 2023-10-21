@@ -68,7 +68,16 @@
     "aeInvalidDataMsg": "invalid data",
     "aeEmailNotFoundMsg": "The email you have provided is not currently registered with us, please try again.",
     "aePhoneNotFoundMsg": "The phone number you have provided is not currently registered with us, please try again.",
-    "aeInvalidPasswordMsg": "Invalid password",
+    "aeInvalidPasswordMsg": "{errorCode, select, invalidLength{Password must have at least 8 digits} noLowerCase{Password must contain at least one lowercase letter} noUpperCase{Password must contain at least one uppercase letter} noDigit{Password must contain at least one digit} noSymbol{Password must contain at least one symbol} consecutiveNumber{Password cannot have consecutive digits} invalid{Invalid password} other{Invalid password}}",
+    "@aeInvalidPasswordMsg": {
+        "description": "Evaluates the error code and shows a message",
+        "placeholders": {
+            "errorCode": {
+                "type": "String",
+                "example": "no valid"
+            }
+        }
+    },
     "aeInvalidUsernameMsg": "Invalid username",
     "aeInvalidPhoneNumberMsg": "Invalid phone number",
     "aeInvalidEmailMsg": "Invalid email",

@@ -34,29 +34,10 @@ class TeamInfoBar extends StatelessWidget {
                 ? NetworkImage('assets/images/soccer_logo_SaaS.png')
                     as ImageProvider
                 : AssetImage('assets/images/soccer_logo_SaaS.png');
-            return Stack(
-              fit: StackFit.expand,
+            return Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 30),
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [Color(0xff0043ba), Color(0xff006df1)]),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
-                      ),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: kIsWeb
-                              ? NetworkImage('assets/images/imageAppBar6.png')
-                                  as ImageProvider
-                              : AssetImage('assets/images/imageAppBar6.png'))),
-                ),
                 Align(
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.topCenter,
                   child: GestureDetector(
                     onTap: () async {
                       final photo = await ImagePicker()
@@ -80,7 +61,7 @@ class TeamInfoBar extends StatelessWidget {
                       children: [
                         CircleAvatar(
                             backgroundColor: Colors.black38,
-                            radius: 29,
+                            radius: 50,
                             backgroundImage: (state.teamInfo.logoId?.document !=
                                     null)
                                 ? Image.memory(base64Decode(
@@ -91,8 +72,8 @@ class TeamInfoBar extends StatelessWidget {
                           bottom: 0,
                           right: 0,
                           child: Container(
-                            height: 20,
-                            width: 20,
+                            height: 30,
+                            width: 30,
                             decoration: const BoxDecoration(
                               color: Color.fromRGBO(255, 255, 255, 0.5),
                               borderRadius:
@@ -112,11 +93,11 @@ class TeamInfoBar extends StatelessWidget {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    state.teamInfo.teamName ?? '',
-                    textAlign: TextAlign.center,
+                    "Equipo ${state.teamInfo.teamName ?? ''}",
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
+                          fontSize: 28,
                         ),
                   ),
                 )
@@ -235,12 +216,24 @@ class _SelectedImageState extends State<SelectedImage> {
                 child: Card(
                   elevation: 4.0,
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(15.0),
                     child: image(),
                   ),
                 ),
               ),
-              const SizedBox(height: 24.0),
+              const SizedBox(height: 12.0),
+              BlocBuilder<ManageTeamCubit, ManageTeamState>(
+                builder: (context, state) {
+                  context.read<ManageTeamCubit>().convertImgToBs(
+                        xFile: _pickedFile,
+                        file: _croppedFile,
+                      );
+                  return (state.imageIsLarge!)
+                      ? const _ImageSizeAlert()
+                      : const SizedBox(height: 0);
+                },
+              ),
+              const SizedBox(height: 12.0),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -275,6 +268,36 @@ class _SelectedImageState extends State<SelectedImage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ImageSizeAlert extends StatelessWidget {
+  const _ImageSizeAlert();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(left: 24.0, right: 24.0),
+      child: Card(
+        elevation: 2.5,
+        color: Colors.orange,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            bottom: 10,
+            left: 15,
+            right: 15,
+          ),
+          child: Text(
+            'El tamaño de la imagen es mas grande que el recomendado(1MB), esto puede tardar, por favor espere un poco.',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15.0,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

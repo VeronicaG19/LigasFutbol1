@@ -5,25 +5,20 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../../core/enums.dart';
 import '../../../app/app.dart';
-import '../../../widgets/notification_icon/cubit/notification_count_cubit.dart';
 import '../cubit/lm_request_cubit.dart';
 import 'lm_request_content.dart';
 
 class LMRequests extends StatelessWidget {
   const LMRequests({super.key});
 
-  static Route route(NotificationCountCubit notificationCountCubit) =>
-      MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: notificationCountCubit,
-          child: const LMRequests(),
-        ),
+  static Route route() => MaterialPageRoute(
+        builder: (_) => const LMRequests(),
       );
 
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return BlocProvider<LmRequestCubit>(
       create: (_) =>
           locator<LmRequestCubit>()..onLoadInitialData(leagueManager.leagueId),
@@ -66,14 +61,14 @@ class _RequestContent extends StatelessWidget {
             );
         }
         context
-            .read<NotificationCountCubit>()
-            .onLoadNotificationCount(leagueManagerId, rol);
+            .read<NotificationBloc>()
+            .add(LoadNotificationCount(leagueManagerId, rol));
       },
       builder: (context, state) {
         if (state.screenState == BasicCubitScreenState.loading) {
           return Center(
             child: LoadingAnimationWidget.fourRotatingDots(
-                color: Colors.blueAccent, size: 50),
+                color: Color(0xff358aac), size: 50),
           );
         }
         return DefaultTabController(
@@ -81,7 +76,7 @@ class _RequestContent extends StatelessWidget {
           child: Scaffold(
             appBar: AppBar(
               title: const Text(
-                "Solicitudes",
+                "Notificaciones",
                 textAlign: TextAlign.center,
               ),
               centerTitle: true,

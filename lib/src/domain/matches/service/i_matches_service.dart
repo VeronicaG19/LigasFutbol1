@@ -7,6 +7,7 @@ import 'package:ligas_futbol_flutter/src/domain/result/dto/result_dto.dart';
 
 import '../../../core/typedefs.dart';
 import '../../countResponse/entity/register_count_interface.dart';
+import '../dto/detail_eliminatory_dto/qualifying_match_detail_dto.dart';
 import '../dto/detail_rol_match_dto/detail_rol_match_DTO.dart';
 import '../dto/edit_match_dto/edit_match_dto.dart';
 import '../dto/finalize_match_dto/finalize_match_dto.dart';
@@ -18,7 +19,7 @@ import '../interface/matches_by_tournament_interface.dart';
 
 abstract class IMatchesService {
   RepositoryResponse<List<MatchesByTournamentsInterface>>
-      getMatchesByTournament(int tournamentId);
+      getMatchesByTournament(int tournamentId, {bool requiresAuthToken = true});
   RepositoryResponse<List<MatchesByPlayerDTO>> getMatchesByPlayer(
       int personId, int teamId);
   RepositoryResponse<List<DetailMatchDTO>> getDetailMatchByPlayer(int matchId);
@@ -34,7 +35,8 @@ abstract class IMatchesService {
   ///
   /// * @return [string response]
   /// * @param [tournamentId]
-  RepositoryResponse<ResultDTO> createRolesGamesByTournamentId(int tournamentId);
+  RepositoryResponse<ResultDTO> createRolesGamesByTournamentId(
+      int tournamentId);
 
   /// Get a list of details for a match
   ///
@@ -90,7 +92,7 @@ abstract class IMatchesService {
   /// * @param [list of MatchRoleDTO]
   ///
   RepositoryResponse<MatchTeamMatchesRefereeDTO> createRolesClass(
-      List<MatchTeamMatchesRefereeDTO> listMatchRoleDTO,int tournamentId);
+      List<MatchTeamMatchesRefereeDTO> listMatchRoleDTO, int tournamentId);
 
   ///
   /// ? Save the moment the match started
@@ -111,4 +113,12 @@ abstract class IMatchesService {
       DateTime day, DateTime hour, int matchId);
   RepositoryResponse<String> updateMatchField(int matchId, int fieldId);
   RepositoryResponse<String> updateMatchReferee(int matchId, int refereeId);
+
+  RepositoryResponse<QualifyingMatchDetailDTO> getDetailEliminatory(
+      int matchId);
+
+  ///
+  /// ? Get match detail by eventId
+  /// @param [eventId]
+  RepositoryResponse<MatchSpr> getMatchDetailByEventId(int eventId);
 }

@@ -9,13 +9,19 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../../../../domain/lookupvalue/entity/lookupvalue.dart';
 import '../../../../../service_locator/injection.dart';
 import '../../../../app/app.dart';
+import '../../../home/tournaments/cubit/tournament_lm_cubit.dart';
+import '../../../home/widget/cubit/staticts_lm_cubit.dart';
+import '../../lm_tournament_v2/main_page/cubit/tournament_main_cubit.dart';
 import 'cubit/create_tournament_cubit.dart';
 import 'widgets/header_step1.dart';
 import 'widgets/header_step2.dart';
 import 'widgets/header_step3.dart';
 
 class CreateTournament extends StatefulWidget {
-  const CreateTournament({Key? key}) : super(key: key);
+  CreateTournament({Key? key, required this.fromPage}) : super(key: key);
+
+  //valida desde que pantalla se accedio para ejecutar el medoto
+  int fromPage;
 
   @override
   State<CreateTournament> createState() => _CreateTournamentState();
@@ -25,13 +31,27 @@ class _CreateTournamentState extends State<CreateTournament> {
   @override
   Widget build(BuildContext context) {
     final leagueId =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return BlocProvider(
       create: (context) => locator<CreateTournamentCubit>()
         ..getTypeTournaments(leagueId.leagueId),
       child: BlocConsumer<CreateTournamentCubit, CreateTournamentState>(
         listener: (context, state) {
-          // TODO: implement listener
+          if (state.formzStatus == FormzStatus.submissionSuccess) {
+            if (widget.fromPage == 2) {
+              context
+                  .read<TournamentMainCubit>()
+                  .onLoadCategories(leagueId.leagueId);
+            } else if (widget.fromPage == 1) {
+              context
+                  .read<TournamentLmCubit>()
+                  .loadTournament(leagueId: leagueId.leagueId);
+              context
+                  .read<StatictsLmCubit>()
+                  .loadStaticts(leagueId: leagueId.leagueId);
+            }
+            Navigator.of(context).pop();
+          }
         },
         builder: (context, state) {
           return Padding(
@@ -45,290 +65,274 @@ class _CreateTournamentState extends State<CreateTournament> {
                       height: 10,
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
+                          children: const [
                             HeaderStep1(),
-                            const SizedBox(
-                              height: 25,
-                            ),
+                            SizedBox(height: 25),
                             _StatusTournaments(),
                             _PrivacityTournaments()
                           ],
                         )),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         Expanded(
                             child: Column(
                           children: [
-                            HeaderStep2(),
-                            const SizedBox(
-                              height: 25,
-                            ),
+                            const HeaderStep2(),
+                            const SizedBox(height: 25),
                             Row(
-                              children: [
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                              children: const [
+                                SizedBox(width: 15),
                                 Expanded(child: _NameTournament()),
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                                SizedBox(width: 15),
                                 Expanded(child: _DateStartTournament()),
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                                SizedBox(width: 15),
                               ],
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
+                            const SizedBox(height: 15),
                             Row(
-                              children: [
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                              children: const [
+                                SizedBox(width: 15),
                                 Expanded(child: _TypeTournament()),
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                                SizedBox(width: 15),
                                 Expanded(child: _TeamsPermit()),
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                                SizedBox(width: 15),
                               ],
                             ),
                             const SizedBox(
                               height: 15,
                             ),
                             Row(
-                              children: [
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                              children: const [
+                                SizedBox(width: 15),
                                 Expanded(child: _TeamsPlayerPermit()),
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                                SizedBox(width: 15),
                                 Expanded(child: _TeamporalExp()),
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                                SizedBox(width: 15),
                               ],
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
+                            const SizedBox(height: 15),
                             // _DaysCheckBox(),
-                            const SizedBox(
-                              height: 15,
-                            ),
+                            const SizedBox(height: 15),
                             const Text(
                               "Seleccione las categorias para las que se crearan los torneos",
                             ),
                             const SizedBox(
                               height: 5,
                             ),
-                            _ListCategories()
+                            !state.flagCategorySelect
+                                ? const Text(
+                                    "Al menos una categoría debe ser seleccionada",
+                                    style: TextStyle(color: Colors.red),
+                                  )
+                                : const SizedBox(height: 0),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            const _ListCategories()
                           ],
                         )),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Container(
-                        child: Column(
-                      children: [
-                        HeaderStep3(),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 50,
-                            ),
-                            Expanded(child: _TypeFotbol()),
-                            const SizedBox(
-                              width: 50,
-                            ),
-                          ],
-                        ),
                         const SizedBox(
-                          height: 30,
+                          width: 10,
                         ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            Expanded(
-                                child: Column(
-                              children: [
-                                Text(
-                                  "Partidos",
-                                  style: TextStyle(
-                                    fontFamily: 'SF Pro',
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.0,
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              HeaderStep3(),
+                              Row(
+                                children: const [
+                                  SizedBox(
+                                    width: 100,
                                   ),
-                                ),
-                                Divider(indent: 1),
-                                Row(
-                                  children: [
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    Expanded(child: _TimesByMatch()),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    Expanded(child: _DurationTimesByMatch()),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    Expanded(
-                                      child: _BreaksByMatch(),
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    Expanded(
-                                      child: _DurationBreaksByMatch(),
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                _CardPenalties(),
-                                Visibility(
-                                  visible: state.cardsflag,
-                                  child: Row(
+                                  Expanded(child: _TypeFotbol()),
+                                  SizedBox(
+                                    width: 100,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: Column(
                                     children: [
-                                      const SizedBox(
-                                        width: 15,
+                                      Text(
+                                        "Partidos",
+                                        style: TextStyle(
+                                          fontFamily: 'SF Pro',
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15.0,
+                                        ),
+                                      ),
+                                      Divider(indent: 1),
+                                      Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          Expanded(child: _TimesByMatch()),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          Expanded(
+                                              child: _DurationTimesByMatch()),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          Expanded(
+                                            child: _BreaksByMatch(),
+                                          ),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          Expanded(
+                                            child: _DurationBreaksByMatch(),
+                                          ),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                        ],
                                       ),
                                       const SizedBox(
-                                        width: 15,
+                                        height: 15,
                                       ),
-                                      Expanded(
-                                        child: _yellowCard(),
+                                      _CardPenalties(),
+                                      Visibility(
+                                        visible: state.cardsflag,
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                            Expanded(
+                                              child: _yellowCard(),
+                                            ),
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                            Expanded(
+                                              child: _redCard(),
+                                            ),
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Expanded(
-                                        child: _redCard(),
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
+                                      _ilimitsChanges(),
+                                      Visibility(
+                                        visible: state.createTournament
+                                                .unlimitedChanges ==
+                                            'N',
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                            Expanded(
+                                              child: _changes(),
+                                            ),
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
-                                  ),
-                                ),
-                                _ilimitsChanges(),
-                                Visibility(
-                                  visible:
-                                      state.createTournament.unlimitedChanges ==
-                                          'N',
-                                  child: Row(
+                                  )),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: Column(
                                     children: [
-                                      const SizedBox(
-                                        width: 15,
+                                      Text(
+                                        "Sistema de puntuación",
+                                        style: TextStyle(
+                                          fontFamily: 'SF Pro',
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15.0,
+                                        ),
                                       ),
-                                      Expanded(
-                                        child: _changes(),
+                                      Divider(indent: 1),
+                                      Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          Expanded(
+                                            child: _pointsPerWin(),
+                                          ),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          Expanded(
+                                            child: _pointsPerTie(),
+                                          ),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                        ],
                                       ),
                                       const SizedBox(
-                                        width: 15,
+                                        height: 15,
+                                      ),
+                                      _shoutOutDefinitios(),
+                                      Visibility(
+                                        visible: state.shooutOutFlag,
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                            Expanded(
+                                              child: _pointsPerWinShootOut(),
+                                            ),
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                            Expanded(
+                                              child: _pointsPerLossShootOut(),
+                                            ),
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
-                                  ),
-                                ),
-                              ],
-                            )),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Expanded(
-                                child: Column(
-                              children: [
-                                Text(
-                                  "Sistema de puntuacion",
-                                  style: TextStyle(
-                                    fontFamily: 'SF Pro',
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.0,
-                                  ),
-                                ),
-                                Divider(indent: 1),
-                                Row(
-                                  children: [
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    Expanded(
-                                      child: _pointsPerWin(),
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    Expanded(
-                                      child: _pointsPerTie(),
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                _shoutOutDefinitios(),
-                                Visibility(
-                                  visible: state.shooutOutFlag,
-                                  child: Row(
-                                    children: [
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Expanded(
-                                        child: _pointsPerWinShootOut(),
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Expanded(
-                                        child: _pointsPerLossShootOut(),
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                          ],
-                        ),
+                                  )),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                        )
                       ],
-                    )),
-                    const SizedBox(
-                      height: 50,
                     ),
                     state.formzStatus.isSubmissionInProgress
                         ? Center(
@@ -367,60 +371,71 @@ class _CreateTournamentState extends State<CreateTournament> {
                                 ),
                               ),
                               Expanded(
-                                child: TextButton(
-                                  onPressed: //state.formzStatus.isValidated
-                                      //?
-                                      () async {
-                                    await context
-                                        .read<CreateTournamentCubit>()
-                                        .createTournament(leagueId: leagueId);
-                                    if (state.tournamentName.valid == true &&
-                                            state.inscriptionDate.valid ==
-                                                true &&
-                                            state.maxTeams.valid == true &&
-                                            state.maxPlayer.valid == true &&
-                                            //state.temporaryReprimands.valid == true &&
-                                            state.gamesTimes.valid == true &&
-                                            state.durationByTime.valid ==
-                                                true &&
-                                            state.breakNumbers.valid == true &&
-                                            state.breakDuration.valid == true &&
-                                            // state.yellowCardFine.valid == true &&
-                                            // state.redCardFine.valid == true &&
-                                            // state.gamesChanges.valid == true &&
-                                            // state.pointPerLoss.valid == true &&
-                                            state.pointPerTie.valid == true &&
-                                            state.pointPerWin.valid == true //&&
-                                        // state.pointsPerLossShootOut.valid == true &&
-                                        // state.pointsPerWinShootOut.valid == true
-                                        ) {
-                                      print(
-                                          'fuera del cubit allFormIsValid ${state.allFormIsValid}');
-
-                                      Navigator.of(context).pop();
-                                    }
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.fromLTRB(
-                                        16.0, 10.0, 16.0, 10.0),
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xff045a74),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15.0)),
-                                    ),
-                                    child: Text(
-                                      'Guardar cambios',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: 'SF Pro',
-                                        color: Colors.grey[200],
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10.0,
+                                child: state.formzStatus.isSubmissionInProgress
+                                    ? Center(
+                                        child: LoadingAnimationWidget
+                                            .fourRotatingDots(
+                                          color: const Color(0xff358aac),
+                                          size: 50,
+                                        ),
+                                      )
+                                    : TextButton(
+                                        onPressed: //state.formzStatus.isValidated
+                                            //?
+                                            () async {
+                                          await context
+                                              .read<CreateTournamentCubit>()
+                                              .createTournament(
+                                                  leagueId: leagueId);
+                                          if (state.tournamentName.valid ==
+                                                  true &&
+                                              state.inscriptionDate.valid ==
+                                                  true &&
+                                              state.maxTeams.valid == true &&
+                                              state.maxPlayer.valid == true &&
+                                              //state.temporaryReprimands.valid == true &&
+                                              state.gamesTimes.valid == true &&
+                                              state.durationByTime.valid ==
+                                                  true &&
+                                              state.breakNumbers.valid ==
+                                                  true &&
+                                              state.breakDuration.valid ==
+                                                  true &&
+                                              // state.yellowCardFine.valid == true &&
+                                              // state.redCardFine.valid == true &&
+                                              // state.gamesChanges.valid == true &&
+                                              // state.pointPerLoss.valid == true &&
+                                              state.pointPerTie.valid == true &&
+                                              state.pointPerWin.valid == true &&
+                                              // state.pointsPerLossShootOut.valid == true &&
+                                              // state.pointsPerWinShootOut.valid == true
+                                              state.flagCategorySelect) {}
+                                        },
+                                        child: Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.fromLTRB(
+                                              16.0, 10.0, 16.0, 10.0),
+                                          decoration: BoxDecoration(
+                                            color: (state.allFormIsValid &&
+                                                    state.flagCategorySelect)
+                                                ? const Color(0xff045a74)
+                                                : Colors.grey,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(15.0)),
+                                          ),
+                                          child: Text(
+                                            'Guardar cambios',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: 'SF Pro',
+                                              color: Colors.grey[200],
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 10.0,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
                               ),
                             ],
                           )
@@ -429,7 +444,7 @@ class _CreateTournamentState extends State<CreateTournament> {
               ],
             ),
           );
-        },
+        }, //pamc
       ),
     );
   }
@@ -451,14 +466,14 @@ class _StatusTournaments extends StatelessWidget {
                       fontFamily: 'SF Pro',
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                     ))
                 : const Text('Cerrado',
                     style: TextStyle(
                       fontFamily: 'SF Pro',
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                     )),
             value: state.createTournament.statusBegin == 'Y' ? true : false,
             onChanged: (val) {
@@ -485,14 +500,14 @@ class _PrivacityTournaments extends StatelessWidget {
                       fontFamily: 'SF Pro',
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                     ))
                 : const Text('Privado',
                     style: TextStyle(
                       fontFamily: 'SF Pro',
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                     )),
             value:
                 state.createTournament.tournamentPrivacy == 'Y' ? true : false,
@@ -546,6 +561,9 @@ class _DateStartTournament extends StatelessWidget {
         print('state');
         print(state.inscriptionDate.value);
         return ElevatedButton.icon(
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll<Color>(Colors.blueGrey),
+          ),
           onPressed: () async {
             DateTime? pickedDate = await showDatePicker(
               context: context,
@@ -563,7 +581,7 @@ class _DateStartTournament extends StatelessWidget {
                 .read<CreateTournamentCubit>()
                 .onInscriptionDateChange(formatted);
           },
-          icon: const Icon(Icons.date_range),
+          icon: const Icon(Icons.date_range, size: 18),
           label: Text(
             'Fecha de inicio ${DateFormat('yyyy-MM-dd').format(
               //state.inscriptionDate == const InscriptionDate.pure()
@@ -571,6 +589,7 @@ class _DateStartTournament extends StatelessWidget {
                   ? DateTime.now()
                   : DateTime.parse(state.inscriptionDate.value),
             )}',
+            style: TextStyle(fontSize: 12),
           ),
         );
       },
@@ -750,7 +769,8 @@ class _TeamporalExp extends StatelessWidget {
       builder: (context, state) {
         return CheckboxListTile(
           key: const Key('temporal_exp_tournament'),
-          title: const Text('Expulsiones temporales'),
+          title: const Text('Expulsiones temporales',
+              style: TextStyle(fontSize: 13)),
           value: ((state.createTournament.temporaryReprimands ?? 'N') == 'Y')
               ? true
               : false,
@@ -803,7 +823,8 @@ class _ListCategories extends StatelessWidget {
               enabled: true,
               selected: state.categorySelect[index].isSelect!,
               title: Text(
-                  state.categorySelect[index].category?.categoryName ?? ''),
+                  state.categorySelect[index].category?.categoryName ?? '',
+                  style: TextStyle(fontSize: 13)),
               value: state.categorySelect[index].isSelect!,
               onChanged: (bool? value) {
                 context
@@ -873,8 +894,6 @@ class _TypeFotbolState extends State<_TypeFotbol> {
             onChanged: (value) {
               context.read<CreateTournamentCubit>().onFutbolTypeChange(value!);
               //context.read<CreateTournamentCubit>().getValuesFutbolType(state.typeFotbol.lookupName!);
-              print("state dentro de pantalla ${value.lookupName}");
-              print("state dentro de pantalla ${state.timeMatchD}");
             },
             value: state.typeFotbol,
             icon: const Icon(
@@ -926,20 +945,18 @@ class _TimesByMatch extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.gamesTimes != current.gamesTimes,
       builder: (context, state) {
-        print("initial value ${state.typeFotbol.lookupName}");
         return TextFormField(
-
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.digitsOnly
           ],
-          initialValue: "0",//1 == 2 ? "2" : "9",
+          initialValue: "0",
           maxLength: 1,
           key: const Key('times_match'),
           onChanged: (value) =>
               context.read<CreateTournamentCubit>().onGamesTimesChange(value),
           onFieldSubmitted: (value) => state.formzStatus.isSubmissionInProgress,
           decoration: InputDecoration(
-            labelText: "Tiempos del partido : ",
+            labelText: "Tiempos del partido: ",
             labelStyle: TextStyle(fontSize: 13),
             errorText: state.gamesTimes.invalid
                 ? "Escriba el numero de tiempos por partido"
@@ -975,7 +992,7 @@ class _DurationTimesByMatch extends StatelessWidget {
             labelText: "Duración del los tiempos del partido : ",
             labelStyle: TextStyle(fontSize: 13),
             errorText: state.durationByTime.invalid
-                ? "Escriba la duracion de cada tiempo"
+                ? "Escriba la duración de cada tiempo"
                 : null,
           ),
           style: TextStyle(fontSize: 13),
@@ -1060,7 +1077,8 @@ class _CardPenalties extends StatelessWidget {
         return CheckboxListTile(
           key: const Key('card_penalties'),
           enabled: true,
-          title: const Text('Sanciones por tarjetas'),
+          title: const Text('Sanciones por tarjetas',
+              style: TextStyle(fontSize: 14)),
           value: state.cardsflag,
           onChanged: (bool? value) {
             context.read<CreateTournamentCubit>().oncardsFlagChange(value!);
@@ -1148,7 +1166,7 @@ class _ilimitsChanges extends StatelessWidget {
         return CheckboxListTile(
           key: const Key('change_ilimits'),
           enabled: true,
-          title: Text('Cambios ilimitados'),
+          title: Text('Cambios ilimitados', style: TextStyle(fontSize: 14)),
           value: ((state.createTournament.unlimitedChanges ?? 'N') == 'Y')
               ? true
               : false,
@@ -1206,7 +1224,8 @@ class _shoutOutDefinitios extends StatelessWidget {
         return CheckboxListTile(
           key: const Key('shoutOut_Definitios'),
           enabled: true,
-          title: Text('Desempate por shoot out: '),
+          title:
+              Text('Desempate por shoot out: ', style: TextStyle(fontSize: 14)),
           value: state.shooutOutFlag,
           onChanged: (value) {
             context.read<CreateTournamentCubit>().onshooutOutFlagChange(value!);
@@ -1293,7 +1312,7 @@ class _pointsPerWinShootOut extends StatelessWidget {
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.digitsOnly
           ],
-          initialValue: "2",
+          initialValue: state.pointsPerWinShootOut.value,
           maxLength: 1,
           key: const Key('points_perwin_shoot_out'),
           onChanged: (value) => context
@@ -1326,7 +1345,7 @@ class _pointsPerLossShootOut extends StatelessWidget {
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.digitsOnly
           ],
-          initialValue: "1",
+          initialValue: state.pointsPerLossShootOut.value,
           maxLength: 1,
           key: const Key('points_perloss_shoot_out'),
           onChanged: (value) => context

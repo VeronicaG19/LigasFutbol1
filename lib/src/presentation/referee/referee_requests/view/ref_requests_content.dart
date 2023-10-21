@@ -5,8 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../../../core/enums.dart';
 import '../../../../domain/user_requests/dto/request_match_to_referee_dto.dart';
 import '../../../../domain/user_requests/entity/user_requests.dart';
-import '../../../app/bloc/authentication_bloc.dart';
-import '../../../widgets/notification_icon/cubit/notification_count_cubit.dart';
+import '../../../app/app.dart';
 import '../cubit/referee_request_cubit.dart';
 
 enum RepRequestType { received, sent, recommendation }
@@ -23,13 +22,17 @@ class RefRequestsContent extends StatelessWidget {
     return BlocConsumer<RefereeRequestCubit, RefereeRequestState>(
       listener: (context, state) {
         if (state.screenStatus == BasicCubitScreenState.error) {
-          SnackBar(
-            content: Text(state.errorMessage ?? ''),
-          );
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage ?? ''),
+              ),
+            );
         } else if (state.screenStatus == BasicCubitScreenState.loaded) {
           context
-              .read<NotificationCountCubit>()
-              .onLoadNotificationCount(refereeId, rol);
+              .read<NotificationBloc>()
+              .add(LoadNotificationCount(refereeId, rol));
         }
       },
       builder: (context, state) {
@@ -130,84 +133,80 @@ class _CardContent extends StatelessWidget {
             ),
             title: Text(title, style: subTitleStyle),
             subtitle: Text(subtitle, style: titleStyle),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              if (type == RepRequestType.received)
-                TextButton(
-                  child: const Text('Aceptar'),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (contextD) {
-                        return BlocProvider.value(
-                          value: BlocProvider.of<RefereeRequestCubit>(context),
-                          child: AlertDialog(
-                            title: const Text('Confirmar solicitud'),
-                            content: const Text('Confirma la solicitud'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  context
-                                      .read<RefereeRequestCubit>()
-                                      .onUpdateRequestStatus(
-                                          requestId: request.requestId,
-                                          personId: user.person.personId!,
-                                          status: true,
-                                          refereeId: 990);
-                                  Navigator.pop(contextD);
-                                },
-                                child: const Text('ACEPTAR'),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(contextD),
-                                child: const Text('CANCELAR'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              const SizedBox(width: 8),
-              TextButton(
-                child: const Text('Cancelar'),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (contextD) {
-                      return BlocProvider.value(
-                        value: BlocProvider.of<RefereeRequestCubit>(context),
-                        child: AlertDialog(
-                          title: const Text('Cancelar solicitud'),
-                          content: const Text('¿Deseas cancelar la solicitud?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                context
-                                    .read<RefereeRequestCubit>()
-                                    .cancelUserRequest(
-                                        requestId: request.requestId,
-                                        personId: user.person.personId!,
-                                        refereeId: 990);
-                                Navigator.pop(contextD);
-                              },
-                              child: const Text('CANCELAR'),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pop(contextD),
-                              child: const Text('REGRESAR'),
-                            ),
-                          ],
+            onTap: () {
+              String dialogTitle = '';
+              String dialogContent = '';
+              if (type == RepRequestType.received) {
+                dialogTitle = 'Aceptar solicitud';
+                dialogContent =
+                    '¿Aceptar la solicitud recibida para unirse al equipo de ${request.requestMadeBy}?';
+              } else if (type == RepRequestType.sent) {
+                dialogTitle = 'Cancelar la solicitud';
+                dialogContent =
+                    '¿Deseas cancelar la solicitud enviada a ${request.requestMadeBy}?';
+              }
+              showDialog(
+                context: context,
+                builder: (contextD) {
+                  return BlocProvider.value(
+                    value: BlocProvider.of<RefereeRequestCubit>(context),
+                    child: AlertDialog(
+                      title: Text(
+                        dialogTitle,
+                        textAlign: TextAlign.center,
+                      ),
+                      content: Text(dialogContent),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(contextD),
+                          child: const Text('CERRAR'),
                         ),
-                      );
-                    },
+                        if (type == RepRequestType.received)
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<RefereeRequestCubit>()
+                                  .cancelUserRequest(
+                                      requestId: request.requestId,
+                                      personId: user.person.personId!,
+                                      refereeId: 990);
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('RECHAZAR'),
+                          ),
+                        if (type == RepRequestType.received)
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<RefereeRequestCubit>()
+                                  .onUpdateRequestStatus(
+                                      requestId: request.requestId,
+                                      personId: user.person.personId!,
+                                      status: true,
+                                      refereeId: 990);
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('ACEPTAR'),
+                          ),
+                        if (type == RepRequestType.sent)
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<RefereeRequestCubit>()
+                                  .cancelUserRequest(
+                                      requestId: request.requestId,
+                                      personId: user.person.personId!,
+                                      refereeId: 990);
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('CANCELAR SOLICITUD'),
+                          ),
+                      ],
+                    ),
                   );
                 },
-              ),
-            ],
+              );
+            },
           ),
         ],
       ),
@@ -287,67 +286,6 @@ class _ActionsRow extends StatelessWidget {
                 return BlocProvider.value(
                   value: BlocProvider.of<RefereeRequestCubit>(context),
                   child: AlertDialog(
-                    title: const Text('Aceptar solicitud'),
-                    content: _DialogContent(
-                      matchReferee: matchReferee,
-                    ),
-                    actions: [
-                      TextButton.icon(
-                        onPressed: () {
-                          Navigator.pop(contextD);
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.grey,
-                        ),
-                        label: const Text(
-                          "Regresar",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                      TextButton.icon(
-                        onPressed: () {
-                          context
-                              .read<RefereeRequestCubit>()
-                              .onAcceptMatchRequest(
-                                  request: matchReferee,
-                                  accepted: true,
-                                  personId: user.person.personId ?? 0,
-                                  refereeId: refereeId!);
-                          Navigator.pop(contextD);
-                        },
-                        icon: Icon(
-                          Icons.check_box,
-                          color: Colors.green[400],
-                        ),
-                        label: Text(
-                          "Aceptar",
-                          style: TextStyle(color: Colors.green[400]),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
-          icon: Icon(
-            Icons.check_box,
-            color: Colors.green[400],
-          ),
-          label: Text(
-            "Aceptar",
-            style: TextStyle(color: Colors.green[400]),
-          ),
-        ),
-        TextButton.icon(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (contextD) {
-                return BlocProvider.value(
-                  value: BlocProvider.of<RefereeRequestCubit>(context),
-                  child: AlertDialog(
                     title: const Text('Rechazar solicitud'),
                     content: _DialogContent(
                       matchReferee: matchReferee,
@@ -399,6 +337,67 @@ class _ActionsRow extends StatelessWidget {
           label: Text(
             "Rechazar",
             style: TextStyle(color: Colors.red[400]),
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (contextD) {
+                return BlocProvider.value(
+                  value: BlocProvider.of<RefereeRequestCubit>(context),
+                  child: AlertDialog(
+                    title: const Text('Aceptar solicitud'),
+                    content: _DialogContent(
+                      matchReferee: matchReferee,
+                    ),
+                    actions: [
+                      TextButton.icon(
+                        onPressed: () {
+                          Navigator.pop(contextD);
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.grey,
+                        ),
+                        label: const Text(
+                          "Regresar",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      TextButton.icon(
+                        onPressed: () {
+                          context
+                              .read<RefereeRequestCubit>()
+                              .onAcceptMatchRequest(
+                                  request: matchReferee,
+                                  accepted: true,
+                                  personId: user.person.personId ?? 0,
+                                  refereeId: refereeId!);
+                          Navigator.pop(contextD);
+                        },
+                        icon: Icon(
+                          Icons.check_box,
+                          color: Colors.green[400],
+                        ),
+                        label: Text(
+                          "Aceptar",
+                          style: TextStyle(color: Colors.green[400]),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+          icon: Icon(
+            Icons.check_box,
+            color: Colors.green[400],
+          ),
+          label: Text(
+            "Aceptar",
+            style: TextStyle(color: Colors.green[400]),
           ),
         ),
       ],

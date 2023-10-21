@@ -1,43 +1,40 @@
 part of 'matchs_l_roles_cubit.dart';
 
-enum ScreenStatus {
-  initial,
-  loading,
-  loaded,
-  error,
-  rolesCreating,
-  rolesCreated
-}
-
-class MatchsLRolesState extends Equatable {
-
-  final List<TeamTournament> listOfTeams;
-  final ScreenStatus screenStatus;
+class MatchesLRolesState extends Equatable {
+  final String round;
+  final int roundCount;
+  final List<List<TeamTournament>> listOfTeams;
+  final List<TeamTournament> tmsSelected;
+  final BasicCubitScreenState screenStatus;
   final String? errorMessage;
-  final List<MatchTeamMatchesRefereeDTO> listRoleToGenerate;
 
-  const MatchsLRolesState({
+  const MatchesLRolesState({
+    this.round = '',
+    this.roundCount = 0,
     this.listOfTeams = const [],
-    this.screenStatus = ScreenStatus.initial,
+    this.screenStatus = BasicCubitScreenState.initial,
     this.errorMessage,
-    this.listRoleToGenerate = const [],
+    this.tmsSelected = const [],
   });
 
-  MatchsLRolesState copyWith({
-    List<TeamTournament>? listOfTeams,
-    ScreenStatus? screenStatus,
+  MatchesLRolesState copyWith({
+    List<List<TeamTournament>>? listOfTeams,
+    BasicCubitScreenState? screenStatus,
+    int? roundCount,
     String? errorMessage,
-    List<MatchTeamMatchesRefereeDTO>? listRoleToGenerate,
-  }){
-    return MatchsLRolesState(
-      listOfTeams : listOfTeams ?? this.listOfTeams,
-      screenStatus: screenStatus ?? this.screenStatus,
-      errorMessage: errorMessage ?? this.errorMessage,
-      listRoleToGenerate: listRoleToGenerate ?? this.listRoleToGenerate,
-    );
+    String? round,
+    List<TeamTournament>? tmsSelected,
+  }) {
+    return MatchesLRolesState(
+        listOfTeams: listOfTeams ?? this.listOfTeams,
+        round: round ?? this.round,
+        roundCount: roundCount ?? this.roundCount,
+        screenStatus: screenStatus ?? this.screenStatus,
+        errorMessage: errorMessage ?? this.errorMessage,
+        tmsSelected: tmsSelected ?? this.tmsSelected);
   }
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [listOfTeams ,screenStatus,listRoleToGenerate];
+  List<Object?> get props =>
+      [round, listOfTeams, roundCount, screenStatus, tmsSelected];
 }

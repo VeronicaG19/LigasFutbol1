@@ -5,9 +5,8 @@ import 'package:ligas_futbol_flutter/src/presentation/representative/teams/view/
 import 'package:ligas_futbol_flutter/src/service_locator/injection.dart';
 
 import '../../../app/app.dart';
-import '../../requests/request_new_team/view/request_new_team_page.dart';
 
-class RepresentativeTeamsPage extends StatelessWidget{
+class RepresentativeTeamsPage extends StatelessWidget {
   const RepresentativeTeamsPage({Key? key}) : super(key: key);
 
   static Route route() =>
@@ -15,9 +14,11 @@ class RepresentativeTeamsPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    final personId = context.read<AuthenticationBloc>().state.user.person.personId;
+    final personId =
+        context.read<AuthenticationBloc>().state.user.person.personId;
     return BlocProvider(
-      create: (_) => locator<RepresentativeTeamsCubit>()..getRepresentativeTeams(personId: personId!),
+      create: (_) => locator<RepresentativeTeamsCubit>()
+        ..getRepresentativeTeams(personId: personId!),
       child: const RepresentativeTeamsContent(),
     );
   }

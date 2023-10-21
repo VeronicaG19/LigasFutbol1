@@ -9,6 +9,7 @@ import 'package:ligas_futbol_flutter/src/domain/user_requests/dto/request_match_
 import 'package:ligas_futbol_flutter/src/domain/user_requests/dto/request_to_league_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/user_requests/entity/field_owner_request.dart';
 import 'package:ligas_futbol_flutter/src/domain/user_requests/entity/user_requests.dart';
+import 'package:user_repository/user_repository.dart';
 
 import '../../../core/endpoints.dart';
 import '../dto/request_to_admin_dto.dart';
@@ -24,17 +25,14 @@ class UserRequestsRepositoryImpl implements IUserRequestsRepository {
   @override
   RepositoryResponse<List<UserRequests>> getRequestByStatusAndType(
       int requestMadeById, int requestStatus, int typeRequest) {
-    return _apiClient.network
-        .getCollectionData(
-            requiresAuthToken: false,
-            queryParams: {
-              'requestMadeById': requestMadeById,
-              'requestStatus': requestStatus,
-              'typeRequest': typeRequest
-            },
-            endpoint: getRequestByStatusAndTypeEndpoint,
-            converter: UserRequests.fromJsonSaveResp)
-        .validateResponse();
+    return _apiClient.network.getCollectionData(
+        queryParams: {
+          'requestMadeById': requestMadeById,
+          'requestStatus': requestStatus,
+          'typeRequest': typeRequest
+        },
+        endpoint: getRequestByStatusAndTypeEndpoint,
+        converter: UserRequests.fromJsonSaveResp).validateResponse();
   }
 
   @override
@@ -76,7 +74,6 @@ class UserRequestsRepositoryImpl implements IUserRequestsRepository {
     }
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             queryParams: data,
             endpoint: getRequestPlayerToTeamEndpoint,
             converter: UserRequests.fromJson)
@@ -113,7 +110,6 @@ class UserRequestsRepositoryImpl implements IUserRequestsRepository {
     }
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             queryParams: data,
             endpoint: getRequestTeamToPlayerEndpoint,
             converter: UserRequests.fromJson)
@@ -143,20 +139,16 @@ class UserRequestsRepositoryImpl implements IUserRequestsRepository {
 
   @override
   RepositoryResponse<String> updateUserRequest(int requestId, bool status) {
-    return _apiClient.network
-        .updateData(
-            requiresAuthToken: false,
-            data: {},
-            endpoint: '$updateRequestEndpoint/$requestId?accepted=$status',
-            converter: (result) => result['result'] as String)
-        .validateResponse();
+    return _apiClient.network.updateData(
+        data: {},
+        endpoint: '$updateRequestEndpoint/$requestId?accepted=$status',
+        converter: (result) => result['result'] as String).validateResponse();
   }
 
   @override
   RepositoryResponse<List<UserRequests>> getUserDeleteRequest(int teamId) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             endpoint: getUserDeleteRequestEndpoint + '?teamId=$teamId',
             converter: UserRequests.fromJson)
         .validateResponse();
@@ -260,7 +252,6 @@ class UserRequestsRepositoryImpl implements IUserRequestsRepository {
     }
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             queryParams: data,
             endpoint: getRequestTeamToLeagueEndpoint,
             converter: UserRequests.fromJson)
@@ -273,7 +264,6 @@ class UserRequestsRepositoryImpl implements IUserRequestsRepository {
     final url = '$updateAdminRequestEndpoint/$requestId?accepted=$status';
     return _apiClient.network
         .updateData(
-            requiresAuthToken: false,
             endpoint: comment == null || comment.trim().isEmpty
                 ? url
                 : '$url&comment=$comment',
@@ -294,7 +284,6 @@ class UserRequestsRepositoryImpl implements IUserRequestsRepository {
     }
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             queryParams: data,
             endpoint: getRequestTeamToTournamentEndpoint,
             converter: UserRequests.fromJson)
@@ -313,7 +302,6 @@ class UserRequestsRepositoryImpl implements IUserRequestsRepository {
     }
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             queryParams: data,
             endpoint: getRequestTournamentToTeamEndpoint,
             converter: UserRequests.fromJson)
@@ -321,10 +309,13 @@ class UserRequestsRepositoryImpl implements IUserRequestsRepository {
   }
 
   @override
-  RepositoryResponse<int> getRequestCount(int requestTo, {RequestType? type}) {
+  RepositoryResponse<int> getRequestCount(int requestTo,
+      {RequestType? type, ApplicationRol? rol}) {
     final data = <String, dynamic>{};
     if (type != null) {
       data.addAll({'requestType': type.name});
+    } else if (rol != null) {
+      data.addAll({'rol': rol.name});
     }
     return _apiClient.network
         .getData(
@@ -420,4 +411,26 @@ class UserRequestsRepositoryImpl implements IUserRequestsRepository {
             converter: (response) => response['result'] as String)
         .validateResponse();
   }
+
+  @override
+  RepositoryResponse<UserRequests> patchUserRequest(UserRequests request) {
+    return _apiClient.updateData(
+        endpoint: requestBaseEndpoint,
+        data: request.toJsonForSave(),
+        converter: UserRequests.fromJsonSaveResp);
+  }
+
+  @override
+  RepositoryResponse<UserRequests> postUserRequest(UserRequests request) {
+    return _apiClient.postData(
+        endpoint: requestBaseEndpoint,
+        data: request.toJsonForSave(),
+        converter: UserRequests.fromJsonSaveResp);
+  }
+
+  @override
+  RepositoryResponse<List<UserRequests>> getDeleteLeaguesRequest() =>
+      _apiClient.fetchCollectionData(
+          endpoint: getDeleteLeaguesRequestsEndpoint,
+          converter: UserRequests.fromJson);
 }

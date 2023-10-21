@@ -1,5 +1,34 @@
 part of 'tournament_main_cubit.dart';
 
+enum CLScreenStatus2 {
+  initial,
+  loading,
+  loaded,
+  error,
+  creatingRoleGame,
+  createdRoleGame,
+  refereetListLoaded,
+  refereetListLing,
+  fieldtListLoaded,
+  fieldtListLoading,
+  submissionInProgress,
+  submissionSuccess,
+  submissionFailure,
+  matchFinalized,
+  createdConfiguration,
+  teamsGetted,
+  createInscribeLeague,
+  loadingDataToFinish,
+  dataToFinishLoaded,
+}
+
+enum MatchStatus {
+  initial,
+  loading,
+  loaded,
+  error,
+}
+
 class TournamentMainState extends Equatable {
   final List<Category> categories;
   final List<Tournament> tournaments;
@@ -25,6 +54,17 @@ class TournamentMainState extends Equatable {
   final int countSelected;
   final int num;
   final String? errorMessage;
+  final CLScreenStatus2 screenStatus;
+  final String nameCh;
+  final TournamentChampionDTO ttDTO;
+  final FinalizeMatchDTO finalizeMatchDTO;
+  final int matchesWithoutResult;
+  final MatchStatus matchStatus;
+  final MatchDetailDTO matchDetail;
+  final bool canFinish;
+  final bool tiebreakerRequired;
+  final QualifyingMatchDetailDTO? qualifyingMatchDetail;
+  final bool haveConfigShootout;
 
   const TournamentMainState({
     this.categories = const [],
@@ -51,6 +91,17 @@ class TournamentMainState extends Equatable {
     this.countSelected = 0,
     this.num = 4,
     this.errorMessage,
+    this.screenStatus = CLScreenStatus2.initial,
+    this.nameCh = '',
+    this.ttDTO = TournamentChampionDTO.empty,
+    this.finalizeMatchDTO = FinalizeMatchDTO.empty,
+    this.matchesWithoutResult = 0,
+    this.matchStatus = MatchStatus.initial,
+    this.matchDetail = MatchDetailDTO.empty,
+    this.canFinish = false,
+    this.tiebreakerRequired = false,
+    this.qualifyingMatchDetail = QualifyingMatchDetailDTO.empty,
+    this.haveConfigShootout = false,
   });
 
   TournamentMainState copyWith({
@@ -78,6 +129,17 @@ class TournamentMainState extends Equatable {
     ResgisterCountInterface? inscribedTeams,
     int? num,
     String? errorMessage,
+    CLScreenStatus2? screenStatus,
+    String? nameCh,
+    TournamentChampionDTO? ttDTO,
+    FinalizeMatchDTO? finalizeMatchDTO,
+    int? matchesWithoutResult,
+    MatchStatus? matchStatus,
+    MatchDetailDTO? matchDetail,
+    bool? canFinish,
+    bool? tiebreakerRequired,
+    QualifyingMatchDetailDTO? qualifyingMatchDetail,
+    bool? haveConfigShootout,
   }) {
     return TournamentMainState(
       categories: categories ?? this.categories,
@@ -105,35 +167,58 @@ class TournamentMainState extends Equatable {
       inscribedTeams: inscribedTeams ?? this.inscribedTeams,
       num: num ?? this.num,
       errorMessage: errorMessage ?? this.errorMessage,
+      screenStatus: screenStatus ?? this.screenStatus,
+      nameCh: nameCh ?? this.nameCh,
+      ttDTO: ttDTO ?? this.ttDTO,
+      finalizeMatchDTO: finalizeMatchDTO ?? this.finalizeMatchDTO,
+      matchesWithoutResult: matchesWithoutResult ?? this.matchesWithoutResult,
+      matchStatus: matchStatus ?? this.matchStatus,
+      matchDetail: matchDetail ?? this.matchDetail,
+      canFinish: canFinish ?? this.canFinish,
+      tiebreakerRequired: tiebreakerRequired ?? this.tiebreakerRequired,
+      qualifyingMatchDetail:
+          qualifyingMatchDetail ?? this.qualifyingMatchDetail,
+      haveConfigShootout: haveConfigShootout ?? this.haveConfigShootout,
     );
   }
 
   @override
   List<Object?> get props => [
-    categories,
-    tournaments,
-    roundNumber,
-    matches,
-    selectedMatch,
-    selectedCategory,
-    selectedTournament,
-    selectedRoundNumber,
-    roundNumberSorting,
-    screenState,
-    selectedMenu,
-    statusTournament,
-    configLeagueInterfaceDTO,
-    qualifiedTeamsList,
-    teamsTournament,
-    rounds,
-    rounds,
-    matchForRound,
-    numberOrFinals,
-    tieBreakerType,
-    cardTeamsSlc,
-    countSelected,
-    inscribedTeams,
-    num,
-    errorMessage,
-  ];
+        categories,
+        tournaments,
+        roundNumber,
+        matches,
+        selectedMatch,
+        selectedCategory,
+        selectedTournament,
+        selectedRoundNumber,
+        roundNumberSorting,
+        screenState,
+        selectedMenu,
+        statusTournament,
+        configLeagueInterfaceDTO,
+        qualifiedTeamsList,
+        teamsTournament,
+        rounds,
+        rounds,
+        matchForRound,
+        numberOrFinals,
+        tieBreakerType,
+        cardTeamsSlc,
+        countSelected,
+        inscribedTeams,
+        num,
+        errorMessage,
+        screenStatus,
+        nameCh,
+        ttDTO,
+        finalizeMatchDTO,
+        matchesWithoutResult,
+        matchStatus,
+        matchDetail,
+        canFinish,
+        tiebreakerRequired,
+        qualifyingMatchDetail,
+        haveConfigShootout,
+      ];
 }

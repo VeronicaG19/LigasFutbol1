@@ -20,7 +20,7 @@ class MatchsRolesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return BlocProvider(
       create: (_) => locator<MatchsRolesCubit>()
         ..getTeamsTournaments(

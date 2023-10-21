@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/constans.dart';
 import '../../../../service_locator/injection.dart';
@@ -18,18 +17,8 @@ class PlayerProfileContent extends StatelessWidget {
   final personId;
   @override
   Widget build(BuildContext context) {
-    /*return BlocListener<PlayerProfileCubit, PlayerProfileState>(
-      listener: (context, state) {
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              content: Text(state.errorMessage ?? ''),
-            ),
-          );
-      },
-      child: const _ContentProfile(),
-    );*/
+    final playerInfo = context
+        .select((AuthenticationBloc bloc) => bloc.state.playerData.playerid);
     return BlocProvider(
       create: (_) =>
           locator<PlayerProfileCubit>()..loadInfoPlayer(personId: personId!),
@@ -48,12 +37,37 @@ class PlayerProfileContent extends StatelessWidget {
                 image: AssetImage('assets/images/imageAppBar25.png'),
                 fit: BoxFit.fill,
               ),
-              actions: const [
-                ButtonShareWidget(),
+              actions: [
+                const ButtonShareWidget(),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      EditPlayerProfilePage.route(
+                          BlocProvider.of<PlayerProfileCubit>(context)),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
+                    decoration: const BoxDecoration(
+                      color: Colors.blueGrey,
+                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    ),
+                    child: Text(
+                      'Actualizar',
+                      style: TextStyle(
+                        fontFamily: 'SF Pro',
+                        color: Colors.grey[200],
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10.0,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-            body: Column(
-              children: <Widget>[
+            body: ListView(
+              children: [
                 Container(
                   decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -61,14 +75,14 @@ class PlayerProfileContent extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  child: Container(
+                  child: SizedBox(
                     width: double.infinity,
                     height: 260.0,
                     child: Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                        children: [
                           IconButton(
                             iconSize: 80.0,
                             icon: BlocBuilder<AuthenticationBloc,
@@ -85,28 +99,28 @@ class PlayerProfileContent extends StatelessWidget {
                                           base64Decode(
                                               state.user.person.photo ?? ''),
                                         ).image,
+                                  child: const Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 12.0,
+                                      child: Icon(
+                                        Icons.edit,
+                                        size: 15.0,
+                                        color: Colors.blueAccent,
+                                      ),
+                                    ),
+                                  ),
                                 );
                               },
                             ),
                             onPressed: () {
                               Navigator.push(
-                            context,
-                            EditPlayerProfilePage.route(BlocProvider.of<PlayerProfileCubit>(context))
-                        );
-                             /* Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return BlocProvider<PlayerProfileCubit>(
-                                      create: (_) =>
-                                          locator<PlayerProfileCubit>()
-                                            ..loadInfoPlayer(
-                                                personId: personId!),
-                                      child: const EditPlayerProfilePage(),
-                                    );
-                                  },
-                                ),
-                              );*/
+                                EditPlayerProfilePage.route(
+                                    BlocProvider.of<PlayerProfileCubit>(
+                                        context)),
+                              );
                             },
                           ),
                           Text(
@@ -143,8 +157,12 @@ class PlayerProfileContent extends StatelessWidget {
                                         const SizedBox(
                                           height: 2.0,
                                         ),
-                                        Text( //agePlayer
-                                          context.watch<PlayerProfileCubit>().agePlayer(state.playerInfo.birthday), //${playerAge}
+                                        Text(
+                                          //agePlayer
+                                          context
+                                              .watch<PlayerProfileCubit>()
+                                              .agePlayer(state.playerInfo
+                                                  .birthday), //${playerAge}
                                           style: const TextStyle(
                                             fontSize: 15.0,
                                             color: Colors.blueGrey,
@@ -181,43 +199,18 @@ class PlayerProfileContent extends StatelessWidget {
                                 ],
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
                 Column(
-                  children: const [
-                    TeamPage(type: ScreenType.profile),
-                    /*Container(
-                  padding: const EdgeInsets.only(
-                    bottom: 10,
-                  ),
-                  height: 55.0,
-                  color: Colors.blueGrey[600],
-                  child: ListTile(
-                      onTap: () {
-                      },
-                      leading: const Image(
-                          image: AssetImage(
-                            "assets/images/categoria.png",
-                          ),
-                          height: 28,
-                          width: 28),
-                      title: Text(
-                        "Agregar experiencia",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: Colors.grey[200],
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 20,
-                        color: Colors.grey[200],
-                      ))),*/
+                  children: [
+                    TeamPage(
+                      type: ScreenType.profile,
+                      playerId: playerInfo ?? 0,
+                    ),
                   ],
                 )
               ],

@@ -6,6 +6,7 @@ import 'package:ligas_futbol_flutter/src/domain/user_requests/dto/request_to_lea
 import 'package:ligas_futbol_flutter/src/domain/user_requests/entity/field_owner_request.dart';
 import 'package:ligas_futbol_flutter/src/domain/user_requests/entity/user_requests.dart';
 import 'package:ligas_futbol_flutter/src/domain/user_requests/repository/i_user_requests_repository.dart';
+import 'package:user_repository/user_repository.dart';
 
 import '../dto/request_to_admin_dto.dart';
 import '../dto/response_request_dto.dart';
@@ -211,8 +212,10 @@ class UserRequestsServiceImpl implements IUserRequestsService {
   }
 
   @override
-  Future<int> getRequestCount(int requestTo, {RequestType? type}) async {
-    final request = await _repository.getRequestCount(requestTo, type: type);
+  Future<int> getRequestCount(int requestTo,
+      {RequestType? type, ApplicationRol? rol}) async {
+    final request =
+        await _repository.getRequestCount(requestTo, type: type, rol: rol);
     return request.getOrElse(() => 0);
   }
 
@@ -263,4 +266,19 @@ class UserRequestsServiceImpl implements IUserRequestsService {
       int requestId, bool accepted) {
     return _repository.sendRefereeResponseRequest(requestId, accepted);
   }
+
+  @override
+  RepositoryResponse<UserRequests> patchUserRequest(UserRequests request) {
+    return _repository.patchUserRequest(request);
+  }
+
+  @override
+  RepositoryResponse<UserRequests> postUserRequest(UserRequests request) {
+    return _repository.postUserRequest(request);
+  }
+
+  @override
+  Future<List<UserRequests>> getDeleteLeaguesRequest() => _repository
+      .getDeleteLeaguesRequest()
+      .then((value) => value.fold((l) => [], (r) => r));
 }

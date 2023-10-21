@@ -17,10 +17,11 @@ class CategoryRepositoryImpl implements ICategoryRepository {
 
   @override
   RepositoryResponse<List<Category>> getCategoryByTournamentByAndLeagueId(
-      int leagueId, String tournamentName) {
+      int leagueId, tournamentName,
+      {bool requiresAuthToken = true}) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
+            requiresAuthToken: requiresAuthToken,
             converter: Category.fromJson,
             //  queryParams: {'idLeague': leagueId},
             endpoint:
@@ -32,7 +33,6 @@ class CategoryRepositoryImpl implements ICategoryRepository {
   RepositoryResponse<List<Category>> getCategoriesByLeagueId(int leagueId) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             converter: Category.fromJson,
             //  queryParams: {'idLeague': leagueId},
             endpoint: "$getCategoryByLeagueIdPresident$leagueId")
@@ -63,7 +63,7 @@ class CategoryRepositoryImpl implements ICategoryRepository {
     return _apiClient.network
         .deleteData(
             endpoint: '$deleteCatecoryByIdPresident$categoryId',
-            converter: Category.fromJson)
+            converter: (response) {})
         .validateResponse();
   }
 
@@ -88,13 +88,11 @@ class CategoryRepositoryImpl implements ICategoryRepository {
   }
 
   @override
-  RepositoryResponse<ResgisterCountInterface> getCountByLeagueId(
-      int leagueId) {
+  RepositoryResponse<ResgisterCountInterface> getCountByLeagueId(int leagueId) {
     return _apiClient.network
         .getData(
-        requiresAuthToken: false,
-        converter: ResgisterCountInterface.fromJson,
-        endpoint: createCategoryPresident + "/countCategory/$leagueId")
+            converter: ResgisterCountInterface.fromJson,
+            endpoint: createCategoryPresident + "/countCategory/$leagueId")
         .validateResponse();
   }
 }

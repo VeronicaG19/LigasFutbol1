@@ -79,11 +79,12 @@ class FieldOwnerCubit extends Cubit<FieldOwnerState> {
   Future<void> onGetAddressse(String text) async {
     emit(state.copyWith(screenStatus: ScreenStatus.addresGeting));
     final response = await _apiHereReposiTory.getAddresssesWithText(text);
-    response.fold((l) => null, (r) {
-      print(r.response!.view[0].result[0].location!.address!.label!);
+    response.fold(
+        (l) => debugPrint('response without addres value ${l.message}'), (r) {
+      debugPrint('response with addres value');
       emit(state.copyWith(
           apiHereResponseAddresses: r,
-          addreses: r.response!.view[0].result,
+          addreses: r.result,
           screenStatus: ScreenStatus.addresGeted));
     });
   }
@@ -97,22 +98,20 @@ class FieldOwnerCubit extends Cubit<FieldOwnerState> {
 
   void onUpdateAssetAddres(ReverseHeoApiHere reverseHeoApiHere) {
     emit(state.copyWith(
-      qraAddresses: state.qraAddresses.copyWith(
-        city: reverseHeoApiHere.items.first.address!.city!,
-        postalCode: reverseHeoApiHere.items.first.address!.postalCode!,
-        state: reverseHeoApiHere.items.first.address!.state,
-        countryCode: reverseHeoApiHere.items.first.address!.countryCode,
-        addressLine1: '${reverseHeoApiHere.items.first.address!.street} ${reverseHeoApiHere.items.first.address?.houseNumber ?? ''}',
-        county: reverseHeoApiHere.items.first.address!.district,
-        town: reverseHeoApiHere.items.first.address!.district,
-        length: '${reverseHeoApiHere.items.first.position!.lng!}',
-        latitude: '${reverseHeoApiHere.items.first.position!.lat}',
-        addressName: 'FIELD',
-        enabledFlag: 'Y',
-        addressType: 'PERSON'
-      )
-    ));
-
+        qraAddresses: state.qraAddresses.copyWith(
+            city: reverseHeoApiHere.items.first.address?.city ?? '',
+            postalCode: reverseHeoApiHere.items.first.address?.postalCode ?? '',
+            state: reverseHeoApiHere.items.first.address?.stateCode,
+            countryCode: reverseHeoApiHere.items.first.address?.countryCode,
+            addressLine1:
+                '${reverseHeoApiHere.items.first.address!.street} ${reverseHeoApiHere.items.first.address?.houseNumber ?? ''}',
+            county: reverseHeoApiHere.items.first.address!.district,
+            town: reverseHeoApiHere.items.first.address!.district,
+            length: '${reverseHeoApiHere.items.first.position!.lng!}',
+            latitude: '${reverseHeoApiHere.items.first.position!.lat}',
+            addressName: 'FIELD',
+            enabledFlag: 'Y',
+            addressType: 'PERSON')));
   }
 
   void onFieldLatitudeChange(String value) {
@@ -202,22 +201,21 @@ class FieldOwnerCubit extends Cubit<FieldOwnerState> {
             (l) => emit(state.copyWith(
                 formzStatus: FormzStatus.submissionFailure,
                 errorMessage: l.errorMessage)), (r) async {
-                  QraAsset assetData = QraAsset(
-          latitude: state.fieldLatitude.value,
-          longitude: state.fieldLength.value,
-          namePerson: state.fieldName.value,
-          location: state.fieldAddres.value,
-          appId: 4,
-          activeId: r.activeId!,
-          assignedPrice: 0.0,
-          partyId: partyId ?? 0,
-          capacity: 0,
-          durationEvents: 0);
-                  state.qraAddresses.copyWith(
-                    activeId: assetData
-                  );
-                  final responseAdd = await _agendaService.addAdrresAssets(r.activeId!, state.qraAddresses);
-                  responseAdd.fold((l) => null, (r) => debugPrint('good'));
+          QraAsset assetData = QraAsset(
+              latitude: state.fieldLatitude.value,
+              longitude: state.fieldLength.value,
+              namePerson: state.fieldName.value,
+              location: state.fieldAddres.value,
+              appId: 4,
+              activeId: r.activeId!,
+              assignedPrice: 0.0,
+              partyId: partyId ?? 0,
+              capacity: 0,
+              durationEvents: 0);
+          state.qraAddresses.copyWith(activeId: assetData);
+          final responseAdd = await _agendaService.addAdrresAssets(
+              r.activeId!, state.qraAddresses);
+          responseAdd.fold((l) => null, (r) => debugPrint('good'));
           print("Datos ${r}");
           _textEditingController.text = '';
           emit(state.copyWith(
@@ -291,8 +289,6 @@ class FieldOwnerCubit extends Cubit<FieldOwnerState> {
       addMarker(latLng);
     });
   }
-
-
 
   Future<void> onCleanFields() async {
     _textEditingController.text = '';

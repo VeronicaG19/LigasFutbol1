@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -14,17 +15,20 @@ import '../../../../domain/agenda/agenda.dart';
 import '../../../../domain/agenda/entity/qra_event.dart';
 import '../../../../domain/field/entity/field.dart';
 import '../../../../domain/field/service/i_field_service.dart';
+import '../../../../domain/topic_evaluation/qualificationByMatchEntity/QualificationByMatch.dart';
+import '../../../../domain/topic_evaluation/service/i_topic_evaluation_service.dart';
 
 part 'field_owner_schedule_state.dart';
 
 @injectable
 class FieldOwnerScheduleCubit extends Cubit<FieldOwnerScheduleState> {
-  FieldOwnerScheduleCubit(this._fieldService, this._agendaService)
+  FieldOwnerScheduleCubit(this._fieldService, this._agendaService, this._topicEvaluationService)
       : super(const FieldOwnerScheduleState());
 
   final List<QraEvent> _events = [];
   final IFieldService _fieldService;
   final IAgendaService _agendaService;
+  final ITopicEvaluationService _topicEvaluationService;
 
   late int activeId;
 
@@ -39,6 +43,9 @@ class FieldOwnerScheduleCubit extends Cubit<FieldOwnerScheduleState> {
     _events.clear();
     _events.addAll(events);
     final f = fields.getOrElse(() => []);
+    events.forEach((element) {
+      onGetQalifications(element.eventId!);
+     });
     emit(state.copyWith(
         selectedDay: availability.openingDate,
         focusedDay: availability.openingDate,
@@ -58,10 +65,30 @@ class FieldOwnerScheduleCubit extends Cubit<FieldOwnerScheduleState> {
     final events = await _agendaService.getFieldsEvents(activeId);
 
     _events.addAll(events);
+    
     emit(state.copyWith(
         selectedEvents: getEventsForDay(state.focusedDay!),
         screenState: BasicCubitScreenState.loaded));
   }
+
+  Future<void> onGetQalifications(int eventId) async{
+     //emit(state.copyWith(screenState: BasicCubitScreenState.loading));
+     final calficicatiosn = await _topicEvaluationService.getTopicsEvaluationByTypeId(eventId, typeId: 'EVENT');
+      List<QualificationByMatch> cals = List.from(state.quaLifications) ;
+     calficicatiosn.fold((l) => {}, (r) {
+       for (var calification in r) { 
+         calification = calification.copyWith(
+            eventId: eventId
+          );
+          cals.add(calification);
+          //cals.add(calification);
+       }
+        
+     });
+     emit(state.copyWith(quaLifications :cals));
+  }
+
+
 
   // Future<void> onLoadCalendarData(int activeId) async {
   //   emit(state.copyWith(screenState: BasicCubitScreenState.loading));
@@ -140,13 +167,38 @@ class FieldOwnerScheduleCubit extends Cubit<FieldOwnerScheduleState> {
         DateTime.utc(event.dateEvent!.year, event.dateEvent!.month,
             event.dateEvent!.day): _addEvents(event)
     };
+   
     final events = LinkedHashMap<DateTime, List<QraEvent>>(
       equals: isSameDay,
       hashCode: getHashCode,
     )..addAll(eventSource);
 
+    print('events ${events[day]?? []}');
     return events[day] ?? [];
   }
+
+  double getQualificationPerEventAndType(int eventId, String qualType) {
+    int index = state.quaLifications.indexWhere((calification) => calification.eventId == eventId && calification.typeEvaluation ==qualType );
+
+    if(index >= 0){
+      return state.quaLifications[index].qualification!;
+    }else{
+      return 0.0;
+    }
+  }
+
+
+  int getMatchId(int eventId) {
+    int index = state.quaLifications.indexWhere((calification) => calification.eventId == eventId );
+
+    if(index >= 0){
+      return state.quaLifications[index].matchId!;
+    }else{
+      return 0;
+    }
+  }
+
+  
 
   List<QraEvent> _addEvents(QraEvent event) {
     return _events

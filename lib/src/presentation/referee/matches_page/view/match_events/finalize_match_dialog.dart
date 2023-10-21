@@ -48,14 +48,14 @@ class FinalizeMatchDialog extends StatelessWidget {
                             fontWeight: FontWeight.bold, fontSize: dFontSize),
                       ),
                     ),
-                    if(type == ScreenType.scoreShoutOut)
-                    Expanded(
-                      child: Text(
-                        '${matchDetail.scoreLocal}(${state.scoreShoutOutLocal})',
-                        style: const TextStyle(fontSize: dFontSize),
+                    if (type == ScreenType.scoreShoutOut)
+                      Expanded(
+                        child: Text(
+                          '${matchDetail.scoreLocal}(${state.scoreShoutOutLocal})',
+                          style: const TextStyle(fontSize: dFontSize),
+                        ),
                       ),
-                    ),
-                    if(type == ScreenType.scoreMatch)
+                    if (type == ScreenType.scoreMatch)
                       Expanded(
                         child: Text(
                           '${matchDetail.scoreLocal}',
@@ -74,14 +74,14 @@ class FinalizeMatchDialog extends StatelessWidget {
                             fontWeight: FontWeight.bold, fontSize: dFontSize),
                       ),
                     ),
-                    if(type == ScreenType.scoreShoutOut)
-                    Expanded(
-                      child: Text(
-                        '${matchDetail.scoreVisit}(${state.scoreShoutOutVisit})',
-                        style: const TextStyle(fontSize: dFontSize),
+                    if (type == ScreenType.scoreShoutOut)
+                      Expanded(
+                        child: Text(
+                          '${matchDetail.scoreVisit}(${state.scoreShoutOutVisit})',
+                          style: const TextStyle(fontSize: dFontSize),
+                        ),
                       ),
-                    ),
-                    if(type == ScreenType.scoreMatch)
+                    if (type == ScreenType.scoreMatch)
                       Expanded(
                         child: Text(
                           '${matchDetail.scoreVisit}',
@@ -115,7 +115,8 @@ class FinalizeMatchDialog extends StatelessWidget {
                             match: match,
                             matchDetail: matchDetail,
                           );
-                      Navigator.pop(ctxt);
+                      Navigator.pop(context);
+                      //Navigator.popUntil(ctxt,(route) => route.settings.name == '/');
                     },
                     child: ButtonCustom(
                       textBtn: ' Confirmar',

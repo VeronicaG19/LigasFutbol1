@@ -33,10 +33,10 @@ migrate_working_dir/
 /build/
 pubspec.lock
 /lib/src/**/**.g.dart
+/lib/src/**/**.freezed.dart
 lib/src/service_locator/injection.config.dart
 
 # Web related
-lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols

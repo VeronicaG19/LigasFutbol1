@@ -12,6 +12,7 @@ class DetailMatchDTO extends Equatable {
   final String? direccion;
   final String? estado;
   final String? fecha;
+  final String? fechaJuego;
   final String? hora;
   final int? idLocal;
   final int? idVisit;
@@ -29,6 +30,9 @@ class DetailMatchDTO extends Equatable {
   final int? uniformeVisitante;
   final String? visitante;
   final String? vs;
+  final int? fieldId;
+  final int? refereeId;
+  final int? leagueid;
 
   const DetailMatchDTO({
     this.matchId,
@@ -38,6 +42,7 @@ class DetailMatchDTO extends Equatable {
     this.direccion,
     this.estado,
     this.fecha,
+    this.fechaJuego,
     this.hora,
     this.idLocal,
     this.idVisit,
@@ -55,6 +60,9 @@ class DetailMatchDTO extends Equatable {
     this.uniformeVisitante,
     this.visitante,
     this.vs,
+    this.fieldId,
+    this.refereeId,
+    this.leagueid,
   });
 
   /// Connect the generated [_$DetailMatchDTOFromJson] function to the `fromJson`
@@ -65,32 +73,34 @@ class DetailMatchDTO extends Equatable {
   /// Connect the generated [_$DetailMatchDTOToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$DetailMatchDTOToJson(this);
 
-  DetailMatchDTO copyWith({
-    int? matchId,
-    String? arbitro,
-    String? cambiosIlimitados,
-    String? campo,
-    String? direccion,
-    String? estado,
-    String? fecha,
-    String? hora,
-    int? idLocal,
-    int? idVisit,
-    String? jordana,
-    String? local,
-    String? logoLocal,
-    String? logoVisit,
-    int? marcadorLocal,
-    int? marcadorVisitante,
-    int? numerodeCambios,
-    String? shootOut,
-    int? shootoutLocal,
-    int? shootoutVisit,
-    int? uniformeLocal,
-    int? uniformeVisitante,
-    String? visitante,
-    String? vs,
-  }) {
+  DetailMatchDTO copyWith(
+      {int? matchId,
+      String? arbitro,
+      String? cambiosIlimitados,
+      String? campo,
+      String? direccion,
+      String? estado,
+      String? fecha,
+      String? hora,
+      int? idLocal,
+      int? idVisit,
+      String? jordana,
+      String? local,
+      String? logoLocal,
+      String? logoVisit,
+      int? marcadorLocal,
+      int? marcadorVisitante,
+      int? numerodeCambios,
+      String? shootOut,
+      int? shootoutLocal,
+      int? shootoutVisit,
+      int? uniformeLocal,
+      int? uniformeVisitante,
+      String? visitante,
+      String? vs,
+      int? fieldId,
+      int? refereeId,
+      int? leagueid}) {
     return DetailMatchDTO(
       matchId: matchId ?? this.matchId,
       arbitro: arbitro ?? this.arbitro,
@@ -116,6 +126,9 @@ class DetailMatchDTO extends Equatable {
       uniformeVisitante: uniformeVisitante ?? this.uniformeVisitante,
       visitante: visitante ?? this.visitante,
       vs: vs ?? this.vs,
+      fieldId: fieldId ?? this.fieldId,
+      refereeId: refereeId ?? this.refereeId,
+      leagueid: leagueid ?? this.leagueid,
     );
   }
 
@@ -145,5 +158,8 @@ class DetailMatchDTO extends Equatable {
         uniformeVisitante,
         visitante,
         vs,
+        fieldId,
+        refereeId,
+        leagueid,
       ];
 }

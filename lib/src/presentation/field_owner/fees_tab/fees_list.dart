@@ -70,6 +70,12 @@ class FeesList extends StatelessWidget {
                                   actions: [
                                     TextButton(
                                       onPressed: () {
+                                        Navigator.pop(contextD);
+                                      }, //Navigator.pop(),
+                                      child: const Text('REGRESAR'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
                                         context
                                             .read<FeeCubit>()
                                             .onPressDeleteFee(
@@ -78,12 +84,6 @@ class FeesList extends StatelessWidget {
                                         Navigator.pop(contextD);
                                       },
                                       child: const Text('ELIMINAR'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(contextD);
-                                      }, //Navigator.pop(),
-                                      child: const Text('REGRESAR'),
                                     ),
                                   ],
                                 ),

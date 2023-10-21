@@ -22,6 +22,20 @@ class SignupService {
     return user.copyWith(person: response);
   }
 
+  Future<User> createLFUserAndAssignRoles(User user) async {
+    final response = await _createLFUser(user);
+    return user.copyWith(person: response);
+  }
+
+  Future<Person> _createLFUser(User user) async {
+    final response = await _apiClient.network.postData(
+        endpoint: Endpoints.createLFURL,
+        data: user.toJsonForRegistration(),
+        requiresAuthToken: false,
+        converter: (body) => Person.fromJson(body['party']));
+    return response;
+  }
+
   Future<Person> _registerUser(User user) async {
     final response = await _apiClient.network.postData(
         endpoint: Endpoints.signupUserURL,
@@ -229,17 +243,17 @@ class SignupService {
     VerificationCode? response;
     if (_getVerificationType(receiver) == kPhoneVerification) {
       response = await _apiClient.network.postData(
-          endpoint: Endpoints.sendVerificationCodeByPhoneURL(receiver),
+          endpoint: Endpoints.sendVerificationCodeURL("2", receiver),
           data: {},
           requiresAuthToken: false,
           converter: VerificationCode.fromJson);
     } else if (_getVerificationType(receiver) == kEmailVerification) {
       response = await _apiClient.network.postData(
-          endpoint: Endpoints.sendVerificationCodeByEmailURL(receiver),
+          endpoint: Endpoints.sendVerificationCodeURL("1", receiver),
           data: {},
           requiresAuthToken: false,
           converter: VerificationCode.fromJson);
-      if (response != null) {
+      /* if (response != null) {
         try {
           await _sendVerificationCodeByEmail(
               receiver, response.verificationCode);
@@ -248,7 +262,7 @@ class SignupService {
         } catch (e) {
           debugPrint('Email sender error --> ${e.toString()}');
         }
-      }
+      }*/
     }
     if (response == null) {
       throw const VerificationCodeException.invalidCode();
@@ -316,7 +330,7 @@ class SignupService {
         "Utiliza el siguiente c&oacute;digo de verificaci&oacute;n para poder acceder a tu cuenta de ${Endpoints.appName}:" +
             "<br><br>C&oacute;digo: <b style='font-family:georgia,serif;font-size:12pt;color:rgb(68,68,68)'>$code</b></p>\n\n";
     const title3 =
-        "&#161;Gracias! Juntos haremos de nuestras comunidades zonas seguras para nuestras familias.";
+        "&#161;Gracias por hacer de México un lugar que promueve y fomenta el Deporte!";
     final String hTMLTemplate = _buildTemplateHTML(kVerificationCodeMessage,
         kVerificationCodeMessage2, bodyMessage, title3);
     final headers = <String, String>{
@@ -346,7 +360,7 @@ class SignupService {
         "Usuario: <b style='font-family:georgia,serif;font-size:12pt;color:rgb(68,68,68)'>${user.userName}</b></p><p>"
         "Contraseña: <b style='font-family:georgia,serif;font-size:12pt;color:rgb(68,68,68)'>"
         "${user.password}</b></p>";
-    const text2 = "&#161;Gracias por unirte a nuestra comunidad";
+    const text2 = "&#161;Gracias por hacer de México un lugar que promueve y fomenta el Deporte!";
     final String hTMLTemplate =
         _buildTemplateHTML(kUserAndPassword, text1, bodyMessage, text2);
     final headers = <String, String>{
@@ -391,6 +405,7 @@ class SignupService {
       'Content-type': 'application/json',
       'ACCEPT-ORG-ID': '4',
     };
+    debugPrint('${Uri.parse(Endpoints.sendEmailNotificationUrl)}');
     final request = await http
         .post(Uri.parse(Endpoints.sendEmailNotificationUrl),
             headers: headers, body: data)

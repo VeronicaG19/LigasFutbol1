@@ -23,7 +23,7 @@ class CardRefereeSend extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     final league =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return BlocConsumer<RefereeSearchCubit, RefereeSearchState>(
       listener: (context, state) {
         if (state.screenStatus == ScreenStatus.error) {
@@ -56,71 +56,90 @@ class CardRefereeSend extends StatelessWidget {
             showDialog(
               context: context,
               builder: (dialogContext) {
-                return AlertDialog(
-                  backgroundColor: Colors.grey[200],
-                  title: const Text('Información del árbitro'),
-                  content: DetailRefereeLeagueManager(refereeId: refereeId!),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(dialogContext),
-                      child: Container(
-                        padding:
-                            const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
-                        decoration: const BoxDecoration(
-                          color: Color(0xff740426),
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        ),
-                        child: Text(
-                          'Cerrar',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'SF Pro',
-                            color: Colors.grey[200],
-                            fontWeight: FontWeight.w500,
-                            fontSize: 10.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(dialogContext);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                AvailabilityRefereePage(refereeId: refereeId),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.calendar_month, size: 25),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        context
-                            .read<RefereeSearchCubit>()
-                            .onSendRequest(refereeId!, league.leagueId);
-                      },
-                      child: Container(
-                        padding:
-                            const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
-                        decoration: const BoxDecoration(
-                          color: Color(0xff358aac),
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        ),
-                        child: Text(
-                          'Enviar Solicitud',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'SF Pro',
-                            color: Colors.grey[200],
-                            fontWeight: FontWeight.w500,
-                            fontSize: 10.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                return BlocProvider.value(
+                  value: BlocProvider.of<RefereeSearchCubit>(context),
+                  child: BlocBuilder<RefereeSearchCubit, RefereeSearchState>(
+                    builder: (context, state) {
+                      return AlertDialog(
+                        backgroundColor: Colors.grey[200],
+                        title: const Text('Información del árbitro'),
+                        content:
+                            DetailRefereeLeagueManager(refereeId: refereeId!),
+                        actions: state.screenStatus == ScreenStatus.sending
+                            ? [
+                                const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ]
+                            : [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(dialogContext),
+                                  child: Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        16.0, 10.0, 16.0, 10.0),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xff740426),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15.0)),
+                                    ),
+                                    child: Text(
+                                      'Cerrar',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'SF Pro',
+                                        color: Colors.grey[200],
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 10.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(dialogContext);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            AvailabilityRefereePage(
+                                                refereeId: refereeId),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.calendar_month,
+                                      size: 25),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    context
+                                        .read<RefereeSearchCubit>()
+                                        .onSendRequest(
+                                            refereeId!, league.leagueId);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        16.0, 10.0, 16.0, 10.0),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xff358aac),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15.0)),
+                                    ),
+                                    child: Text(
+                                      'Enviar Solicitud',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'SF Pro',
+                                        color: Colors.grey[200],
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 10.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                      );
+                    },
+                  ),
                 );
               },
             );

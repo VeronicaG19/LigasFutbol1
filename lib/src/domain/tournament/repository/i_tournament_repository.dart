@@ -14,11 +14,14 @@ import '../dto/tournament_champion/tournament_champion_dto.dart';
 import '../entity/tournament.dart';
 
 abstract class ITournamentRepository {
-  RepositoryResponse<List<Tournament>> getTournamentByLeagueId(int leagueId);
+  RepositoryResponse<List<Tournament>> getTournamentByLeagueId(int leagueId,
+      {bool requiresAuthToken = true});
   RepositoryResponse<List<ScoringTournamentDTO>> getScoringTournamentId(
-      int tournamentId);
+      int tournamentId,
+      {bool requiresAuthToken = true});
   RepositoryResponse<List<GoalsTournamentDTO>> getGoalsTournamentId(
-      int tournamentId);
+      int tournamentId,
+      {bool requiresAuthToken = true});
   RepositoryResponse<List<TournamentByPlayer>> getTournamentByPlayer(
       int partyId);
   RepositoryResponse<List<PerformanceByTournament>> getPerformanceByPlayer(
@@ -91,13 +94,16 @@ abstract class ITournamentRepository {
   RepositoryResponse<List<GetOpenTournamentsInterface>>
       getTournamentsByTeamIdAndLeagueId(int teamId, {int? leagueId});
   RepositoryResponse<Tournament> getFindByNameAndCategory(
-      int categoryId, String tournamentName);
+      int categoryId, String tournamentName,
+      {bool requiresAuthToken = true});
 
   RepositoryResponse<TournamentChampionDTO> getTournamentChampion(
-      int tournamentId);
+      int tournamentId,
+      {bool requiresAuthToken = true});
   RepositoryResponse<TournamentChampionDTO> tournamentFinished(
       int tournamentId);
-  RepositoryResponse<String> getTournamentMatchesStatus(int tournamentId);
+  RepositoryResponse<String> getTournamentMatchesStatus(int tournamentId,
+      {bool requiresAuthToken = true});
 
   RepositoryResponse<String> createRoundsConfiguration(ConfigLeagueDTO config);
   RepositoryResponse<String> inscribeLeagueTeams(

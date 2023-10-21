@@ -28,10 +28,53 @@ class ExperiencesPage extends StatelessWidget {
       child: BlocBuilder<ExperiencesCubit, ExperiencesState>(
         builder: (context, state) {
           if (state.screenStatus == ScreenStatus.loading) {
-            return Center(
-              child: LoadingAnimationWidget.fourRotatingDots(
-                color: const Color(0xff358aac),
-                size: 50,
+            //pantalla antes de mostrar experiencia
+
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text("Mi experiencia"),
+                backgroundColor: Colors.grey[200],
+                flexibleSpace: const Image(
+                  image: AssetImage('assets/images/imageAppBar25.png'),
+                  fit: BoxFit.fill,
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      Navigator.push(
+                          context,
+                          PlayerExperiencePage.route(
+                              BlocProvider.of<ExperiencesCubit>(context)));
+                    },
+                    child: Container(
+                      padding:
+                          const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
+                      decoration: const BoxDecoration(
+                        color: Colors.blueGrey,
+                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                      ),
+                      child: Text(
+                        'Agregar',
+                        style: TextStyle(
+                          fontFamily: 'SF Pro',
+                          color: Colors.grey[200],
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+                elevation: 0.0,
+              ),
+              body: Container(
+                color: Colors.grey[200],
+                child: Center(
+                  child: LoadingAnimationWidget.fourRotatingDots(
+                    color: const Color(0xff358aac),
+                    size: 50,
+                  ),
+                ),
               ),
             );
           } else {

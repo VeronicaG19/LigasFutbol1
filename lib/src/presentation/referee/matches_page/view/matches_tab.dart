@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/view/matches_page.dart';
+import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/view/match_events/other_matches_page.dart';
+import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/view/pending_matches_page.dart';
+
+import '../../../../core/constans.dart';
 
 class MatchesTab extends StatefulWidget {
   const MatchesTab({Key? key}) : super(key: key);
@@ -26,7 +29,7 @@ class _MatchesTabState extends State<MatchesTab> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     return ListView(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 2,
       ),
       shrinkWrap: true,
@@ -35,32 +38,35 @@ class _MatchesTabState extends State<MatchesTab> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TabBar(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 right: 10,
                 left: 10,
               ),
               controller: _nestedTabController,
-              indicatorColor: Color(0xff045a74),
+              indicatorColor: const Color(0xff045a74),
               labelColor: Colors.black,
-              unselectedLabelColor: Color(0xff045a74),
+              unselectedLabelColor: const Color(0xff045a74),
               isScrollable: true,
-              labelStyle: TextStyle(color: Colors.black54, fontSize: 12.5),
-              tabs: const [
+              labelStyle:
+                  const TextStyle(color: Colors.black54, fontSize: 12.5),
+              tabs: [
                 Tab(
-                  text: 'Mis partidos',
+                  key: CoachKey.myMatchesReferee,
+                  text: 'Partidos pendientes',
                 ),
                 Tab(
+                  key: CoachKey.allMyMatchesReferee,
                   text: 'Todos mis partidos',
                 ),
               ],
             ),
-            Container(
+            SizedBox(
               height: screenHeight * 0.85,
               child: TabBarView(
                 controller: _nestedTabController,
-                children: [
-                  const MatchesPage(),
-                  const MatchesPage(),
+                children: const [
+                  PendingMatchesPage(),
+                  OtherMatchesPage(),
                 ],
               ),
             ),

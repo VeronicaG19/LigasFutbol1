@@ -18,7 +18,7 @@ class EditPlayerProfilePage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text(
+            title: const Text( 
               "Actualizar datos",
               textAlign: TextAlign.center,
             ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
@@ -69,10 +71,12 @@ class FoFieldDetailCubit extends Cubit<FoFieldDetailState> {
         openingDate: state.initialDate,
         expirationDate: state.endDate,
       );
+      //emit(state.copyWith(screenState: BasicCubitScreenState.emptyData));
       final request = await _agendaService.createAvailability(availabilityData);
       request.fold(
           (l) => emit(state.copyWith(
-              errorMessage: l.errorMessage,
+              errorMessage: _getAvailabilityErrorResponse(
+                  jsonDecode(l.data ?? '')['status']),
               screenState: BasicCubitScreenState.error)), (r) {
         emit(state.copyWith(
           screenState: BasicCubitScreenState.success,
@@ -83,15 +87,34 @@ class FoFieldDetailCubit extends Cubit<FoFieldDetailState> {
     }
   }
 
+  String _getAvailabilityErrorResponse(final int? status) {
+    switch (status) {
+      case -1:
+        return 'Error al guardar';
+      case -2:
+        return 'Este rango de fecha ya está ocupado';
+      case -3:
+        return 'El activo no existe';
+      case -4:
+        return 'Hay datos faltantes';
+      default:
+        return 'Ha ocurrido un error';
+    }
+  }
+
   Future<void> getFieldsAvailability(int activeId) async {
     emit(state.copyWith(screenState: BasicCubitScreenState.loading));
     final request = await _agendaService.getFieldsAvailability(activeId);
-    request.fold(
-        (l) => emit(state.copyWith(
-            screenState: BasicCubitScreenState.error,
-            errorMessage: l.errorMessage)), (r) {
+    request.fold((l) {
       emit(state.copyWith(
-          availability: r, screenState: BasicCubitScreenState.loaded));
+        screenState: BasicCubitScreenState.error,
+        errorMessage: l.errorMessage,
+      ));
+    }, (r) {
+      emit(state.copyWith(
+        availability: r,
+        screenState: BasicCubitScreenState.loaded,
+      ));
     });
   }
 }

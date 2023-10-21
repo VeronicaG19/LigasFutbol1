@@ -47,9 +47,9 @@ class _CreateFieldOwnerContent extends StatefulWidget {
       _CreateFieldOwnerContentState();
 }
 
-class _CreateFieldOwnerContentState extends State<_CreateFieldOwnerContent> {
-  late final MapController _mapController;
+late final MapController _mapController;
 
+class _CreateFieldOwnerContentState extends State<_CreateFieldOwnerContent> {
   @override
   void initState() {
     super.initState();
@@ -65,7 +65,7 @@ class _CreateFieldOwnerContentState extends State<_CreateFieldOwnerContent> {
   @override
   Widget build(BuildContext context) {
     final leagueId =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     final personInfo =
         context.select((AuthenticationBloc bloc) => bloc.state.user.person);
     /*void launchGoogleMaps(double lat, double lng) async {
@@ -131,9 +131,6 @@ class _CreateFieldOwnerContentState extends State<_CreateFieldOwnerContent> {
                               maxZoom: 19.0,
                               interactiveFlags: InteractiveFlag.all,
                               onTap: (value, latlng) {
-                                print("latitude --- > ${latlng.latitude}");
-                                print("longitude --- > ${latlng.longitude}");
-                                print("longitude --- > ");
                                 context
                                     .read<FieldOwnerCubit>()
                                     .onFieldLatitudeChange(
@@ -179,9 +176,9 @@ class _CreateFieldOwnerContentState extends State<_CreateFieldOwnerContent> {
                 height: 200.0,
                 width: 200,
                 color: Colors.grey[200],
-                child: Column(
+                child: const Column(
                   children: <Widget>[
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(top: 5, bottom: 5),
                       child: Text(
                           "Llenar los siguientes datos para crear un campo",
@@ -190,7 +187,7 @@ class _CreateFieldOwnerContentState extends State<_CreateFieldOwnerContent> {
                               fontWeight: FontWeight.w500, fontSize: 15)),
                     ),
                     Row(
-                      children: const [
+                      children: [
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.only(left: 10, right: 10),
@@ -205,7 +202,7 @@ class _CreateFieldOwnerContentState extends State<_CreateFieldOwnerContent> {
                         ),
                       ],
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Padding(
                         padding: EdgeInsets.all(10),
                         child: _AddresField(),
@@ -358,33 +355,81 @@ class _AddresField extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.fieldAddres != current.fieldAddres,
       builder: (context, state) {
-        return TextFormField(
-          controller: context.read<FieldOwnerCubit>().getTextAddresController,
-          enabled: false,
-          key: const Key('addres_field'),
-          onChanged: (value) {
-            if (value.trim().length > 7) {
-              context.read<FieldOwnerCubit>().onGetAddressse(value);
-            }
-
-            context.read<FieldOwnerCubit>().onFieldAddresChange(value);
+        return GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (_) {
+                return BlocProvider.value(
+                  value: BlocProvider.of<FieldOwnerCubit>(context),
+                  child: const _SearchAddress(),
+                );
+              },
+            );
           },
-          //onFieldSubmitted: (value) => state.formzStatus.isSubmissionInProgress,
-          decoration: InputDecoration(
-            labelText: "Selecciona un punto en el mapa",
-            labelStyle: const TextStyle(fontSize: 13),
-            errorText: state.fieldAddres.invalid
-                ? "Selecciona un punto en el mapa"
-                : null,
+          child: TextFormField(
+            controller: context.read<FieldOwnerCubit>().getTextAddresController,
+            enabled: false,
+            //readOnly: true,
+            key: const Key('addres_field'),
+            onChanged: (value) {
+              if (value.trim().length > 7) {
+                context.read<FieldOwnerCubit>().onGetAddressse(value);
+              }
+
+              context.read<FieldOwnerCubit>().onFieldAddresChange(value);
+            },
+            //onFieldSubmitted: (value) => state.formzStatus.isSubmissionInProgress,
+            decoration: InputDecoration(
+              icon: const Icon(Icons.search, color: Colors.blue),
+              labelText: "Selecciona un punto en el mapa",
+              labelStyle: const TextStyle(fontSize: 13),
+              errorText: state.fieldAddres.invalid
+                  ? "Selecciona un punto en el mapa"
+                  : null,
+            ),
+            style: const TextStyle(fontSize: 13),
           ),
-          style: const TextStyle(fontSize: 13),
         );
       },
     );
   }
 }
 
-/*class AutocompleteBasicExample extends StatelessWidget {
+class _SearchAddress extends StatelessWidget {
+  const _SearchAddress({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FieldOwnerCubit, FieldOwnerState>(
+        builder: (context, state) {
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Center(
+              child: Text('Buscar dirección'),
+            ),
+            TextFormField(
+              /*controller:
+                      context.read<FieldOwnerCubit>().getTextAddresController,*/
+              key: const Key('addres_field_search'),
+              onChanged: (value) {
+                if (value.trim().length > 7) {
+                  context.read<FieldOwnerCubit>().onGetAddressse(value);
+                }
+              },
+              style: const TextStyle(fontSize: 13),
+            ),
+            AutocompleteBasicExample()
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class AutocompleteBasicExample extends StatelessWidget {
   const AutocompleteBasicExample({super.key});
 
   @override
@@ -396,44 +441,67 @@ class _AddresField extends StatelessWidget {
         return Container(
           margin: const EdgeInsets.all(10),
           height: MediaQuery.of(context).size.height * .3,
-          width: MediaQuery.of(context).size.width * .3,
-          color: (state.addreses.isNotEmpty)
-              ? Colors.black.withOpacity(0.7)
-              : Colors.transparent,
+          width: MediaQuery.of(context).size.width * .8,
+          color:
+              (state.addreses.isNotEmpty) ? Colors.white : Colors.transparent,
           child: ListView.builder(
               itemCount: state.addreses.length,
               itemBuilder: (context, index) {
-                print(state.addreses.length);
-                return ListTile(
-                  title: Text(state.addreses[index].location!.address!.label!),
-                  onTap: () async {
-                    //addMarker(value);
-                    await context.read<FieldOwnerCubit>().onUpdateLatLeng(
-                        state.addreses[index].location!.navigationPosition[0]
-                            .latitude!,
-                        state.addreses[index].location!.navigationPosition[0]
-                            .longitude!);
-                    lstlong.LatLng latn = lstlong.LatLng(
-                        state.addreses[index].location!.navigationPosition[0]
-                            .latitude!,
-                        state.addreses[index].location!.navigationPosition[0]
-                            .longitude!);
-                    await context.read<FieldOwnerCubit>().addMarker(latn);
-                    context
-                        .read<FieldOwnerCubit>()
-                        .getMapController
-                        .move(latn, 17.00);
-                    context
-                        .read<FieldOwnerCubit>()
-                        .onFieldLengthChange('${latn.longitude}');
-                    context
-                        .read<FieldOwnerCubit>()
-                        .onFieldLatitudeChange('${latn.latitude}');
-                    context
-                        .read<FieldOwnerCubit>()
-                        .getTextAddresController
-                        .text = state.addreses[index].location!.address!.label!;
-                  },
+                return Card(
+                  elevation: 2,
+                  child: ListTile(
+                    title:
+                        Text(state.addreses[index].location!.address!.label!),
+                    onTap: () async {
+                      //addMarker(value);
+                      await context.read<FieldOwnerCubit>().onUpdateLatLeng(
+                          state.addreses[index].location!.navigationPosition[0]
+                              .latitude!,
+                          state.addreses[index].location!.navigationPosition[0]
+                              .longitude!);
+                      lstlong.LatLng latn = lstlong.LatLng(
+                          state.addreses[index].location!.navigationPosition[0]
+                              .latitude!,
+                          state.addreses[index].location!.navigationPosition[0]
+                              .longitude!);
+                      await context.read<FieldOwnerCubit>().addMarker(latn);
+
+                      context.read<FieldOwnerCubit>().onFieldLatitudeChange(
+                          state.addreses[index].location!.navigationPosition[0]
+                              .latitude
+                              .toString());
+
+                      context.read<FieldOwnerCubit>().onFieldLengthChange(state
+                          .addreses[index]
+                          .location!
+                          .navigationPosition[0]
+                          .longitude
+                          .toString());
+
+                      context.read<FieldOwnerCubit>().addDireccionAndMarket(
+                          lstlong.LatLng(
+                              state.addreses[index].location!
+                                  .navigationPosition[0].latitude!,
+                              state.addreses[index].location!
+                                  .navigationPosition[0].longitude!));
+
+                      _mapController.move(latn, 17.00);
+
+                      context
+                          .read<FieldOwnerCubit>()
+                          .onFieldLengthChange('${latn.longitude}');
+                      context
+                          .read<FieldOwnerCubit>()
+                          .onFieldLatitudeChange('${latn.latitude}');
+                      context
+                              .read<FieldOwnerCubit>()
+                              .getTextAddresController
+                              .text =
+                          state.addreses[index].location!.address!.label!;
+
+                      Navigator.pop(context);
+                    },
+                  ),
                 );
               }),
         );
@@ -445,7 +513,7 @@ class _AddresField extends StatelessWidget {
       }
     });
   }
-}*/
+}
 
 class _TypeField extends StatefulWidget {
   const _TypeField({Key? key}) : super(key: key);
@@ -462,8 +530,8 @@ class _TypeFieldInputState extends State<_TypeField> {
         return DropdownButtonHideUnderline(
           child: DropdownButton2(
             isExpanded: true,
-            hint: Row(
-              children: const [
+            hint: const Row(
+              children: [
                 Icon(
                   Icons.app_registration,
                   size: 16,

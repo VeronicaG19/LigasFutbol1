@@ -15,23 +15,45 @@ class PlayerProfileState extends Equatable {
   final String? errorMessage;
   final ScreenStatus screenStatus;
   final FormzStatus formStatus;
-  final Address addresInput;
+  final plyadd.Address addresInput;
   final PositionPlayer postionInput;
+  final ApiHereResponseAddresses apiHereResponseAddresses;
+  final List<Result> addreses;
+  final double lat;
+  final double leng;
+  final List<Marker> allMarkers;
 
   const PlayerProfileState({
     this.playerInfo = Player.empty,
     this.screenStatus = ScreenStatus.initial,
     this.errorMessage,
+    this.lat = 19.4260138,
+    this.leng = -99.6389653,
+    this.addreses = const [],
     this.formStatus = FormzStatus.pure,
     this.nickNameInput = const NickName.pure(),
     this.bithDateInput = const BirthDate.pure(),
-    this.addresInput = const Address.pure(),
-    this.postionInput = const PositionPlayer.pure()
+    this.addresInput = const plyadd.Address.pure(),
+    this.postionInput = const PositionPlayer.pure(),
+    this.apiHereResponseAddresses = ApiHereResponseAddresses.empty,
+    this.allMarkers = const [],
+
   });
 
   @override
   // TODO: implement props
-  List<Object?> get props => [playerInfo, screenStatus,formStatus, bithDateInput, nickNameInput, addresInput,postionInput];
+  List<Object?> get props => [playerInfo, 
+  screenStatus,
+  formStatus, 
+  bithDateInput, 
+  nickNameInput, 
+  addresInput,
+  postionInput,
+  lat,
+  leng,
+  addreses,
+  apiHereResponseAddresses,
+  allMarkers];
 
   PlayerProfileState copyWith({
     Player? playerInfo,
@@ -40,8 +62,14 @@ class PlayerProfileState extends Equatable {
     FormzStatus? formStatus,
     NickName ? nickNameInput,
     BirthDate? bithDateInput,
-    Address? addresInput,
-    PositionPlayer? postionInput
+    plyadd.Address? addresInput,
+    PositionPlayer? postionInput,
+    ApiHereResponseAddresses? apiHereResponseAddresses,
+    List<Result>? addreses,
+    double? lat,
+    double? leng,
+    List<Marker>? allMarkers
+
   }) {
     return PlayerProfileState(
       playerInfo: playerInfo ?? this.playerInfo,
@@ -51,7 +79,12 @@ class PlayerProfileState extends Equatable {
       nickNameInput : nickNameInput ?? this.nickNameInput,
       bithDateInput : bithDateInput ??this.bithDateInput,
       addresInput : addresInput ?? this.addresInput,
-      postionInput: postionInput ?? this.postionInput
+      postionInput: postionInput ?? this.postionInput,
+      apiHereResponseAddresses: apiHereResponseAddresses ?? this.apiHereResponseAddresses,
+      addreses: addreses ?? this.addreses,
+      lat: lat ?? this.lat,
+      leng: leng ?? this.leng,
+      allMarkers: allMarkers ?? this.allMarkers
     );
   }
 }

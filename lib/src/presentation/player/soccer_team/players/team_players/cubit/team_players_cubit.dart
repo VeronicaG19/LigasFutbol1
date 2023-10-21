@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ligas_futbol_flutter/src/domain/team_player/entity/team_player.dart';
 import 'package:ligas_futbol_flutter/src/domain/team_player/service/i_team_player_service.dart';
@@ -30,7 +31,6 @@ class TeamPlayersCubit extends Cubit<TeamPlayerState> {
                   screenStatus: ScreenStatus.loaded,
                   errorMessage: l.errorMessage)),
             }, (r) {
-      print('lista de jugadores $r');
       emit(state.copyWith(screenStatus: ScreenStatus.loaded, teamPlayer: r));
     });
   }
@@ -49,6 +49,9 @@ class TeamPlayersCubit extends Cubit<TeamPlayerState> {
   }
 
   Future<void> onSendPlayerToTeamRequest(int personId, int teamId) async {
+    Trace customTrace = FirebasePerformance.instance
+        .newTrace('onSendPlayerToTeamRequest-trace');
+    await customTrace.start();
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
     final player = await _playerService.getDataPlayerByPartyId(personId);
     print(player);
@@ -74,5 +77,7 @@ class TeamPlayersCubit extends Cubit<TeamPlayerState> {
       getValidatedRequest(personId, teamId);
       emit(state.copyWith(screenStatus: ScreenStatus.success));
     });
+
+    await customTrace.stop();
   }
 }

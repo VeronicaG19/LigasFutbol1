@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "961689438961",
+    "project_id": "wiplif-80bf2",
+    "storage_bucket": "wiplif-80bf2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961689438961:android:178e0922120f6afb627750",
+        "android_client_info": {
+          "package_name": "com.ccs.swat.iaas.spr.ligas_futbol.ligas_futbol_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961689438961-d5hvbam4uq971mjarfqf05e74pnask3p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbRVUP8zy1BzknX7zMg1vNTrSd-9RUNZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "961689438961-d5hvbam4uq971mjarfqf05e74pnask3p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "961689438961-j6fdfbatuo6lhul63gg9l4kuqof01lp1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.ias.swat.ccs.com.Wiplif"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961689438961:android:5b4c124c73e994dd627750",
+        "android_client_info": {
+          "package_name": "dev.ias.swat.ccs.com.Wiplif"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961689438961-d5hvbam4uq971mjarfqf05e74pnask3p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbRVUP8zy1BzknX7zMg1vNTrSd-9RUNZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "961689438961-d5hvbam4uq971mjarfqf05e74pnask3p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "961689438961-j6fdfbatuo6lhul63gg9l4kuqof01lp1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.ias.swat.ccs.com.Wiplif"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

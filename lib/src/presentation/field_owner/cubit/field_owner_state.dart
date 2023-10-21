@@ -81,28 +81,27 @@ class FieldOwnerState extends Equatable {
     List<Marker>? allMarkers,
   }) {
     return FieldOwnerState(
-      fieldtList: fieldtList ?? this.fieldtList,
-      errorMessage: errorMessage ?? this.errorMessage,
-      detailField: detailField ?? this.detailField,
-      screenStatus: screenStatus ?? this.screenStatus,
-      fieldName: fieldName ?? this.fieldName,
-      fieldAddres: fieldAddres ?? this.fieldAddres,
-      fieldImage: fieldImage ?? this.fieldImage,
-      fieldLength: fieldLength ?? this.fieldLength,
-      fieldLatitude: fieldLatitude ?? this.fieldLatitude,
-      formzStatus: formzStatus ?? this.formzStatus,
-      lookUpValues: lookUpValues ?? this.lookUpValues,
-      lookupSelect: lookupSelect ?? this.lookupSelect,
-      cteField: cteField ?? this.cteField,
-      allFormIsValid: allFormIsValid ?? this.allFormIsValid,
-      apiHereResponseAddresses:
-          apiHereResponseAddresses ?? this.apiHereResponseAddresses,
-      addreses: addreses ?? this.addreses,
-      lat: lat ?? this.lat,
-      leng: leng ?? this.leng,
-      allMarkers: allMarkers ?? this.allMarkers,
-      qraAddresses: qraAddresses ?? this.qraAddresses
-    );
+        fieldtList: fieldtList ?? this.fieldtList,
+        errorMessage: errorMessage ?? this.errorMessage,
+        detailField: detailField ?? this.detailField,
+        screenStatus: screenStatus ?? this.screenStatus,
+        fieldName: fieldName ?? this.fieldName,
+        fieldAddres: fieldAddres ?? this.fieldAddres,
+        fieldImage: fieldImage ?? this.fieldImage,
+        fieldLength: fieldLength ?? this.fieldLength,
+        fieldLatitude: fieldLatitude ?? this.fieldLatitude,
+        formzStatus: formzStatus ?? this.formzStatus,
+        lookUpValues: lookUpValues ?? this.lookUpValues,
+        lookupSelect: lookupSelect ?? this.lookupSelect,
+        cteField: cteField ?? this.cteField,
+        allFormIsValid: allFormIsValid ?? this.allFormIsValid,
+        apiHereResponseAddresses:
+            apiHereResponseAddresses ?? this.apiHereResponseAddresses,
+        addreses: addreses ?? this.addreses,
+        lat: lat ?? this.lat,
+        leng: leng ?? this.leng,
+        allMarkers: allMarkers ?? this.allMarkers,
+        qraAddresses: qraAddresses ?? this.qraAddresses);
   }
 
   @override

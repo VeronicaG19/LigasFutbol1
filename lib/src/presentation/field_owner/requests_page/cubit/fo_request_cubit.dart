@@ -76,6 +76,7 @@ class FoRequestCubit extends Cubit<FoRequestState> {
           (l) => emit(state.copyWith(
               screenStatus: BasicCubitScreenState.error,
               errorMessage: l.errorMessage)), (r) {
+        emit(state.copyWith(screenStatus: BasicCubitScreenState.success));
         onLoadInitialData(ownerId);
       });
     });

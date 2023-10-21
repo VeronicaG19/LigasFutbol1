@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 import '../../constants.dart';
@@ -11,14 +13,14 @@ class ApiInterceptor extends QueuedInterceptor {
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     if (options.extra.containsKey(kRequiresAuthToken)) {
-      /*if (options.extra[kRequiresAuthToken] == true) {
+      if (options.extra[kRequiresAuthToken] == true) {
         final token = await _kVService.getAuthToken();
         options.headers.addAll(
           <String, Object?>{
             HttpHeaders.authorizationHeader: 'Bearer $token',
           },
         );
-      }*/
+      }
       options.extra.remove(kRequiresAuthToken);
     }
     return handler.next(options);

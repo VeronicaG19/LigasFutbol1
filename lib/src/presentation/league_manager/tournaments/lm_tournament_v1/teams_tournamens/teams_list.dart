@@ -36,65 +36,23 @@ class TeamListPage extends StatelessWidget {
                 size: 50,
               ),
             );
-          } else if (state.screenStatus == ScreenStatus.loaded ||
-              state.screenStatus == ScreenStatus.teamsGetted ||
-              state.screenStatus == ScreenStatus.teamsGetting) {
+          } else {
             return SingleChildScrollView(
-                child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.green)),
-                        onPressed: () {
-                          context
-                              .read<TeamsLMCubit>()
-                              .getTeamsTosuscribeTournament();
-                          showDialog(
-                              context: context,
-                              builder: (_) {
-                                return BlocProvider.value(
-                                    value:
-                                        BlocProvider.of<TeamsLMCubit>(context),
-                                    child: AssingTeamOnTournament(
-                                        tournament: state.tournament));
-                              });
-                        },
-                        icon: Icon(
-                          // <-- Icon
-                          Icons.add_circle,
-                          size: 24.0,
-                        ),
-                        label: const Text('Agregar equipo'), // <-- Text
-                      ),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: _AddTeamButton(),
                     ),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    /* Expanded(
-                    child: ElevatedButton.icon(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              Colors.greenAccent)),
-                      onPressed: () {},
-                      icon: Icon(
-                        // <-- Icon
-                        Icons.transfer_within_a_station,
-                        size: 24.0,
-                      ),
-                      label: const Text('Intercambiar equipo'), // <-- Text
-                    ),
-                  ),*/
-                  ],
-                ),
-                GridView.count(
+                  ),
+                  GridView.count(
                     shrinkWrap: true,
                     crossAxisCount:
-                        (ResponsiveWidget.isSmallScreen(context)) ? 3 : 5, //5,
-                    padding: EdgeInsets.only(top: 20, left: 8, right: 8),
+                        (ResponsiveWidget.isSmallScreen(context)) ? 3 : 8, //5,
+                    padding: const EdgeInsets.only(
+                        top: 20, left: 8, right: 8, bottom: 20),
                     children: List.generate(
                       state.teamsTournamentDto.length,
                       (int index) {
@@ -111,67 +69,62 @@ class TeamListPage extends StatelessWidget {
                               state.teamsTournamentDto[index].teamLogo ?? '',
                           onTap: () {
                             showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return BlocProvider.value(
-                                    value:
-                                        BlocProvider.of<TeamsLMCubit>(context),
-                                    child: DeleteTeamTournamentModal(
-                                      teamTournament:
-                                          state.teamsTournamentDto[index],
-                                      tournament: tournament,
-                                    ),
-                                  );
-                                });
+                              context: context,
+                              builder: (_) {
+                                return BlocProvider.value(
+                                  value: BlocProvider.of<TeamsLMCubit>(context),
+                                  child: DeleteTeamTournamentModal(
+                                    teamTournament:
+                                        state.teamsTournamentDto[index],
+                                    tournament: tournament,
+                                  ),
+                                );
+                              },
+                            );
                           },
                         );
                       },
-                    )),
-              ],
-            ));
-          } else {
-            return SingleChildScrollView(
-                child: Column(children: [
-              Row(children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.green)),
-                    onPressed: () {
-                      context
-                          .read<TeamsLMCubit>()
-                          .getTeamsTosuscribeTournament();
-                      showDialog(
-                              context: context,
-                              builder: (_) {
-                                final exampleCubit =
-                                    context.read<TeamsLMCubit>();
-                                return BlocProvider<TeamsLMCubit>.value(
-                                    value: exampleCubit,
-                                    child: AssingTeamOnTournament(
-                                        tournament: state.tournament));
-                              })
-                          .whenComplete(() => context
-                              .read<TeamsLMCubit>()
-                              .getTournamentTeamDataBytournament(
-                                  tournament: tournament));
-                    },
-                    icon: Icon(
-                      // <-- Icon
-                      Icons.add_circle,
-                      size: 24.0,
                     ),
-                    label: const Text('Agregar equipo'), // <-- Text
                   ),
-                ),
-                const SizedBox(
-                  width: 25,
-                )
-              ])
-            ]));
+                ],
+              ),
+            );
           }
         },
+      ),
+    );
+  }
+}
+
+class _AddTeamButton extends StatelessWidget {
+  const _AddTeamButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final tournament =
+        context.select((TeamsLMCubit bloc) => bloc.state.tournament);
+    return ElevatedButton.icon(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.green),
+      ),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (_) {
+            return BlocProvider<TeamsLMCubit>.value(
+                value: BlocProvider.of<TeamsLMCubit>(context)
+                  ..getTeamsTosuscribeTournament(),
+                child: AssingTeamOnTournament(tournament: tournament));
+          },
+        );
+      },
+      icon: const Icon(
+        Icons.add_circle,
+        size: 24.0,
+      ),
+      label: const Text(
+        'Agregar equipo',
+        style: TextStyle(fontSize: 15),
       ),
     );
   }

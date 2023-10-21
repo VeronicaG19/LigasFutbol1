@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ligas_futbol_flutter/src/domain/roles/entity/user_rol.dart';
 import 'package:ligas_futbol_flutter/src/domain/roles/service/i_rol_service.dart';
@@ -30,11 +31,32 @@ class RolServiceImpl implements IRolService {
   }
 
   @override
-  UserRol getPrimaryRol(List<UserRol> roles) {
+  Future<UserRol> getPrimaryRol(List<UserRol> roles) async {
     final rol = roles.isNotEmpty
         ? roles.firstWhere((element) => element.primaryFlag == 'Y')
         : UserRol.empty;
-    return rol;
+    final player = roles.isNotEmpty
+        ? roles.firstWhere((element) => element.rol.roleId == 17)
+        : UserRol.empty;
+    return await _validatePlatformRol(rol, player.userRolId);
+  }
+
+  Future<UserRol> _validatePlatformRol(
+      final UserRol rol, final int defaultRol) async {
+    final roleId = rol.rol.roleId;
+    if (kIsWeb) {
+      if (roleId != 17 && roleId != 18 && roleId != 19) {
+        final newRol = await changePrimaryRol(defaultRol);
+        return newRol.getOrElse(() => UserRol.empty);
+      }
+      return rol;
+    } else {
+      if (roleId != 17 && roleId != 20 && roleId != 22 && roleId != 23) {
+        final newRol = await changePrimaryRol(defaultRol);
+        return newRol.getOrElse(() => UserRol.empty);
+      }
+      return rol;
+    }
   }
 
   @override
@@ -80,7 +102,8 @@ class RolServiceImpl implements IRolService {
   }
 
   @override
-  RepositoryResponse<UserRol> createUserRolAndUpdateByNames(int personId, String rolName) {
-    return _repository.createUserRolAndUpdateByNames(personId,rolName);
+  RepositoryResponse<UserRol> createUserRolAndUpdateByNames(
+      int personId, String rolName) {
+    return _repository.createUserRolAndUpdateByNames(personId, rolName);
   }
 }

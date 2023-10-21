@@ -7,6 +7,7 @@ import '../../../domain/team/entity/team.dart';
 import '../../../service_locator/injection.dart';
 import '../soccer_team/players/team_players/team_player_page.dart';
 import 'cubit/search_team_cubit.dart';
+import 'filters_modal.dart';
 
 class SearchTeamPage extends StatelessWidget {
   const SearchTeamPage({super.key});
@@ -47,10 +48,23 @@ class _PageContent extends StatelessWidget {
                       vertical: 5.0, horizontal: 18.0),
                   child: TextField(
                     onChanged: context.read<SearchTeamCubit>().onFilterList,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Buscar por nombre de equipo',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: GestureDetector(
+                        child: const Icon(Icons.format_list_bulleted),
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) {
+                                final exampleCubit =
+                                    context.read<SearchTeamCubit>();
+                                return BlocProvider<SearchTeamCubit>.value(
+                                    value: exampleCubit, child: FiltersModal());
+                              });
+                        },
+                      ),
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(25.0),
                         ),
@@ -63,7 +77,11 @@ class _PageContent extends StatelessWidget {
                   child: GridView.builder(
                     shrinkWrap: true,
                     padding: const EdgeInsets.only(
-                        top: 15, left: 15, right: 15, bottom: 65),
+                      top: 15,
+                      left: 15,
+                      right: 15,
+                      bottom: 65,
+                    ),
                     itemCount: state.teamPageable.content.length,
                     physics: const NeverScrollableScrollPhysics(),
                     //physics: const ScrollPhysics(),
@@ -83,7 +101,7 @@ class _PageContent extends StatelessWidget {
                             //crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Expanded(
-                                flex: 3,
+                                flex: 2,
                                 child: CircleAvatar(
                                   backgroundColor: Colors.grey[100],
                                   child: Image.asset(
@@ -111,7 +129,18 @@ class _PageContent extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.grey[800],
-                                      fontSize: 12,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  " ${state.teamPageable.content[index].requestPlayers == 'Y' ? 'En busca de jugadores' : ''}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.grey[800],
+                                      fontSize: 10,
                                       fontWeight: FontWeight.w400),
                                 ),
                               ),

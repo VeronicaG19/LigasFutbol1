@@ -89,14 +89,14 @@ class LmRequestCubit extends Cubit<LmRequestState> {
   void onChangeRequestType(int value) {
     if (value == 0) {
       emit(state.copyWith(
-          refereeRequestList: _leagueToReferee,
-          requestStatus: 0,
-          tournamentList: _tournamentToTeam));
-    } else {
-      emit(state.copyWith(
           refereeRequestList: _refereeToLeague,
           requestStatus: 1,
           tournamentList: _teamToTournament));
+    } else {
+      emit(state.copyWith(
+          refereeRequestList: _leagueToReferee,
+          requestStatus: 0,
+          tournamentList: _tournamentToTeam));
     }
   }
 
@@ -118,7 +118,7 @@ class LmRequestCubit extends Cubit<LmRequestState> {
         emit(state.copyWith(
             currentRequestType: LMRequestType.referee,
             requestStatus: 0,
-            refereeRequestList: _leagueToReferee));
+            refereeRequestList: _refereeToLeague));
         break;
       case 3:
         emit(state.copyWith(

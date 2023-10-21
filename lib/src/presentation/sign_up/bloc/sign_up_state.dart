@@ -5,21 +5,22 @@ enum SignUpStatus { verificationCode, userForm, submitted, showIntroduction }
 enum VerificationType { unknown, email, phone }
 
 class SignUpState extends Equatable {
-  const SignUpState(
-      {this.firstName = const FirstName.pure(),
-      this.lastName = const LastName.pure(),
-      this.password = const Password.pure(),
-      this.password2 = const Password.pure(),
-      this.username = const Username.pure(),
-      this.verificationCode = const VerificationCodeForm.pure(),
-      this.verificationSender = const VerificationSender.pure(),
-      this.signUpStatus = SignUpStatus.verificationCode,
-      this.verificationType = VerificationType.unknown,
-      this.index = 0,
-      this.tacStatus = false,
-      this.userModel = User.empty,
-      this.status = FormzStatus.pure,
-      this.errorMessage});
+  const SignUpState({
+    this.firstName = const FirstName.pure(),
+    this.lastName = const LastName.pure(),
+    this.password = const Password.pure(),
+    this.password2 = const Password.pure(),
+    this.username = const Username.pure(),
+    this.verificationCode = const VerificationCodeForm.pure(),
+    this.verificationSender = const VerificationSender.pure(),
+    this.signUpStatus = SignUpStatus.verificationCode,
+    this.verificationType = VerificationType.unknown,
+    this.index = 0,
+    this.tacStatus = false,
+    this.userModel = User.empty,
+    this.status = FormzStatus.pure,
+    this.errorMessage,
+  });
 
   final FirstName firstName;
   final LastName lastName;

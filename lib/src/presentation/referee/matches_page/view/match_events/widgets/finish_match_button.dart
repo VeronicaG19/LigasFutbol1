@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/referee_match.dart';
 import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/cubit/events/events_cubit.dart';
 import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/view/match_events/finalize_match_dialog.dart';
-import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/view/match_events/widgets/button_custom.dart';
 
 import '../../../../../../core/enums.dart';
 
@@ -24,37 +23,129 @@ class FinishMatchButton extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    if(state.matchDetail.scoreLocal == state.matchDetail.scoreVisit &&
-                        state.tournamentSelected.scoringSystemId?.pointsPerWinShootOut != null) {
-                      print('empate shootout');
-                      return BlocProvider.value(
-                        value: BlocProvider.of<EventsCubit>(context),
-                        child: _DialogDesempate(match: match,)
-                      );
-                    } else {
-                      print('sin empate');
-                      return BlocProvider.value(
-                        value: BlocProvider.of<EventsCubit>(context),
-                        child: FinalizeMatchDialog(
-                          match: match,
-                          matchDetail: state.matchDetail,
-                          type: ScreenType.scoreMatch,
-                        ),
-                      );
-                    }
-                  },
-                );
-                //context.read<EventsCubit>().onPressGameOver(match: match);
+                print("Valor----------->");
+                print(state.matchDetail.scoreLocal);
+                print(state.matchDetail.scoreVisit);
+                print(state
+                    .tournamentSelected.scoringSystemId?.pointsPerWinShootOut);
+                print(match.jornada);
+                if (match.jornada != 0) {
+                  print('match.jornada DIF 0');
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      if (state.matchDetail.scoreLocal ==
+                              state.matchDetail.scoreVisit &&
+                          state.tournamentSelected.scoringSystemId
+                                  ?.pointsPerWinShootOut !=
+                              null) {
+                        print('empate shootout');
+                        return BlocProvider.value(
+                            value: BlocProvider.of<EventsCubit>(context),
+                            child: _DialogDesempate(
+                              match: match,
+                            ));
+                      } else {
+                        print('sin empate');
+                        return BlocProvider.value(
+                          value: BlocProvider.of<EventsCubit>(context),
+                          child: FinalizeMatchDialog(
+                            match: match,
+                            matchDetail: state.matchDetail,
+                            type: ScreenType.scoreMatch,
+                          ),
+                        );
+                      }
+                    },
+                  );
+                } else {
+                  print('ELSE match.jornada DIF 0');
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      if (state.qualifyingMatchDetail?.tieBreakType == 2 &&
+                          state.matchDetail.scoreLocal ==
+                              state.matchDetail.scoreVisit) {
+                        print('tieBreakType 2');
+                        if (state.qualifyingMatchDetail?.roundtrip == 1) {
+                          print('roundtrip 1');
+                          return BlocProvider.value(
+                              value: BlocProvider.of<EventsCubit>(context),
+                              child: _DialogDesempate(
+                                match: match,
+                              ));
+                        } else if (state.qualifyingMatchDetail?.scoreLocal ==
+                                state.qualifyingMatchDetail?.scoreVisit &&
+                            state.qualifyingMatchDetail?.roundtrip ==
+                                state.qualifyingMatchDetail?.matchNumber) {
+                          print('IDA Y VUELTA + MARCADOR EMPATADO');
+                          return BlocProvider.value(
+                              value: BlocProvider.of<EventsCubit>(context),
+                              child: _DialogDesempate(
+                                match: match,
+                              ));
+                        } else if (state.qualifyingMatchDetail?.rounName ==
+                                'Final' &&
+                            state.qualifyingMatchDetail?.numberFinalsGame ==
+                                1) {
+                          print('FINAL IDA + MARCADOR EMPATADO');
+                          return BlocProvider.value(
+                              value: BlocProvider.of<EventsCubit>(context),
+                              child: _DialogDesempate(
+                                match: match,
+                              ));
+                        } else if (state.qualifyingMatchDetail?.rounName ==
+                                'Final' &&
+                            state.qualifyingMatchDetail?.numberFinalsGame ==
+                                2 &&
+                            state.qualifyingMatchDetail?.matchNumber == 2) {
+                          print('FINAL IDA Y VUELTA + MARCADOR EMPATADO');
+                          return BlocProvider.value(
+                              value: BlocProvider.of<EventsCubit>(context),
+                              child: _DialogDesempate(
+                                match: match,
+                              ));
+                        } else {
+                          print('ELSE tieBreakType');
+                          return BlocProvider.value(
+                            value: BlocProvider.of<EventsCubit>(context),
+                            child: FinalizeMatchDialog(
+                              match: match,
+                              matchDetail: state.matchDetail,
+                              type: ScreenType.scoreMatch,
+                            ),
+                          );
+                        }
+                      } else {
+                        print('ELSE tieBreakType 2');
+                        return BlocProvider.value(
+                          value: BlocProvider.of<EventsCubit>(context),
+                          child: FinalizeMatchDialog(
+                            match: match,
+                            matchDetail: state.matchDetail,
+                            type: ScreenType.scoreMatch,
+                          ),
+                        );
+                      }
+                    },
+                  );
+                }
               },
-              child: ButtonCustom(
-                textBtn: ' Terminar partido',
-                iconBtn: Icons.stop_circle_rounded,
-                fontColor: Colors.white,
-                backgroundColor: Colors.orange.shade700,
-                isOutline: false,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(50.0, 10.0, 50.0, 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.green[800],
+                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                ),
+                child: Text(
+                  'Terminar partido',
+                  style: TextStyle(
+                    fontFamily: 'SF Pro',
+                    color: Colors.grey[200],
+                    fontWeight: FontWeight.w500,
+                    fontSize: 10.0,
+                  ),
+                ),
               ),
             ),
           ],
@@ -65,12 +156,15 @@ class FinishMatchButton extends StatelessWidget {
 }
 
 class _DialogDesempate extends StatelessWidget {
-  const _DialogDesempate({super.key,required this.match,});
+  const _DialogDesempate({
+    super.key,
+    required this.match,
+  });
   final RefereeMatchDTO match;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventsCubit, EventsState>(
-      builder: (context, state){
+      builder: (context, state) {
         return AlertDialog(
           title: const Text('Agregar resultado del shoot out'),
           content: SingleChildScrollView(
@@ -173,14 +267,16 @@ class _DialogDesempate extends StatelessWidget {
           ),
           actions: [
             ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey)),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.grey)),
               child: const Text('Cancelar'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green)),
               child: const Text('Guardar'),
               onPressed: () {
                 if (state.scoreShoutOutLocal == state.scoreShoutOutVisit) {
@@ -188,7 +284,8 @@ class _DialogDesempate extends StatelessWidget {
                     context: context,
                     builder: (context) => AlertDialog(
                       title: const Text('No se puede empatar'),
-                      content: const Text('Los marcadores deben ser diferentes'),
+                      content:
+                          const Text('Los marcadores deben ser diferentes'),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
@@ -210,7 +307,9 @@ class _DialogDesempate extends StatelessWidget {
                         ),
                       );
                     },
-                  ).whenComplete(() => Navigator.of(context).pop(),);
+                  ).whenComplete(
+                    () => Navigator.of(context).pop(),
+                  );
                   // Guardar los marcadores
                 }
                 //Navigator.of(context).pop();

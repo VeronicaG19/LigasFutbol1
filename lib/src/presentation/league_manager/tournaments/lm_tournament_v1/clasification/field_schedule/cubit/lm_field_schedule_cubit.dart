@@ -27,33 +27,34 @@ class LmFieldScheduleCubit extends Cubit<LmFieldScheduleState> {
 
   Future<void> onLoadActiveAvailability(
       int activeId, LMRequestType type) async {
-    if (LMRequestType.fieldOwner == type) {
-      emit(state.copyWith(screenState: BasicCubitScreenState.loading));
-      _activeId = activeId;
-      final request = await _agendaService.getFieldsAvailability(activeId);
-      request.fold(
-          (l) => emit(state.copyWith(screenState: BasicCubitScreenState.error)),
-          (r) {
-        emit(state.copyWith(
-            availabilityList: r, screenState: BasicCubitScreenState.loaded));
-      });
-    } else {
-      emit(state.copyWith(screenState: BasicCubitScreenState.loading));
-      _activeId = activeId;
-      final request = await _agendaService.getRefereeAvailability(activeId);
-      request.fold(
-          (l) => emit(state.copyWith(screenState: BasicCubitScreenState.error)),
-          (r) {
-        emit(state.copyWith(
-            availabilityList: r, screenState: BasicCubitScreenState.loaded));
-      });
-    }
+    emit(state.copyWith(screenState: BasicCubitScreenState.loading));
+    _activeId = activeId;
+    final request = LMRequestType.fieldOwner == type
+        ? await _agendaService.getFieldsAvailability(activeId)
+        : await _agendaService.getRefereeAvailability(activeId);
+    request.fold(
+        (l) => emit(state.copyWith(screenState: BasicCubitScreenState.error)),
+        (r) {
+      r.sort((a, b) => a.openingDate!.compareTo(b.openingDate!));
+      emit(state.copyWith(
+          availabilityList: r, screenState: BasicCubitScreenState.loaded));
+      if (r.isNotEmpty) {
+        onLoadEvents(r.first, type);
+      }
+    });
   }
 
-  Future<void> onLoadEvents(final Availability availability) async {
-    emit(state.copyWith(screenState: BasicCubitScreenState.sending));
+  Future<void> onLoadEvents(
+      final Availability availability, final LMRequestType type) async {
+    if (state.screenState == BasicCubitScreenState.sending) return;
+    emit(state.copyWith(
+      screenState: BasicCubitScreenState.sending,
+      selectedAvailability: availability,
+    ));
     _activeId = availability.activeId?.activeId ?? 0;
-    final events = await _agendaService.getFieldsEvents(_activeId);
+    final events = LMRequestType.fieldOwner == type
+        ? await _agendaService.getFieldsEvents(_activeId)
+        : await _agendaService.getRefereesEvents(_activeId);
     _events.clear();
     _events.addAll(events);
     emit(state.copyWith(
@@ -62,6 +63,8 @@ class LmFieldScheduleCubit extends Cubit<LmFieldScheduleState> {
         selectedEvents: getEventsForDay(availability.openingDate!),
         firstDay: availability.openingDate,
         lastDay: availability.expirationDate,
+        rangeStart: availability.openingDate,
+        rangeEnd: availability.expirationDate,
         screenState: BasicCubitScreenState.success));
   }
 

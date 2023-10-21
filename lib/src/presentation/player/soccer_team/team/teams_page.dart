@@ -4,15 +4,22 @@ import 'package:ligas_futbol_flutter/src/presentation/app/bloc/authentication_bl
 import 'package:ligas_futbol_flutter/src/presentation/player/soccer_team/matches_by_player/matches_by_player_page.dart';
 import 'package:ligas_futbol_flutter/src/presentation/player/soccer_team/players/team_players/team_player_page.dart';
 import 'package:ligas_futbol_flutter/src/service_locator/injection.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../../../../core/constans.dart';
+import '../../../app/notification_bloc/notification_bloc.dart';
 import '../players/experiences_player/esperiences_page.dart';
 import 'cubit/team_cubit.dart';
 
 enum ScreenType { mainPage, profile }
 
 class TeamPage extends StatelessWidget {
-  const TeamPage({super.key, required this.type});
+  const TeamPage({
+    super.key,
+    required this.type,
+    required this.playerId,
+  });
+
+  final int playerId;
 
   final ScreenType type;
 
@@ -22,73 +29,72 @@ class TeamPage extends StatelessWidget {
     print("Person Id---->$user");
     return BlocProvider(
       create: (_) => locator<TeamCubit>()..getsAllTeamsPlayer(partyId: user!),
-      child:
-      BlocBuilder<TeamCubit, TeamState>(
-        builder: (context, state) {
-          if (state.screenStatus == ScreenStatus.loading) {
-            return Center(
-              child: LoadingAnimationWidget.fourRotatingDots(
-                color: const Color(0xff358aac),
-                size: 50,
-              ),
-            );
-          } else {
-            return ListView(
-              shrinkWrap: true,
-              children: [
-                if (type == ScreenType.profile)
-                  SizedBox(
-                    height: 10,
-                  ),
-                _CustomButton(
-                  title: 'Ver mis partidos',
-                  onPressed: () => Navigator.push(
-                    context,
-                    MatchesByPlayerPage.route(),
-                  ),
+      child: BlocListener<NotificationBloc, NotificationState>(
+      listenWhen: (previous, current) =>
+          previous.notificationCount != current.notificationCount,
+      listener: (context, state) {
+        context.read<TeamCubit>().getsAllTeamsPlayer(partyId: user!);
+      },
+        child: BlocBuilder<TeamCubit, TeamState>(
+          builder: (context, state) {
+          return ListView(
+            shrinkWrap: true,
+            children: [
+              PlayerProfileButton(
+                key: CoachKey.myMatchPlayer,
+                title: 'Ver mis partidos',
+                onPressed: () => Navigator.push(
+                  context,
+                  MatchesByPlayerPage.route(playerId),
                 ),
-                if (type == ScreenType.profile)
-                  Column(
-                    children: [
-                      const Divider(),
-                      _CustomButton(
-                        title: 'Ver mi experiencia',
-                        onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ExperiencesPage(
-                                      partyId: user!,
-                                      type: ViewType.profile,
-                                    ))),
-                      ),
-                      const Divider(),
-                      const Text(
-                        "Mis Equipos",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 16.0),
-                      ),
-                    ],
-                  ),
-                const Divider(),
-                if (state.teamList.isNotEmpty)
-                  SingleChildScrollView(
-                    physics: const ScrollPhysics(),
+              ),
+              if (type == ScreenType.profile)
+                Column(
+                  children: [
+                    const Divider(),
+                    PlayerProfileButton(
+                      title: 'Ver mi experiencia',
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => ExperiencesPage(
+                                    partyId: user!,
+                                    type: ViewType.profile,
+                                  ))),
+                    ),
+                    const Divider(),
+                    const Text(
+                      "Mis Equipos",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 16.0),
+                    ),
+                  ],
+                ),
+              // if (type == ScreenType.mainPage)
+              //   PlayerProfileButton(
+              //     key: CoachKey.myMatchPlayer,
+              //     title: 'Ver mis partidos',
+              //     onPressed: () => Navigator.push(
+              //       context,
+              //       MatchesByPlayerPage.route(playerId),
+              //     ),
+              //   ),
+              if (state.teamList.isNotEmpty)
+                SingleChildScrollView(
+                  physics: const ScrollPhysics(),
                   child: GridView.builder(
                     shrinkWrap: true,
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 15, right: 15),
+                    padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
                     itemCount: state.teamList.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 2 / 3,
-                            crossAxisSpacing: 5.0,
-                            mainAxisSpacing: 5.0),
+                    physics: const ScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 2 / 3,
+                        crossAxisSpacing: 5.0,
+                        mainAxisSpacing: 5.0),
                     itemBuilder: (BuildContext ctx, index) {
                       return InkWell(
                         child: Card(
@@ -133,18 +139,19 @@ class TeamPage extends StatelessWidget {
                         },
                       );
                     },
-                  ),),
-              ],
-            );
-          }
-        },
+                  ),
+                ),
+            ],
+          );
+        }),
       ),
     );
   }
 }
 
-class _CustomButton extends StatelessWidget {
-  const _CustomButton({Key? key, required this.title, required this.onPressed})
+class PlayerProfileButton extends StatelessWidget {
+  const PlayerProfileButton(
+      {Key? key, required this.title, required this.onPressed})
       : super(key: key);
 
   final String title;

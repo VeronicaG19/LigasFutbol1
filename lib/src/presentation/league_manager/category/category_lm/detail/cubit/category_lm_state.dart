@@ -8,6 +8,9 @@ enum ScreenStatus {
   tournamentloading,
   tournamentloaded,
   infoLoading,
+  lookupsLoaded,
+  successfullyCreated,
+  updatedSuccessful,
   succes,
   loaded,
   error,
@@ -31,27 +34,32 @@ class CategoryLmState extends Equatable {
   final MinAge minAge;
   final RedForPunishment redForPunishment;
   final YellowForPunishment yellowForPunishment;
+  final bool validAge;
   final FormzStatus status;
+  final bool allFormIsValid;
 
-  const CategoryLmState(
-      {this.categoryList = const [],
-      this.lookupValueList = const [],
-      this.tournamentList = const [],
-      this.selectedLookupValue = LookUpValue.empty,
-      this.scoringTournamentDTO = const [],
-      this.goalsTournament = const [],
-      this.categoryId = 0,
-      this.categoryInfo = Category.empty,
-      this.tournamentInfo = Tournament.empty,
-      this.screenStatus = ScreenStatus.initial,
-      this.errorMessage,
-      this.categoryName = const CategoryName.pure(),
-      this.comment = const Comment.pure(),
-      this.maxAge = const MaxAge.pure(),
-      this.minAge = const MinAge.pure(),
-      this.redForPunishment = const RedForPunishment.pure(),
-      this.yellowForPunishment = const YellowForPunishment.pure(),
-      this.status = FormzStatus.pure});
+  const CategoryLmState({
+    this.categoryList = const [],
+    this.lookupValueList = const [],
+    this.tournamentList = const [],
+    this.selectedLookupValue = LookUpValue.empty,
+    this.scoringTournamentDTO = const [],
+    this.goalsTournament = const [],
+    this.categoryId = 0,
+    this.categoryInfo = Category.empty,
+    this.tournamentInfo = Tournament.empty,
+    this.screenStatus = ScreenStatus.initial,
+    this.errorMessage,
+    this.categoryName = const CategoryName.pure(),
+    this.comment = const Comment.pure(),
+    this.maxAge = const MaxAge.pure(),
+    this.minAge = const MinAge.pure(),
+    this.redForPunishment = const RedForPunishment.pure(),
+    this.yellowForPunishment = const YellowForPunishment.pure(),
+    this.validAge = false,
+    this.status = FormzStatus.pure,
+    this.allFormIsValid = false,
+  });
 
   CategoryLmState copyWith({
     List<Category>? categoryList,
@@ -71,7 +79,9 @@ class CategoryLmState extends Equatable {
     MinAge? minAge,
     RedForPunishment? redForPunishment,
     YellowForPunishment? yellowForPunishment,
+    bool? validAge,
     FormzStatus? status,
+    bool? allFormIsValid,
   }) {
     return CategoryLmState(
       tournamentList: tournamentList ?? this.tournamentList,
@@ -91,7 +101,9 @@ class CategoryLmState extends Equatable {
       minAge: minAge ?? this.minAge,
       redForPunishment: redForPunishment ?? this.redForPunishment,
       yellowForPunishment: yellowForPunishment ?? this.yellowForPunishment,
+      validAge: validAge ?? this.validAge,
       status: status ?? this.status,
+      allFormIsValid: allFormIsValid ?? this.allFormIsValid,
     );
   }
 
@@ -110,6 +122,8 @@ class CategoryLmState extends Equatable {
         minAge,
         redForPunishment,
         yellowForPunishment,
+        validAge,
         status,
+        allFormIsValid,
       ];
 }

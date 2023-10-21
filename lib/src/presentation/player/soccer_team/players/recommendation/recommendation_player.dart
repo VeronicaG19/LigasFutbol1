@@ -63,6 +63,11 @@ class RecommendationPlayerContent extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(
                 content: Text("Se recomendo al jugador correctamente")));
+        }else if(state.screenStatus == ScreenStatus.error){
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(
+                content: Text(state.errorMessage??'')));
         }
       },
       builder: (context, state) {

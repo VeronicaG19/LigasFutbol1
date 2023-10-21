@@ -14,6 +14,7 @@ abstract class AuthenticationInterface {
       {required String name, required String password});
   RepoResponse<void> autoLogin();
   RepoResponse<User> signUp(User user);
+  RepoResponse<User> createLFUserAndAssignRoles(User user);
   RepoResponse<VerificationCode> submitVerificationCode(String receiver);
   RepoResponse<VerificationCode> resentVerificationCode(
       String receiver, bool isForUpdate);

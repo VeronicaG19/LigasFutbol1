@@ -52,6 +52,10 @@ class Endpoints {
       '$_personManagementURLBase/iaas/api/v1/post/verificationcode/$receiver';
 
   ///Endpoint to send a verification code by phone
+  static String sendVerificationCodeURL(String type, String receiver) =>
+      '$_personManagementURLBase/iaas/api/v1/post/verificationcode/$type/$receiver';
+
+  ///Endpoint to send a verification code by phone
   ///
   /// METHOD POST
   static String sendVerificationCodeByPhoneURL(String receiver) =>
@@ -63,11 +67,17 @@ class Endpoints {
   static String get signupUserURL =>
       '$_personManagementURLBase/iaas/api/v1/partyUser';
 
+  ///Endpoint to register a new user
+  ///
+  /// METHOD POST
+  static String get createLFURL =>
+      '$_personManagementURLBase/iaas/api/v1/create-LF-user/with/roles';
+
   ///Endpoint to send an email notification
   ///
   /// METHOD POST
   static String get sendEmailNotificationUrl =>
-      '${_baseURL.replaceFirst(RegExp(r's'), '')}$_notificationURLBase/notifications/jm/html';
+      '$_baseURL$_notificationURLBase/notifications/jm/html';
 
   ///Endpoint to recover password
   ///

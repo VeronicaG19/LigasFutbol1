@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../service_locator/injection.dart';
+import 'package:ligas_futbol_flutter/src/core/constans.dart';
+import 'package:ligas_futbol_flutter/src/presentation/widgets/only_mobile_app/button_alert_only_web.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 import '../../app/bloc/authentication_bloc.dart';
 import '../../widgets/button_share/button_share_widget.dart';
-import '../../widgets/notification_icon/cubit/notification_count_cubit.dart';
 import '../../widgets/notification_icon/view/notification_icon.dart';
 import '../search_teams/search_team_page.dart';
 import '../soccer_team/team/teams_page.dart';
@@ -20,9 +22,43 @@ class PlayerMainPage extends StatefulWidget {
 }
 
 class _PlayerMainPageState extends State<PlayerMainPage> {
+   @override
+  void initState(){
+
+    final newvVersion = NewVersionPlus(
+      iOSId: 'dev.ias.swat.ccs.com.Wiplif',
+      androidId: 'com.ccs.swat.iaas.spr.ligas_futbol.ligas_futbol_flutter'
+    );
+
+    Timer(const Duration(milliseconds: 800),(){
+      checkNewVersion(newvVersion);
+
+    });
+
+    super.initState();
+  }
+
+  void checkNewVersion(NewVersionPlus newVersion ) async{
+    final status = await newVersion.getVersionStatus();
+      if(status != null) {
+        if (status.canUpdate) {
+          newVersion.showUpdateDialog(
+            context: context, 
+            versionStatus: status,
+            dialogText: 'Nueva version disponible en la tienda (${status.storeVersion}), Actualiza ahora',
+            dialogTitle: 'Actualización disponible',
+
+            );
+        }
+      }
+  }
   @override
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    final playerInfo = context
+        .select((AuthenticationBloc bloc) => bloc.state.playerData.playerid);
+    const double tabSize = 50;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -45,75 +81,43 @@ class _PlayerMainPageState extends State<PlayerMainPage> {
             fit: BoxFit.cover,
           ),
           actions: [
+            const ButtonAlertOnlyWeb(),
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 5.0),
-              child: BlocProvider(
-                create: (contextC) => locator<NotificationCountCubit>()
-                  ..onLoadNotificationCount(
-                      user.person.personId, user.applicationRol),
-                child: NotificationIcon(
-                  applicationRol: user.applicationRol,
-                ),
+              child: NotificationIcon(
+                applicationRol: user.applicationRol,
               ),
             ),
             const ButtonShareWidget(),
           ],
           elevation: 0.0,
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(90),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: TabBar(
-                    indicatorSize: TabBarIndicatorSize.label,
-                    unselectedLabelColor: Colors.white70,
-                    indicatorWeight: 1.0,
-                    indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.white38),
-                    tabs: [
-                      Tab(
-                        height: 25,
-                        iconMargin: const EdgeInsets.all(10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(
-                                  color: Colors.white70, width: 1.5)),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Mis equipos",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 10),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Tab(
-                        height: 25,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            border:
-                                Border.all(color: Colors.white70, width: 1.5),
-                          ),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Buscar equipos",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 10),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+            preferredSize: const Size.fromHeight(60),
+            child: TabBar(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
+              indicatorSize: TabBarIndicatorSize.label,
+              unselectedLabelColor: Colors.white70,
+              indicatorWeight: 2.0,
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white38,
+              ),
+              tabs: [
+                Tab(
+                  key: CoachKey.myTeamsPlayer,
+                  height: tabSize,
+                  child: const _PlayerTab(
+                    title: "Mis equipos",
+                    icon: Icons.groups_rounded,
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
+                Tab(
+                  key: CoachKey.searchTeamsPlayer,
+                  height: tabSize,
+                  child: const _PlayerTab(
+                    title: "Buscar equipos",
+                    icon: Icons.content_paste_search,
+                  ),
                 ),
               ],
             ),
@@ -124,7 +128,7 @@ class _PlayerMainPageState extends State<PlayerMainPage> {
             TabBarView(
               children: [
                 //  ManageMembersPage(),
-                const TeamPage(type: ScreenType.mainPage),
+                TeamPage(type: ScreenType.mainPage, playerId: playerInfo ?? 0),
                 Container(
                   padding: const EdgeInsets.only(
                       left: 15, right: 15, bottom: 10, top: 20),
@@ -135,6 +139,43 @@ class _PlayerMainPageState extends State<PlayerMainPage> {
                 //   NotificationPage(),
               ],
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PlayerTab extends StatelessWidget {
+  final String title;
+  final IconData icon;
+
+  const _PlayerTab({
+    Key? key,
+    required this.title,
+    required this.icon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.white70,
+          width: 1.5,
+        ),
+      ),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 10),
+            ),
+            Icon(icon)
           ],
         ),
       ),

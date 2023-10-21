@@ -20,7 +20,6 @@ class TeamPlayerRepositoryImpl implements ITeamPlayerRepository {
   RepositoryResponse<List<TeamPlayer>> getTeamPlayer(int partyId, int teamId) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             endpoint: "$getTeamPlayerEndpoint?partyId=$partyId&teamId=$teamId",
             converter: TeamPlayer.fromJson)
         .validateResponse();
@@ -46,17 +45,21 @@ class TeamPlayerRepositoryImpl implements ITeamPlayerRepository {
 
   @override
   RepositoryResponse<List<PlayerIntoTeamDTO>> getPlayersIntoTeam(int teamId) {
-    return _apiClient.network.getCollectionData(
-      endpoint: '$getPlayesInTeamAdmin$teamId', 
-      converter: PlayerIntoTeamDTO.fromJson).validateResponse();
+    return _apiClient.network
+        .getCollectionData(
+            endpoint: '$getPlayesInTeamAdmin$teamId',
+            converter: PlayerIntoTeamDTO.fromJson)
+        .validateResponse();
   }
 
   @override
-  RepositoryResponse<CreateTeamPlayerDTO> createTeamPlayer(CreateTeamPlayerDTO teamPlayer) {
-    return _apiClient.network.postData(
-        endpoint: createTeamPlayerEndpoint,
-        data: teamPlayer.ToJsonCreate(),
-        converter: CreateTeamPlayerDTO.fromJson
-    ).validateResponse();
+  RepositoryResponse<CreateTeamPlayerDTO> createTeamPlayer(
+      CreateTeamPlayerDTO teamPlayer) {
+    return _apiClient.network
+        .postData(
+            endpoint: createTeamPlayerEndpoint,
+            data: teamPlayer.ToJsonCreate(),
+            converter: CreateTeamPlayerDTO.fromJson)
+        .validateResponse();
   }
 }

@@ -6,7 +6,6 @@ import '../../../../core/enums.dart';
 import '../../../../domain/leagues/entity/league.dart';
 import '../../../../service_locator/injection.dart';
 import '../../../app/app.dart';
-import '../../../widgets/notification_icon/cubit/notification_count_cubit.dart';
 import '../cubit/ref_league_cubit.dart';
 
 class LeaguesPage extends StatelessWidget {
@@ -36,8 +35,8 @@ class _PageContent extends StatelessWidget {
           state.screenState == BasicCubitScreenState.success,
       listener: (context, state) {
         context
-            .read<NotificationCountCubit>()
-            .onLoadNotificationCount(refereeId, rol);
+            .read<NotificationBloc>()
+            .add(LoadNotificationCount(refereeId, rol));
       },
       builder: (context, state) {
         if (state.screenState == BasicCubitScreenState.loading) {
@@ -68,6 +67,7 @@ class _PageContent extends StatelessWidget {
                 ),
               ),
             ),
+            // SeekPlayerDialog(),
             SingleChildScrollView(
               child: GridView.builder(
                 shrinkWrap: true,
@@ -247,7 +247,7 @@ class _LeagueDetailContent extends StatelessWidget {
             height: 15,
           ),
           const Text(
-            'Categorias de la liga',
+            'Categorías de la liga',
             textAlign: TextAlign.center,
             style: titleStyle,
           ),
@@ -266,7 +266,7 @@ class _LeagueDetailContent extends StatelessWidget {
                   children: const [
                     //TODO: Obtener las categorias de una liga
                     Text(
-                      "Sin categorias",
+                      "Sin categorías",
                       style: subTitleStyle,
                       textAlign: TextAlign.center,
                     )

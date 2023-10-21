@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -39,6 +40,7 @@ class _AddTeamPageState extends State<AddTeamPage> {
             size: 100,
           )),
       body: BlocConsumer<TeamLeagueManagerCubit, TeamLeagueManagerState>(
+        listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status == FormzStatus.submissionSuccess &&
               state.screenStatus == ScreenStatus.createdSucces) {
@@ -50,23 +52,78 @@ class _AddTeamPageState extends State<AddTeamPage> {
                 message: "Se creo correctamente el equipo",
               ),
             );
+            Navigator.pop(context);
+          } else if (state.status == FormzStatus.submissionFailure) {
+            String message = 'Ha ocurrido un error';
+            if (state.errorMessage == 'USER_EXIST') {
+              message = 'Este usuario ya está registrado en la aplicación';
+            } else if (state.errorMessage == 'Team al ready registered') {
+              message = 'Un equipo con este nombre ya está registrado';
+            }
+            showTopSnackBar(
+              context,
+              CustomSnackBar.success(
+                backgroundColor: color2!,
+                textScaleFactor: 1.0,
+                message: message,
+              ),
+            );
           }
-          // TODO: implement listener
         },
+        // buildWhen: (previous, current) =>
+        //     ((previous.status != current.status) ||
+        //         (previous.photoTeamSelected != current.photoTeamSelected) ||
+        //         (previous.uniformLocalImageSelected !=
+        //             current.uniformLocalImageSelected) ||
+        //         (previous.uniformVisitImageSelected !=
+        //             current.uniformVisitImageSelected)),
         builder: (context, state) {
           return ListView(
-            padding: const EdgeInsets.only(left: 10, right: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 30),
             children: [
-              Row(
+              const Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Expanded(child: DataTeamContent()),
-                  Expanded(child: DataRefereeTeamContent()),
+                children: [
+                  // Expanded(child: DataTeamContent()),
+                  // Expanded(child: DataRefereeTeamContent()),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(
+                      width: 0,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Card(
+                      elevation: 5,
+                      child: DataTeamContent(),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(
+                      width: 0,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Card(
+                      elevation: 5,
+                      child: DataRefereeTeamContent(),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(
+                      width: 0,
+                    ),
+                  ),
                 ],
               ),
+              const Padding(padding: EdgeInsets.only(top: 15, bottom: 15)),
               Padding(
-                padding: EdgeInsets.only(top: 5, bottom: 15),
+                padding: const EdgeInsets.only(top: 5, bottom: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -94,19 +151,21 @@ class _AddTeamPageState extends State<AddTeamPage> {
                         radius: 120,
                         //Color(0xff358aac)
                         backgroundColor: Colors.white54,
-                        child: state.showImage1?.path != null
+                        child: state.photoTeamSelected != ''
                             ? ClipRRect(
-                                child: Image.network(
-                                state.showImage1!.path,
+                                child: Image.memory(
+                                base64Decode(state.photoTeamSelected),
+                                //Image.network(
+                                //state.showImage1!.path,
                                 width: 200,
                                 height: 200,
                               ))
                             : Container(
                                 width: 100,
                                 height: 100,
-                                child: Column(
+                                child: const Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.cloud,
                                       color: Color(0xff358aac),
@@ -148,19 +207,22 @@ class _AddTeamPageState extends State<AddTeamPage> {
                         radius: 120,
                         //Color(0xff358aac)
                         backgroundColor: Colors.white54,
-                        child: state.showImage2?.path != null
+                        child: state.uniformLocalImageSelected != ''
                             ? ClipRRect(
-                                child: Image.network(
-                                state.showImage2!.path,
+                                child: Image.memory(
+                                base64Decode(
+                                    '${state.uniformLocalImageSelected}'),
+                                // Image.network(
+                                // state.showImage2!.path,
                                 width: 200,
                                 height: 200,
                               ))
                             : Container(
                                 width: 100,
                                 height: 100,
-                                child: Column(
+                                child: const Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.cloud,
                                       color: Color(0xff358aac),
@@ -169,7 +231,7 @@ class _AddTeamPageState extends State<AddTeamPage> {
                                       height: 8,
                                     ),
                                     Text(
-                                      "Selecciona el uniforme visitante",
+                                      "Selecciona el uniforme local",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 12, color: Colors.black),
@@ -202,19 +264,22 @@ class _AddTeamPageState extends State<AddTeamPage> {
                         radius: 120,
                         //Color(0xff358aac)
                         backgroundColor: Colors.white54,
-                        child: state.showImage3?.path != null
+                        child: state.uniformVisitImageSelected != ''
                             ? ClipRRect(
-                                child: Image.network(
-                                state.showImage3!.path,
+                                child: Image.memory(
+                                base64Decode(
+                                    '${state.uniformVisitImageSelected}'),
+                                // Image.network(
+                                // state.showImage2!.path,
                                 width: 200,
                                 height: 200,
                               ))
                             : Container(
                                 width: 100,
                                 height: 100,
-                                child: Column(
+                                child: const Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.cloud,
                                       color: Color(0xff358aac),
@@ -223,7 +288,7 @@ class _AddTeamPageState extends State<AddTeamPage> {
                                       height: 8,
                                     ),
                                     Text(
-                                      "Selecciona el uniforme local",
+                                      "Selecciona el uniforme visitante",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 12, color: Colors.black),
@@ -235,6 +300,7 @@ class _AddTeamPageState extends State<AddTeamPage> {
                   ],
                 ),
               ),
+              const Padding(padding: EdgeInsets.only(top: 15, bottom: 15)),
               const ButtonPressed(),
             ],
           );
@@ -263,7 +329,8 @@ class ButtonPressed extends StatelessWidget {
                   Expanded(
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context, rootNavigator: true).pop();
+                        //? causa error en la navegación: Navigator.of(context, rootNavigator: true).pop();
+                        Navigator.pop(context);
                       },
                       child: Container(
                         width: double.infinity,
@@ -288,21 +355,23 @@ class ButtonPressed extends StatelessWidget {
                   ),
                   Expanded(
                     child: TextButton(
-                      onPressed: state.status.isValidated
-                          ? () {
-                              context
-                                  .read<TeamLeagueManagerCubit>()
-                                  .createRefereeTeam();
-                              Navigator.of(context).pop();
-                            }
-                          : null,
+                      onPressed: () {
+                        if (state.status.isValidated) {
+                          context
+                              .read<TeamLeagueManagerCubit>()
+                              .createRefereeTeam();
+                        }
+                      },
                       child: Container(
                         width: double.infinity,
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
-                        decoration: const BoxDecoration(
-                          color: Color(0xff045a74),
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        decoration: BoxDecoration(
+                          color: (state.status.isValidated)
+                              ? const Color(0xff045a74)
+                              : Colors.grey,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15.0)),
                         ),
                         child: Text(
                           'Guardar cambios',

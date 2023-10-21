@@ -6,6 +6,7 @@ import 'package:ligas_futbol_flutter/src/domain/referee/entity/count_tournament_
 import 'package:ligas_futbol_flutter/src/domain/referee/entity/referee_statics.dart';
 import 'package:user_repository/user_repository.dart';
 
+import '../../../core/models/address_filter.dart';
 import '../../../core/typedefs.dart';
 import '../../agenda/service/i_agenda_service.dart';
 import '../dto/create_referee_dto.dart';
@@ -135,10 +136,9 @@ class RefereeServiceImpl implements IRefereeService {
       _repository.updateReferee(referee);
 
   @override
-  Future<List<RefereeByAddress>> getRefereeByAddress(int matchId,
-      {String? state, DateTime? matchDate}) async {
-    final request = await _repository.getRefereeByAddress(matchId,
-        state: state, matchDate: matchDate);
+  Future<List<RefereeByAddress>> searchByFiltersReferee(
+      AddressFilter filter) async {
+    final request = await _repository.searchByFiltersReferee(filter);
     return request.fold((l) => [], (r) => r);
   }
 }

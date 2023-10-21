@@ -1,8 +1,8 @@
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ligas_futbol_flutter/src/domain/agenda/agenda.dart';
 import 'package:ligas_futbol_flutter/src/domain/agenda/entity/qra_active.dart';
@@ -50,11 +50,12 @@ class RefereeAgendaCubit extends Cubit<RefereeAgendaState> {
   }
 
   void setItemsNow() {
-  emit(state.copyWith(
-    initialDate: DateTime.now(),
-    endDate: DateTime.now(),
-    initialHour: DateTime.now(),
-    endHour: DateTime.now(),));
+    emit(state.copyWith(
+      initialDate: DateTime.now(),
+      endDate: DateTime.now(),
+      initialHour: DateTime.now(),
+      endHour: DateTime.now(),
+    ));
   }
 
   Future<void> onLoadInitialData(int refereeId) async {
@@ -202,11 +203,12 @@ class RefereeAgendaCubit extends Cubit<RefereeAgendaState> {
         expirationDate: state.endDate,
       );
       final request = await _service.createAvailability(availabilityData);
-      _agenda.clear();
       request.fold(
           (l) => emit(state.copyWith(
-              errorMessage: l.errorMessage,
+              errorMessage: _getAvailabilityErrorResponse(
+                  jsonDecode(l.data ?? '')['status']),
               screenState: BasicCubitScreenState.error)), (r) {
+        _agenda.clear();
         emit(state.copyWith(
           screenState: BasicCubitScreenState.success,
         ));
@@ -214,6 +216,21 @@ class RefereeAgendaCubit extends Cubit<RefereeAgendaState> {
       onLoadInitialData(refereeId);
     } else {
       emit(state.copyWith(screenState: BasicCubitScreenState.emptyData));
+    }
+  }
+
+  String _getAvailabilityErrorResponse(final int? status) {
+    switch (status) {
+      case -1:
+        return 'Error al guardar';
+      case -2:
+        return 'Este rango de fecha ya está ocupado';
+      case -3:
+        return 'El activo no existe';
+      case -4:
+        return 'Hay datos faltantes';
+      default:
+        return 'Ha ocurrido un error';
     }
   }
 }

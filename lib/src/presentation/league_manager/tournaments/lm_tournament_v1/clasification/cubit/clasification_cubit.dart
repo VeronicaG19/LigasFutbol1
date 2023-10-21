@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
+import 'package:ligas_futbol_flutter/src/domain/team_tournament/service/i_team_tournament_service.dart';
 import 'package:ligas_futbol_flutter/src/domain/tournament/service/i_tournament_service.dart';
 
 import '../../../../../../core/enums.dart';
@@ -29,14 +30,15 @@ part 'clasification_state.dart';
 @injectable
 class ClasificationCubit extends Cubit<ClasificationState> {
   ClasificationCubit(
-      this._service,
-      this._matchService,
-      this._tournamentService,
-      this._refereeService,
-      this._fieldService,
-      this._requestService,
-      this._agendaService,)
-      : super(const ClasificationState());
+    this._service,
+    this._matchService,
+    this._tournamentService,
+    this._refereeService,
+    this._fieldService,
+    this._requestService,
+    this._agendaService,
+    this._iTeamTournamentService,
+  ) : super(const ClasificationState());
 
   final IScoringSystemService _service;
   final IMatchesService _matchService;
@@ -45,29 +47,48 @@ class ClasificationCubit extends Cubit<ClasificationState> {
   final IFieldService _fieldService;
   final IUserRequestsService _requestService;
   final IAgendaService _agendaService;
+  final ITeamTournamentService _iTeamTournamentService;
+
   int? _roundNumber;
 
   Future<void> getScoringSystem({required Tournament tournament}) async {
+    print('>>> ----------------------------------------------------');
+    print('>>> getScoringSystem');
+    print('>>> ----------------------------------------------------');
+
     emit(state.copyWith(screenStatus: CLScreenStatus.loading));
     final response =
         await _service.getScoringSystemByTournament(tournament.tournamentId!);
+
     response.fold(
-        (l) => emit(state.copyWith(
-            screenStatus: CLScreenStatus.error,
-            errorMessage: l.errorMessage)), (r) {
-      bool shooout = (r.pointsPerWinShootOut != null) ? true : false;
-      emit(state.copyWith(
+      (l) => emit(state.copyWith(
+          screenStatus: CLScreenStatus.error, errorMessage: l.errorMessage)),
+      (r) {
+        bool shooout = ((r.pointsPerWinShootOut != null) &&
+            r.pointPerLossShootOut != null);
+
+        emit(state.copyWith(
           scoringSystem: r,
           tournament: tournament,
           shootout: shooout,
-          scoringSystem2: r));
-      getRoundsListByTournament(state.tournament.tournamentId!);
-      getScoringTournamentId(tournamentId: tournament.tournamentId!);
-      getMatchDetailByTournamnet();
-      getTournamentFinishedStatus(tournamentId: tournament.tournamentId!);
-      getTournamentChampion(tournamentId: tournament.tournamentId!);
-      //getTeamsTournament(tournamentId: tournament.tournamentId!);
-    });
+          scoringSystem2: r,
+        ));
+
+        getRoundsListByTournament(state.tournament.tournamentId!);
+
+        if (shooout) {
+          getScoringTournamentIdShootOut(
+              tournamentId: tournament.tournamentId!);
+        } else {
+          getScoringTournamentId(tournamentId: tournament.tournamentId!);
+        }
+
+        getMatchDetailByTournamnet();
+        getTournamentFinishedStatus(tournamentId: tournament.tournamentId!);
+        getTournamentChampion(tournamentId: tournament.tournamentId!);
+        // getTeamsTournament(tournamentId: tournament.tournamentId!);
+      },
+    );
   }
 
   Future<void> getScoreData(final int? tournamentId) async {
@@ -84,7 +105,7 @@ class ClasificationCubit extends Cubit<ClasificationState> {
     emit(state.copyWith(
         scoringSystem: score,
         scoringSystem2: score,
-        shootout: score.pointsPerWinShootOut != null ? true : false,
+        shootout: score.pointsPerWinShootOut != null,
         statusTournament: tournamentMatchStatus.getOrElse(() => 'false'),
         nameCh: tournamentChampion
             .getOrElse(() => TournamentChampionDTO.empty)
@@ -94,16 +115,40 @@ class ClasificationCubit extends Cubit<ClasificationState> {
   Future<void> getScoringTournamentId({required int tournamentId}) async {
     print("Valor del torneo---->$tournamentId");
     emit(state.copyWith(screenStatus: CLScreenStatus.loading));
+
     final response =
         await _tournamentService.getScoringTournamentId(tournamentId);
+
     response.fold(
-        (l) => emit(state.copyWith(
-            screenStatus: CLScreenStatus.error,
-            scoringTournament: [],
-            errorMessage: l.errorMessage)), (r) {
-      emit(state.copyWith(
-          screenStatus: CLScreenStatus.loaded, scoringTournament: r));
-    });
+      (l) => emit(state.copyWith(
+          screenStatus: CLScreenStatus.error,
+          scoringTournament: [],
+          errorMessage: l.errorMessage)),
+      (r) {
+        emit(state.copyWith(
+            screenStatus: CLScreenStatus.loaded, scoringTournament: r));
+      },
+    );
+  }
+
+  Future<void> getScoringTournamentIdShootOut(
+      {required int tournamentId}) async {
+    final response =
+        await _iTeamTournamentService.getGeneralTableByTournament(tournamentId);
+
+    response.fold(
+      (l) {
+        emit(state.copyWith(
+          screenStatus: CLScreenStatus.error,
+          scoringTournament: [],
+          errorMessage: l.errorMessage,
+        ));
+      },
+      (r) {
+        emit(state.copyWith(
+            screenStatus: CLScreenStatus.loaded, scoringTournament: r));
+      },
+    );
   }
 
   Future<void> getMatchDetailByTournamnet({int? roundNumber}) async {
@@ -165,16 +210,28 @@ class ClasificationCubit extends Cubit<ClasificationState> {
 
   Future<void> onUpdateSoring() async {
     emit(state.copyWith(screenStatus: CLScreenStatus.loading));
-    final response = await _service.updateScoringSystem(state.scoringSystem);
+    ScoringSystem score = state.scoringSystem;
+    if (!state.shootout) {
+      score = ScoringSystem(
+          scoringSystemId: state.scoringSystem.scoringSystemId,
+          pointPerLoss: state.scoringSystem.pointPerLoss,
+          pointPerTie: state.scoringSystem.pointPerTie,
+          pointsPerWin: state.scoringSystem.pointsPerWin,
+          pointPerLossShootOut: 0,
+          pointsPerWinShootOut: 0);
+    }
+    final response = await _service.updateScoringSystem(score);
     response.fold(
         (l) => emit(state.copyWith(
-            screenStatus: CLScreenStatus.error, errorMessage: l.errorMessage)),
-        (r) => {
-              emit(state.copyWith(
-                  screenStatus: CLScreenStatus.loaded,
-                  scoringSystem: r,
-                  scoringSystem2: r))
-            });
+            screenStatus: CLScreenStatus.error,
+            errorMessage: l.errorMessage)), (r) {
+      emit(state.copyWith(
+          screenStatus: CLScreenStatus.loaded,
+          shootout:
+              r.pointsPerWinShootOut != null && r.pointPerLossShootOut != null,
+          scoringSystem: r,
+          scoringSystem2: r));
+    });
   }
 
   Future<void> createRoleGame() async {
@@ -508,5 +565,4 @@ class ClasificationCubit extends Cubit<ClasificationState> {
           screenStatus: CLScreenStatus.loaded, nameCh: r.teamName));
     });
   }
-
 }

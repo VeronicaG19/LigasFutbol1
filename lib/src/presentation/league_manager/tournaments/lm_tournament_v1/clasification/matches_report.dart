@@ -16,7 +16,7 @@ class MatchesReport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return BlocBuilder<ClasificationCubit, ClasificationState>(
       builder: (context, state) {
         if (state.screenStatus == CLScreenStatus.creatingRoleGame ||
@@ -345,8 +345,6 @@ class _FieldSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
     if (match.dateMatch == null) {
       return const Text('-');
     }
@@ -401,8 +399,6 @@ class _RefereeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
     if (match.dateMatch == null) {
       return const Text('-');
     }

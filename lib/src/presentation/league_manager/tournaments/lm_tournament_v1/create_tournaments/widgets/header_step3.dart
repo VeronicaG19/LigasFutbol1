@@ -30,21 +30,11 @@ class HeaderStep3 extends StatelessWidget {
             ),
           ),
         ),
-        const Text(
-          "Paso 3",
-          style: TextStyle(
-            fontFamily: 'SF Pro',
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 30.0,
-          ),
-        ),
-        const Divider(indent: 1),
         const SizedBox(
           height: 5,
         ),
         const Text(
-          "Datos de los partidos ",
+          "Paso 3",
           style: TextStyle(
             fontFamily: 'SF Pro',
             color: Colors.black,
@@ -52,6 +42,19 @@ class HeaderStep3 extends StatelessWidget {
             fontSize: 20.0,
           ),
         ),
+        const Divider(indent: 1),
+        const Text(
+          "Datos de los partidos ",
+          style: TextStyle(
+            fontFamily: 'SF Pro',
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 16.0,
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        ), /*
         const SizedBox(
           height: 5,
         ),
@@ -63,7 +66,7 @@ class HeaderStep3 extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 15.0,
           ),
-        ),
+        ),*/
       ],
     );
   }

@@ -8,7 +8,8 @@ abstract class ICategoryService {
   ///
   /// [leagueId] [tournamentName]
   RepositoryResponse<List<Category>> getCategoryByTournamentByAndLeagueId(
-      int leagueId, String tournamentName);
+      int leagueId, String tournamentName,
+      {bool requiresAuthToken = true});
 
   RepositoryResponse<List<Category>> getCategoriesByLeagueId(int leagueId);
 

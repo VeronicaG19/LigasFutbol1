@@ -29,7 +29,8 @@ class ApiClient {
   static Future<ApiClient> initialize(
       {required String baseUrl,
       required int orgId,
-      required String refreshTokenURL}) async {
+      required String refreshTokenURL,
+      required bool showLogs}) async {
     _dio = Dio(
       BaseOptions(
           baseUrl: baseUrl,
@@ -50,7 +51,7 @@ class ApiClient {
         dioClient: _dio,
         interceptors: [
           ApiInterceptor(_localStorageService),
-          LoggingInterceptor(),
+          if (showLogs) LoggingInterceptor(),
           RefreshTokenInterceptor(
               dioClient: _dio,
               kVService: _localStorageService,

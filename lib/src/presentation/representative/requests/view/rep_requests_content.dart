@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/presentation/representative/requests/cubit/representantive_requests_cubit.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import '../../../../domain/user_requests/entity/user_requests.dart';
 import '../../../app/app.dart';
 
@@ -12,12 +13,20 @@ class RepRequestsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RepresentantiveRequestsCubit, RepresentantiveRequestsState>(
+    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    final teamId = context
+        .select((AuthenticationBloc bloc) => bloc.state.selectedTeam.teamId);
+    return BlocConsumer<RepresentantiveRequestsCubit,
+        RepresentantiveRequestsState>(
       listener: (context, state) {
         if (state.screenStatus == ScreenStatus.error) {
           SnackBar(
             content: Text(state.errorMessage ?? ''),
           );
+        } else if (state.screenStatus == ScreenStatus.loaded) {
+          context
+              .read<NotificationBloc>()
+              .add(LoadNotificationCount(teamId, user.applicationRol));
         }
       },
       builder: (context, state) {
@@ -31,57 +40,59 @@ class RepRequestsContent extends StatelessWidget {
           children: [
             state.receivedRequestsList.isNotEmpty
                 ? ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: state.receivedRequestsList.length,
-              itemBuilder: (context, index) {
-                return _CardContent(
-                  type: RepRequestType.received,
-                  request: state.receivedRequestsList[index],
-                );
-              },
-            )
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: state.receivedRequestsList.length,
+                    itemBuilder: (context, index) {
+                      return _CardContent(
+                        type: RepRequestType.received,
+                        request: state.receivedRequestsList[index],
+                      );
+                    },
+                  )
                 : const Center(
-              child: Text('Sin solicitudes recibidas'),
-            ),
+                    child: Text('Sin solicitudes recibidas'),
+                  ),
             state.sentRequestsList.isNotEmpty
                 ? ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: state.sentRequestsList.length,
-              itemBuilder: (context, index) {
-                return _CardContent(
-                  type: RepRequestType.sent,
-                  request: state.sentRequestsList[index],
-                );
-              },
-            )
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: state.sentRequestsList.length,
+                    itemBuilder: (context, index) {
+                      return _CardContent(
+                        type: RepRequestType.sent,
+                        request: state.sentRequestsList[index],
+                      );
+                    },
+                  )
                 : const Center(
-              child: Text('Sin solicitudes enviadas'),
-            ),
+                    child: Text('Sin solicitudes enviadas'),
+                  ),
             state.adminRequestList.isNotEmpty
                 ? ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: state.adminRequestList.length,
-              itemBuilder: (context, index) {
-                return _CardRequestLeague(
-                  type: RepRequestType.league,
-                  request: state.adminRequestList[index],
-                );
-              },
-            )
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: state.adminRequestList.length,
+                    itemBuilder: (context, index) {
+                      return _CardRequestLeague(
+                        type: RepRequestType.league,
+                        request: state.adminRequestList[index],
+                      );
+                    },
+                  )
                 : const Center(
-              child: Text('Sin solicitudes a ligas'),
-            ),
+                    child: Text('Sin solicitudes a ligas'),
+                  ),
           ],
         );
       },
     );
   }
 }
-class _CardRequestLeague extends StatelessWidget{
-  const _CardRequestLeague({Key? key, required this.request, required this.type})
+
+class _CardRequestLeague extends StatelessWidget {
+  const _CardRequestLeague(
+      {Key? key, required this.request, required this.type})
       : super(key: key);
 
   final UserRequests request;
@@ -89,12 +100,12 @@ class _CardRequestLeague extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    final titleToLeague = type == RepRequestType.league
-        ? 'Solicitud a una liga\n'
-        : 'Solicitud';
+    final titleToLeague =
+        type == RepRequestType.league ? 'Solicitud a una liga\n' : 'Solicitud';
     final subtitleToLeague = type == RepRequestType.league
-        ? 'Solicitud para pertener a ${request.requestTo}\n'
-        'Estatus: ${request.requestStatus}\n' : '';
+        ? 'Solicitud para pertenecer a ${request.requestTo}\n'
+            'Estatus: ${request.requestStatus}\n'
+        : '';
 
     return Card(
       child: Column(
@@ -110,6 +121,7 @@ class _CardRequestLeague extends StatelessWidget{
     );
   }
 }
+
 class _CardContent extends StatelessWidget {
   const _CardContent({Key? key, required this.request, required this.type})
       : super(key: key);
@@ -119,11 +131,14 @@ class _CardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final team = context.read<AuthenticationBloc>().state.teamManager;
-    final title = type == RepRequestType.sent ? 'Solicitud enviada' : 'Solicitud recibida';
+    final team =
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedTeam);
+    final title = type == RepRequestType.sent
+        ? 'Solicitud enviada'
+        : 'Solicitud recibida';
     final subtitle = type == RepRequestType.sent
         ? 'Solicitud enviada a ${request.requestMadeBy}'
-        : 'Solicitud de ${request.requestTo}';
+        : 'Solicitud de ${request.requestMadeBy}';
 
     return Card(
       child: Column(
@@ -133,126 +148,80 @@ class _CardContent extends StatelessWidget {
             leading: const Icon(Icons.email),
             title: Text(title),
             subtitle: Text(subtitle),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              if (type == RepRequestType.received)
-                TextButton(
-                  child: const Text('Aceptar'),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (contextD) {
-                        return BlocProvider.value(
-                          value: BlocProvider.of<RepresentantiveRequestsCubit>(context),
-                          child: AlertDialog(
-                            title: const Text(
-                              'Aceptar solicitud',
-                              textAlign: TextAlign.center,),
-                            content: Text('¿Aceptar la solicitud recibida de ${request.requestMadeBy}?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  context
-                                      .read<RepresentantiveRequestsCubit>()
-                                      .sendRequestStatus(
+            onTap: () {
+              String dialogTitle = '';
+              String dialogContent = '';
+              if (type == RepRequestType.received) {
+                dialogTitle = 'Aceptar solicitud';
+                dialogContent =
+                    '¿Aceptar la solicitud recibida para unirse a tu equipo: ${request.requestTo}?';
+              } else if (type == RepRequestType.sent) {
+                dialogTitle = 'Cancelar la solicitud';
+                dialogContent =
+                    '¿Deseas cancelar la solicitud enviada a ${request.requestMadeBy}?';
+              }
+              showDialog(
+                context: context,
+                builder: (contextD) {
+                  return BlocProvider.value(
+                    value:
+                        BlocProvider.of<RepresentantiveRequestsCubit>(context),
+                    child: AlertDialog(
+                      title: Text(
+                        dialogTitle,
+                        textAlign: TextAlign.center,
+                      ),
+                      content: Text(dialogContent),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(contextD),
+                          child: const Text('CERRAR'),
+                        ),
+                        if (type == RepRequestType.received)
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<RepresentantiveRequestsCubit>()
+                                  .cancelUserRequest(
+                                    requestId: request.requestId,
+                                    teamId: team.teamId!,
+                                  );
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('RECHAZAR'),
+                          ),
+                        if (type == RepRequestType.received)
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<RepresentantiveRequestsCubit>()
+                                  .sendRequestStatus(
                                       requestId: request.requestId,
                                       teamId: team.teamId!,
                                       status: true);
-                                  Navigator.pop(contextD);
-                                },
-                                child: const Text('ACEPTAR'),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(contextD),
-                                child: const Text('REGRESAR'),
-                              ),
-                            ],
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('ACEPTAR'),
                           ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              const SizedBox(width: 8),
-              if (type == RepRequestType.received)
-              TextButton(
-                child: const Text('Rechazar'),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (contextD) {
-                      return BlocProvider.value(
-                        value: BlocProvider.of<RepresentantiveRequestsCubit>(context),
-                        child: AlertDialog(
-                          title: const Text(
-                            'Rechazar solicitud',
-                            textAlign: TextAlign.center,),
-                          content: Text('¿Deseas rechazar la solicitud de ${request.requestMadeBy}?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                context
-                                    .read<RepresentantiveRequestsCubit>()
-                                    .sendRequestStatus(
+                        if (type == RepRequestType.sent)
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<RepresentantiveRequestsCubit>()
+                                  .cancelUserRequest(
                                     requestId: request.requestId,
                                     teamId: team.teamId!,
-                                    status: false);
-                                Navigator.pop(contextD);
-                              },
-                              child: const Text('RECHAZAR'),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pop(contextD),
-                              child: const Text('REGRESAR'),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                                  );
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('CANCELAR SOLICITUD'),
+                          ),
+                      ],
+                    ),
                   );
                 },
-              ),
-              if (type == RepRequestType.sent)
-                TextButton(
-                  child: const Text('Cancelar'),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (contextD) {
-                        return BlocProvider.value(
-                          value: BlocProvider.of<RepresentantiveRequestsCubit>(context),
-                          child: AlertDialog(
-                            title: const Text(
-                              'Cancelar la solicitud',
-                              textAlign: TextAlign.center,),
-                            content: Text('¿Deseas cancelar la solicitud de ${request.requestMadeBy}?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  context
-                                      .read<RepresentantiveRequestsCubit>()
-                                      .cancelUserRequest(
-                                      requestId: request.requestId,
-                                      teamId: team.teamId!,
-                                  );
-                                  Navigator.pop(contextD);
-                                },
-                                child: const Text('Cancelar'),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(contextD),
-                                child: const Text('REGRESAR'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-            ],
+              );
+            },
           ),
         ],
       ),

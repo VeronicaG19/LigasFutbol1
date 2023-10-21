@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ligas_futbol_flutter/environment_config.dart';
 import 'package:ligas_futbol_flutter/src/domain/roles/service/i_rol_service.dart';
@@ -33,7 +34,7 @@ class RoleCubit extends Cubit<RoleState> {
     for (final r in userRoles) {
       availableRoles.removeWhere((element) => element.roleId == r.rol.roleId);
     }
-    final currentRole = _rolService.getPrimaryRol(userRoles);
+    final currentRole = await _rolService.getPrimaryRol(userRoles);
     emit(state.copyWith(
         rolChanged: _rolService.getApplicationRol(currentRole.rol.roleName),
         screenState: BasicCubitScreenState.loaded,
@@ -42,8 +43,69 @@ class RoleCubit extends Cubit<RoleState> {
         availableRoles: availableRoles));
   }
 
-  Future<void> changeRol(int index) async {
+  Future<void> onChangeRol(final int index) async {
     final rol = state.associatedRoles.elementAt(index);
+    final roleId = rol.rol.roleId;
+    emit(state.copyWith(screenState: BasicCubitScreenState.initial));
+    if (kIsWeb) {
+      if (roleId != 17 && roleId != 18 && roleId != 19) {
+        emit(state.copyWith(
+            screenState: BasicCubitScreenState.error,
+            errorMessage:
+                'Este rol no está disponible en la versión web. Cambia a la versión móvil de la app.'));
+        return;
+      } else {
+        _changeRol(rol);
+      }
+    } else {
+      if (roleId != 17 && roleId != 20 && roleId != 22 && roleId != 23) {
+        emit(state.copyWith(
+            screenState: BasicCubitScreenState.error,
+            errorMessage:
+                'Este rol no está disponible en la app. Cambia a la versión Web.'));
+        return;
+      } else {
+        _changeRol(rol);
+      }
+    }
+  }
+
+  int allowedDevice(int index) {
+    int device = 0;
+    final rol = state.associatedRoles.elementAt(index);
+    final roleId = rol.rol.roleId;
+
+    if (roleId == 18) {
+      device = 0;
+    }
+
+    if (roleId == 20 || roleId == 22 || roleId == 23) {
+      device = 1;
+    }
+
+    if (roleId == 17 || roleId == 19) {
+      device = 2;
+    }
+
+    return device;
+  }
+
+  String allowedDeviceLabel(int device) {
+    String cDevice;
+
+    if (device == 0) {
+      cDevice = "Web";
+    } else if (device == 1) {
+      cDevice = "Movil";
+    } else {
+      cDevice = "Web/Movil";
+    }
+
+    return cDevice;
+  }
+
+  Future<void> _changeRol(final UserRol rol) async {
+    //final rol = state.associatedRoles.elementAt(index);
     emit(state.copyWith(screenState: BasicCubitScreenState.loading));
     final response = await _rolService.changePrimaryRol(rol.userRolId);
     response.fold(

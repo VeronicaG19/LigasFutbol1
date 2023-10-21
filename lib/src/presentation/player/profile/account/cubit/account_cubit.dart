@@ -2,8 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:ligas_futbol_flutter/src/domain/login/models.dart';
+import 'package:ligas_futbol_flutter/src/domain/sign_up/original_password.dart';
 import 'package:user_repository/user_repository.dart';
+
+import '../../../../../domain/sign_up/password.dart';
 
 part 'account_state.dart';
 
@@ -19,15 +21,18 @@ class AccountCubit extends Cubit<AccountState> {
   }
 
   void onOriginalPasswordChanged(String value) {
-    Password password = Password.dirty(value);
+    OriginalPassword password = OriginalPassword.dirty(value);
     FormzStatus validation =
         Formz.validate([password, state.password, state.password2]);
     if (value != originalP) {
       validation = FormzStatus.invalid;
-      password = const Password.dirty('');
+      password = const OriginalPassword.dirty('');
     }
     emit(
-      state.copyWith(originalPassword: password, status: validation),
+      state.copyWith(
+        originalPassword: password,
+        status: validation,
+      ),
     );
   }
 

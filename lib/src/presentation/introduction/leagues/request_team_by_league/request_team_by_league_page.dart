@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ligas_futbol_flutter/src/domain/category/entity/category.dart';
-import 'package:ligas_futbol_flutter/src/domain/tournament/entity/tournament.dart';
-import 'package:ligas_futbol_flutter/src/presentation/introduction/leagues/request_team_by_league/cubit/request_team_by_league_cubit.dart';
-import 'package:ligas_futbol_flutter/src/service_locator/injection.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-import '../../../login/view/login_page.dart';
+import '../../../../core/enums.dart';
+import '../../../../domain/category/entity/category.dart';
+import '../../../../domain/tournament/entity/tournament.dart';
+import '../../../../service_locator/injection.dart';
+import 'cubit/request_team_by_league_cubit.dart';
 
-class RequestTeamByLeaguePage extends StatefulWidget {
-  RequestTeamByLeaguePage(
+class RequestTeamByLeaguePage extends StatelessWidget {
+  const RequestTeamByLeaguePage(
       {Key? key, required this.tournament, required this.category})
       : super(key: key);
   final Tournament tournament;
   final Category category;
-  @override
-  _RequestTeamByLeaguePageState createState() =>
-      _RequestTeamByLeaguePageState();
-}
 
-class _RequestTeamByLeaguePageState extends State<RequestTeamByLeaguePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => locator<RequestTeamByLeagueCubit>()
-        ..getRequestTeamByLeague(
-            leagueId: widget.tournament.leagueId!.leagueId),
+        ..getRequestTeamByLeague(tournamentId: tournament.tournamentId),
       child: BlocBuilder<RequestTeamByLeagueCubit, RequestTeamByLeagueState>(
         builder: (context, state) {
-          if (state.screenStatus == ScreenStatus.loading) {
+          if (state.screenStatus == BasicCubitScreenState.loading) {
             return Center(
               child: LoadingAnimationWidget.fourRotatingDots(
                 color: const Color(0xff358aac),
@@ -37,95 +31,129 @@ class _RequestTeamByLeaguePageState extends State<RequestTeamByLeaguePage> {
             );
           } else {
             return ListView.builder(
-                padding: const EdgeInsets.only(
-                  top: 5,
-                ),
-                itemCount: state.teamList.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: <Widget>[
-                      Container(
-                        color: Colors.black12,
-                        height: 5,
+              padding: const EdgeInsets.only(
+                top: 5,
+              ),
+              itemCount: state.postsList.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  color: Colors.white38,
+                  padding: const EdgeInsets.only(
+                      right: 20, left: 12, top: 15, bottom: 15),
+                  child: ListTile(
+                    leading: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(8.0),
+                        bottomRight: Radius.circular(8.0),
                       ),
-                      InkWell(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const LoginPage())),
-                        child: Container(
-                          color: Colors.white38,
-                          padding: const EdgeInsets.only(
-                              right: 20, left: 12, top: 15, bottom: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(8.0),
-                                    bottomRight: Radius.circular(8.0),
-                                  ),
-                                  child: Container(
-                                    width: 6.0,
-                                    height: 20.0,
-                                    color: Color(0xff358aac),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "${state.teamList[index].teamName}",
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w900),
-                                ),
-                              ]),
-                              Container(
-                                height: 45,
-                                padding: EdgeInsets.all(8),
-                                color: Color(0xff358aac),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Edad",
-                                      style: TextStyle(
-                                          fontSize: 11,
-                                          color: Colors.grey[200],
-                                          fontWeight: FontWeight.w900),
-                                    ),
-                                    const SizedBox(
-                                      height: 3,
-                                    ),
-                                    Text(
-                                      "18 - 50",
-                                      style: TextStyle(
-                                          fontSize: 11,
-                                          color: Colors.grey[200],
-                                          fontWeight: FontWeight.w900),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
+                      child: Container(
+                        width: 6.0,
+                        height: 20.0,
+                        color: const Color(0xff358aac),
+                      ),
+                    ),
+                    title: Text(
+                      "Equipo: ${state.postsList[index].name}",
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w900),
+                    ),
+                    subtitle: Text(
+                      "${state.postsList[index].title}\n"
+                          "${state.postsList[index].description}"
+                    ),
+                    onTap: () {
+                      context
+                          .read<RequestTeamByLeagueCubit>()
+                          .onSelectPost(state.postsList[index], false);
+                      showDialog(
+                        context: context,
+                        builder: (_) => BlocProvider.value(
+                          value: BlocProvider.of<RequestTeamByLeagueCubit>(
+                              context),
+                          child: _DialogContent(
+                            tournament: tournament,
                           ),
                         ),
-                      ),
-                      Container(
-                        color: Colors.black12,
-                        height: 5,
-                      ),
-                    ],
-                  );
-                  //     TablePage()
-                });
+                      );
+                    },
+                  ),
+                );
+              },
+            );
           }
         },
       ),
+    );
+  }
+}
+
+class _DialogContent extends StatelessWidget {
+  const _DialogContent({Key? key, required this.tournament}) : super(key: key);
+  final Tournament tournament;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RequestTeamByLeagueCubit, RequestTeamByLeagueState>(
+      builder: (context, state) {
+        final contactIfo = [
+          ListTile(
+            leading: const SizedBox(width: 80, child: Text('Contacto:')),
+            title: Text(state.contactInfo.getFullName),
+          ),
+          ListTile(
+            leading: const SizedBox(width: 80, child: Text('Teléfono:')),
+            title: Text(state.contactInfo.getFormattedMainPhone),
+          ),
+          ListTile(
+            leading: const SizedBox(width: 80, child: Text('Email:')),
+            title: Text(state.contactInfo.getMainEmail),
+          ),
+        ];
+        final items = [
+          ListTile(
+            leading: const SizedBox(width: 80, child: Text('Liga:')),
+            title: Text(tournament.leagueId?.leagueName ?? ''),
+          ),
+          ListTile(
+            leading: const SizedBox(width: 80, child: Text('Categoría:')),
+            title: Text(tournament.categoryId?.categoryName ?? ''),
+          ),
+          ListTile(
+            leading: const SizedBox(width: 80, child: Text('Equipo:')),
+            title: Text(state.selectedPost.name),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 15, top: 12),
+            child: Text(
+              'Descripción',
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 8, 15, 5),
+            child: Text(state.selectedPost.description),
+          ),
+        ];
+        return AlertDialog(
+          title: Text(state.selectedPost.title),
+          content: state.screenStatus == BasicCubitScreenState.validating
+              ? const SizedBox(
+                  height: 50,
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: items,
+                ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('ACEPTAR'))
+          ],
+        );
+      },
     );
   }
 }

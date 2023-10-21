@@ -21,6 +21,7 @@ class TeamLeagueManagerState extends Equatable {
   final List<Category> categoryList;
   final Category categorySelected;
   final Team teamInfo;
+  final Team teamInfo2;
   final ScreenStatus screenStatus;
   final String? errorMessage;
   final FormzStatus status;
@@ -38,29 +39,37 @@ class TeamLeagueManagerState extends Equatable {
   final User userModel;
   final Person infoManager;
   final CategoryId categoryId;
+  final String? uniformL;
+  final String? uniformV;
+  final bool? imageIsLarge;
 
-  const TeamLeagueManagerState(
-      {this.teamPageable = const CommonPageableResponse<TeamLeagueManagerDTO>(),
-      this.categoryList = const [],
-      this.categorySelected = Category.empty,
-      this.teamInfo = Team.empty,
-      this.teamName = const TeamName.pure(),
-      this.refereeName = const RefereeName.pure(),
-      this.refereeLastName = const RefereeLastName.pure(),
-      this.verificationSender = const VerificationSender.pure(),
-      this.verificationType = VerificationType.unknown,
-      this.screenStatus = ScreenStatus.initial,
-      this.errorMessage,
-      this.photoTeamSelected = '',
-      this.uniformLocalImageSelected = '',
-      this.uniformVisitImageSelected = '',
-      this.showImage1,
-      this.showImage2,
-      this.showImage3,
-      this.userModel = User.empty,
-      this.status = FormzStatus.pure,
-      this.infoManager = Person.empty,
-      this.categoryId = const CategoryId.pure()});
+  const TeamLeagueManagerState({
+    this.teamPageable = const CommonPageableResponse<TeamLeagueManagerDTO>(),
+    this.categoryList = const [],
+    this.categorySelected = Category.empty,
+    this.teamInfo = Team.empty,
+    this.teamInfo2 = Team.empty,
+    this.teamName = const TeamName.pure(),
+    this.refereeName = const RefereeName.pure(),
+    this.refereeLastName = const RefereeLastName.pure(),
+    this.verificationSender = const VerificationSender.pure(),
+    this.verificationType = VerificationType.unknown,
+    this.screenStatus = ScreenStatus.initial,
+    this.errorMessage,
+    this.photoTeamSelected = '',
+    this.uniformLocalImageSelected = '',
+    this.uniformVisitImageSelected = '',
+    this.showImage1,
+    this.showImage2,
+    this.showImage3,
+    this.userModel = User.empty,
+    this.status = FormzStatus.pure,
+    this.infoManager = Person.empty,
+    this.categoryId = const CategoryId.pure(),
+    this.uniformL = '',
+    this.uniformV = '',
+    this.imageIsLarge = false,
+  });
 
   @override
   List<Object?> get props => [
@@ -70,6 +79,7 @@ class TeamLeagueManagerState extends Equatable {
         uniformLocalImageSelected,
         uniformVisitImageSelected,
         teamInfo,
+        teamInfo2,
         screenStatus,
         status,
         teamName,
@@ -83,7 +93,10 @@ class TeamLeagueManagerState extends Equatable {
         verificationType,
         userModel,
         infoManager,
-        categoryId
+        categoryId,
+        uniformL,
+        uniformV,
+        imageIsLarge,
       ];
 
   VerificationType getVerificationType() {
@@ -100,6 +113,7 @@ class TeamLeagueManagerState extends Equatable {
     List<Category>? categoryList,
     Category? categorySelected,
     Team? teamInfo,
+    Team? teamInfo2,
     ScreenStatus? screenStatus,
     String? errorMessage,
     FormzStatus? status,
@@ -117,30 +131,38 @@ class TeamLeagueManagerState extends Equatable {
     XFile? showImage3,
     Person? infoManager,
     CategoryId? categoryId,
+    String? uniformL,
+    String? uniformV,
+    bool? imageIsLarge,
   }) {
     return TeamLeagueManagerState(
-        teamPageable: teamPageable ?? this.teamPageable,
-        categoryList: categoryList ?? this.categoryList,
-        categorySelected: categorySelected ?? this.categorySelected,
-        teamInfo: teamInfo ?? this.teamInfo,
-        screenStatus: screenStatus ?? this.screenStatus,
-        errorMessage: errorMessage ?? this.errorMessage,
-        status: status ?? this.status,
-        teamName: teamName ?? this.teamName,
-        refereeName: refereeName ?? this.refereeName,
-        refereeLastName: refereeLastName ?? this.refereeLastName,
-        photoTeamSelected: photoTeamSelected ?? this.photoTeamSelected,
-        uniformLocalImageSelected:
-            uniformLocalImageSelected ?? this.uniformLocalImageSelected,
-        uniformVisitImageSelected:
-            uniformVisitImageSelected ?? this.uniformVisitImageSelected,
-        verificationSender: verificationSender ?? this.verificationSender,
-        verificationType: verificationType ?? this.verificationType,
-        showImage1: showImage1 ?? this.showImage1,
-        showImage2: showImage2 ?? this.showImage2,
-        showImage3: showImage3 ?? this.showImage3,
-        userModel: userModel ?? this.userModel,
-        infoManager: infoManager ?? this.infoManager,
-        categoryId: categoryId ?? this.categoryId);
+      teamPageable: teamPageable ?? this.teamPageable,
+      categoryList: categoryList ?? this.categoryList,
+      categorySelected: categorySelected ?? this.categorySelected,
+      teamInfo: teamInfo ?? this.teamInfo,
+      teamInfo2: teamInfo2 ?? this.teamInfo2,
+      screenStatus: screenStatus ?? this.screenStatus,
+      errorMessage: errorMessage ?? this.errorMessage,
+      status: status ?? this.status,
+      teamName: teamName ?? this.teamName,
+      refereeName: refereeName ?? this.refereeName,
+      refereeLastName: refereeLastName ?? this.refereeLastName,
+      photoTeamSelected: photoTeamSelected ?? this.photoTeamSelected,
+      uniformLocalImageSelected:
+          uniformLocalImageSelected ?? this.uniformLocalImageSelected,
+      uniformVisitImageSelected:
+          uniformVisitImageSelected ?? this.uniformVisitImageSelected,
+      verificationSender: verificationSender ?? this.verificationSender,
+      verificationType: verificationType ?? this.verificationType,
+      showImage1: showImage1 ?? this.showImage1,
+      showImage2: showImage2 ?? this.showImage2,
+      showImage3: showImage3 ?? this.showImage3,
+      userModel: userModel ?? this.userModel,
+      infoManager: infoManager ?? this.infoManager,
+      categoryId: categoryId ?? this.categoryId,
+      uniformL: uniformL ?? this.uniformL,
+      uniformV: uniformV ?? this.uniformV,
+      imageIsLarge: imageIsLarge ?? this.imageIsLarge,
+    );
   }
 }

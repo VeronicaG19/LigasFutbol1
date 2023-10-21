@@ -21,7 +21,8 @@ class CategoryByTournamentAndLeagueCubit
       {required String tournamentName, required int legueId}) async {
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
     final response = await _categoryService
-        .getCategoryByTournamentByAndLeagueId(legueId, tournamentName);
+        .getCategoryByTournamentByAndLeagueId(legueId, tournamentName,
+            requiresAuthToken: false);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
@@ -36,15 +37,13 @@ class CategoryByTournamentAndLeagueCubit
     emit(state.copyWith(
       screenStatus: ScreenStatus.loading,
     ));
-    print("Torneo-------->$tournamentName");
-    print("Categoria-------->$categoryId");
     final response = await _tournamentService.getFindByNameAndCategory(
-        categoryId, tournamentName);
+        categoryId, tournamentName,
+        requiresAuthToken: false);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
             errorMessage: l.errorMessage)), (r) {
-      print("Informacion-------->$r");
       emit(
           state.copyWith(screenStatus: ScreenStatus.loaded, tournamentInfo: r));
     });

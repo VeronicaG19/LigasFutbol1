@@ -7,10 +7,11 @@ class RequestCardAdmin extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onTapCancel;
 
-  const RequestCardAdmin({super.key, required this.request, this.onTap, this.onTapCancel});
+  const RequestCardAdmin(
+      {super.key, required this.request, this.onTap, this.onTapCancel});
   @override
   Widget build(BuildContext context) {
-      const subTitleStyle = TextStyle(
+    const subTitleStyle = TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w500,
     );
@@ -31,40 +32,41 @@ class RequestCardAdmin extends StatelessWidget {
               color: Color(0xff358aac),
               size: 20,
             ),
-            title: Text('$subtitle: ${request.requestMadeBy}' , style: subTitleStyle),
-            subtitle:
-                Text('Nombre de la liga: ${request.requestTo}', style: titleStyle),
+            title: Text('$subtitle: ${request.requestMadeBy}',
+                style: subTitleStyle),
+            subtitle: Text('Nombre de la liga: ${request.requestTo}',
+                style: titleStyle),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-                TextButton(
-                  child: const Text('Aceptar'),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (contextD) {
-                        return AlertDialog(
-                          title: const Text('Confirmar solicitud'),
-                          content: const Text('Confirma la solicitud'),
-                          actions: [
-                            TextButton(
-                              onPressed: (){ 
-                                onTap!();
-                                Navigator.pop(contextD); },
-                              child: const Text('ACEPTAR')
-                              ,
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pop(contextD),
-                              child: const Text('CANCELAR'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
+              TextButton(
+                child: const Text('Aceptar'),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (contextD) {
+                      return AlertDialog(
+                        title: const Text('Confirmar solicitud'),
+                        content: const Text('Confirma la solicitud'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(contextD),
+                            child: const Text('CANCELAR'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              onTap!();
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('ACEPTAR'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
               const SizedBox(width: 8),
               TextButton(
                 child: const Text('Cancelar'),
@@ -77,14 +79,16 @@ class RequestCardAdmin extends StatelessWidget {
                         content: const Text('Confirma la cancelción'),
                         actions: [
                           TextButton(
-                            onPressed: (){ 
-                              onTapCancel!();
-                            Navigator.pop(contextD);},
-                            child: const Text('ACEPTAR'),
+                            onPressed: () => Navigator.pop(
+                                contextD), //Navigator.pop(context),
+                            child: const Text('CANCELAR'),
                           ),
                           TextButton(
-                            onPressed: () => Navigator.pop(contextD),//Navigator.pop(context),
-                            child: const Text('CANCELAR'),
+                            onPressed: () {
+                              onTapCancel!();
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('ACEPTAR'),
                           ),
                         ],
                       );

@@ -20,8 +20,8 @@ class Player extends Equatable {
   final int? paymentType;
   final String? phoneNumber;
   final String? playerAddress;
-  final int? playerLatitude;
-  final int? playerLenght;
+  final String? playerLatitude;
+  final String? playerLenght;
   final int? playerid;
   @JsonKey(name: 'playerId')
   final int? idPlayer;
@@ -49,7 +49,7 @@ class Player extends Equatable {
       this.playerLatitude,
       this.playerLenght,
       this.playerid,
-        this.idPlayer,
+      this.idPlayer,
       this.preferencePosition,
       this.preferencePositionId,
       this.situation,
@@ -58,7 +58,7 @@ class Player extends Equatable {
       this.fileId,
       this.playerPhotoId,
       this.partyId});
-
+  bool get isEmpty => this == Player.empty;
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlayerToJson(this);
@@ -76,10 +76,10 @@ class Player extends Equatable {
       int? paymentType,
       String? phoneNumber,
       String? playerAddress,
-      int? playerLatitude,
-      int? playerLenght,
+      String? playerLatitude,
+      String? playerLenght,
       int? playerid,
-        int? idPlayer,
+      int? idPlayer,
       String? preferencePosition,
       int? preferencePositionId,
       String? situation,
@@ -158,7 +158,7 @@ class Player extends Equatable {
         playerLatitude,
         playerLenght,
         playerid,
-    idPlayer,
+        idPlayer,
         preferencePosition,
         preferencePositionId,
         situation,
@@ -168,9 +168,9 @@ class Player extends Equatable {
         playerPhotoId,
         partyId
       ];
-/**
- * To json para actualizar la entidad de player
- */
+  /**
+   * To json para actualizar la entidad de player
+   */
   Map<String, dynamic> toJsonUpdate() {
     final Map<String, dynamic> plyr = <String, dynamic>{};
     //plyr['camera'] = camera.toJson(),
@@ -198,9 +198,9 @@ class Player extends Equatable {
     plyr['transferKm'] = transferKm;
     return plyr;
   }
-  /**
-   * 
-  "playerPhotoId": {
+/**
+ *
+    "playerPhotoId": {
     "approveResource": "string",
     "auxId": 0,
     "document": "string",
@@ -208,6 +208,6 @@ class Player extends Equatable {
     "fileName": "string",
     "fileType": "IMAGE",
     "mimetype": "string"
-  }
-   */
+    }
+ */
 }

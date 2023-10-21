@@ -82,11 +82,11 @@ class _AgendaContent extends StatelessWidget {
                     const noDateLabel = 'Sin fecha asignada';
                     final firstDate = item.openingDate == null
                         ? noDateLabel
-                        : DateFormat('dd-MM-yyyy hh:mm')
+                        : DateFormat('dd-MM-yyyy HH:mm')
                             .format(item.openingDate!);
                     final secondDate = item.expirationDate == null
                         ? noDateLabel
-                        : DateFormat('dd-MM-yyyy hh:mm')
+                        : DateFormat('dd-MM-yyyy HH:mm')
                             .format(item.expirationDate!);
                     return Column(
                       children: [
@@ -260,6 +260,8 @@ class _AgendaContent extends StatelessWidget {
                                       DateTime now = DateTime.now();
                                       final TimeOfDay? time =
                                           await showTimePicker(
+                                              initialEntryMode:
+                                                  TimePickerEntryMode.input,
                                               context: context,
                                               initialTime: TimeOfDay.now());
                                       if (time != null) {
@@ -316,6 +318,8 @@ class _AgendaContent extends StatelessWidget {
                                       DateTime now = DateTime.now();
                                       final TimeOfDay? time =
                                           await showTimePicker(
+                                              initialEntryMode:
+                                                  TimePickerEntryMode.input,
                                               context: context,
                                               initialTime: TimeOfDay.now());
                                       if (time != null) {

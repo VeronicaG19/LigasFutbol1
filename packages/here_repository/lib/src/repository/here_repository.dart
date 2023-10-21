@@ -9,8 +9,7 @@ import 'here_interface.dart';
 import '../exceptions/here_exception.dart';
 import 'here_service.dart';
 
-
-class ApiHereReposiTory implements IApiHereInterface{
+class ApiHereReposiTory implements IApiHereInterface {
   final ApiClient _client;
   late final HereService _hereService = HereService();
   ApiHereReposiTory(this._client,
@@ -20,7 +19,8 @@ class ApiHereReposiTory implements IApiHereInterface{
   }
 
   @override
-  HereRepoResponse<ApiHereResponseAddresses> getAddresssesWithText(String address) async{
+  HereRepoResponse<ApiHereResponseAddresses> getAddresssesWithText(
+      String address) async {
     String addre = address.replaceAll(' ', '+');
 
     final request = await Task(() => _hereService.getAddres(kApiHereKey, addre))
@@ -37,13 +37,14 @@ class ApiHereReposiTory implements IApiHereInterface{
   }
 
   @override
-  HereRepoResponse<ReverseHeoApiHere> getReverseGeoAddres(String latLengt) async{
-     final request = await Task(() => _hereService.getReverseGeo(kApiHereKey, latLengt))
-        ._validateResponse();
+  HereRepoResponse<ReverseHeoApiHere> getReverseGeoAddres(
+      String latLengt) async {
+    final request =
+        await Task(() => _hereService.getReverseGeo(kApiHereKey, latLengt))
+            ._validateResponse();
     //_controller.add(request.getOrElse(() => ''));
     return request;
   }
-
 }
 
 extension _HereResponse<T> on Task<T> {

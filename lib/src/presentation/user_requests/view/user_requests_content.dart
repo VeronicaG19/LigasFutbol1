@@ -5,7 +5,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../domain/user_requests/entity/user_requests.dart';
 import '../../app/app.dart';
-import '../../widgets/notification_icon/cubit/notification_count_cubit.dart';
 
 enum RequestType { received, sent }
 
@@ -22,8 +21,8 @@ class UserRequestsContent extends StatelessWidget {
             content: Text(state.errorMessage ?? ''),
           );
         } else if (state.screenStatus == ScreenStatus.loaded) {
-          context.read<NotificationCountCubit>().onLoadNotificationCount(
-              user.person.personId, user.applicationRol);
+          context.read<NotificationBloc>().add(
+              LoadNotificationCount(user.person.personId, user.applicationRol));
         }
       },
       builder: (context, state) {
@@ -85,8 +84,8 @@ class _CardContent extends StatelessWidget {
     final title =
         type == RequestType.sent ? 'Solicitud enviada' : 'Solicitud recibida';
     final subtitle = type == RequestType.sent
-        ? 'Solicitud enviada a ${request.requestTo}'
-        : 'Solicitud de ${request.requestTo}';
+        ? 'Solicitud enviada al equipo: ${request.requestTo}'
+        : 'Solicitud del equipo: ${request.requestTo}';
     return Card(
       child: Column(
         children: [
@@ -95,82 +94,77 @@ class _CardContent extends StatelessWidget {
             leading: const Icon(Icons.email),
             title: Text(title),
             subtitle: Text(subtitle),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              if (type == RequestType.received)
-                TextButton(
-                  child: const Text('Aceptar'),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (contextD) {
-                        return BlocProvider.value(
-                          value: BlocProvider.of<UserRequestsCubit>(context),
-                          child: AlertDialog(
-                            title: const Text('Confirmar solicitud'),
-                            content: const Text('Confirma la solicitud'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  context
-                                      .read<UserRequestsCubit>()
-                                      .onUpdateRequestStatus(
-                                          requestId: request.requestId,
-                                          personId: user.person.personId!,
-                                          status: true);
-                                  Navigator.pop(contextD);
-                                },
-                                child: const Text('ACEPTAR'),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(contextD),
-                                child: const Text('CANCELAR'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              const SizedBox(width: 8),
-              TextButton(
-                child: const Text('Cancelar'),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (contextD) {
-                      return BlocProvider.value(
-                        value: BlocProvider.of<UserRequestsCubit>(context),
-                        child: AlertDialog(
-                          title: const Text('Cancelar solicitud'),
-                          content: const Text('¿Deseas cancelar la solicitud?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                context
-                                    .read<UserRequestsCubit>()
-                                    .cancelUserRequest(
-                                        requestId: request.requestId,
-                                        personId: user.person.personId!);
-                                Navigator.pop(contextD);
-                              },
-                              child: const Text('CANCELAR'),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pop(contextD),
-                              child: const Text('REGRESAR'),
-                            ),
-                          ],
+            onTap: () {
+              String dialogTitle = '';
+              String dialogContent = '';
+              if (type == RequestType.received) {
+                dialogTitle = 'Aceptar solicitud';
+                dialogContent =
+                    '¿Aceptar la solicitud recibida para unirse al equipo: ${request.requestTo}?';
+              } else if (type == RequestType.sent) {
+                dialogTitle = 'Cancelar la solicitud';
+                dialogContent =
+                    '¿Deseas cancelar la solicitud enviada al equipo: ${request.requestTo}?';
+              }
+              showDialog(
+                context: context,
+                builder: (contextD) {
+                  return BlocProvider.value(
+                    value: BlocProvider.of<UserRequestsCubit>(context),
+                    child: AlertDialog(
+                      title: Text(
+                        dialogTitle,
+                        textAlign: TextAlign.center,
+                      ),
+                      content: Text(dialogContent),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(contextD),
+                          child: const Text('CERRAR'),
                         ),
-                      );
-                    },
+                        if (type == RequestType.received)
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<UserRequestsCubit>()
+                                  .cancelUserRequest(
+                                      requestId: request.requestId,
+                                      personId: user.person.personId!);
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('RECHAZAR'),
+                          ),
+                        if (type == RequestType.received)
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<UserRequestsCubit>()
+                                  .onUpdateRequestStatus(
+                                      requestId: request.requestId,
+                                      personId: user.person.personId!,
+                                      status: true);
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('ACEPTAR'),
+                          ),
+                        if (type == RequestType.sent)
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<UserRequestsCubit>()
+                                  .cancelUserRequest(
+                                      requestId: request.requestId,
+                                      personId: user.person.personId!);
+                              Navigator.pop(contextD);
+                            },
+                            child: const Text('CANCELAR SOLICITUD'),
+                          ),
+                      ],
+                    ),
                   );
                 },
-              ),
-            ],
+              );
+            },
           ),
         ],
       ),

@@ -41,7 +41,6 @@ class AgendaRepositoryImpl implements IAgendaRepository {
       Availability availability) {
     return _apiClient.network
         .postData(
-            requiresAuthToken: false,
             data: availability.toJson(),
             endpoint: createAvailabilityEndpoint,
             converter: Availability.fromJson)
@@ -52,7 +51,6 @@ class AgendaRepositoryImpl implements IAgendaRepository {
   RepositoryResponse<QraAsset> createRefereeSchedule(QraAsset qraAsset) {
     return _apiClient.network
         .postData(
-            requiresAuthToken: false,
             data: qraAsset.toJson(),
             endpoint: createRefereeScheduleEndpoint,
             converter: QraAsset.fromJson)
@@ -63,7 +61,6 @@ class AgendaRepositoryImpl implements IAgendaRepository {
   RepositoryResponse<String> createQraEvents(QraEvent event) {
     return _apiClient.network
         .postData(
-            requiresAuthToken: false,
             data: event.toJson(),
             endpoint: qraEventEndpoint,
             converter: (response) => response['result'] as String)
@@ -74,7 +71,6 @@ class AgendaRepositoryImpl implements IAgendaRepository {
   RepositoryResponse<QraAsset> createQraFieldLeague(QraAsset event) {
     return _apiClient.network
         .postData(
-            requiresAuthToken: false,
             data: event.toJson(),
             endpoint: createQraFieldLeagueEndpoint,
             converter: QraAsset.fromJson)
@@ -103,8 +99,8 @@ class AgendaRepositoryImpl implements IAgendaRepository {
   RepositoryResponse<List<QraEvent>> getRefereesEvents(int activeId) {
     return _apiClient.network
         .getCollectionData(
-        endpoint: '$getRefereeEventsEndpoint/$activeId',
-        converter: QraEvent.fromJson)
+            endpoint: '$getRefereeEventsEndpoint/$activeId',
+            converter: QraEvent.fromJson)
         .validateResponse();
   }
 
@@ -121,7 +117,6 @@ class AgendaRepositoryImpl implements IAgendaRepository {
   RepositoryResponse<ResultDTO> createPrices(QraPrices qraPrice) {
     return _apiClient.network
         .postData(
-            requiresAuthToken: false,
             data: qraPrice.toJson(),
             endpoint: qraPricesEndpoint,
             converter: ResultDTO.fromJson)
@@ -138,25 +133,33 @@ class AgendaRepositoryImpl implements IAgendaRepository {
   }
 
   @override
-  RepositoryResponse<QraAddresses> addAdrresAssets(int activeId, QraAddresses qraAddresses) {
+  RepositoryResponse<QraAddresses> addAdrresAssets(
+      int activeId, QraAddresses qraAddresses) {
     return _apiClient.network
-    .postData(endpoint: '$addressesEndpoint/$activeId', 
-    data: qraAddresses.toJson(), 
-    converter: QraAddresses.fromJson).validateResponse();
+        .postData(
+            endpoint: '$addressesEndpoint/$activeId',
+            data: qraAddresses.toJson(),
+            converter: QraAddresses.fromJson)
+        .validateResponse();
   }
 
   @override
   RepositoryResponse<QraAddresses> getAddressesByActive(int activeId) {
-    return _apiClient.network.getData(
-      endpoint: '$addressesEndpoint/get/$activeId', 
-      converter: QraAddresses.fromJson).validateResponse();
+    return _apiClient.network
+        .getData(
+            endpoint: '$addressesEndpoint/get/$activeId',
+            converter: QraAddresses.fromJson)
+        .validateResponse();
   }
 
   @override
-  RepositoryResponse<QraAddresses> updateAddresssset(QraAddresses qraAddresses) {
-    return _apiClient.network.updateData(
-      endpoint: addressesEndpoint, 
-      data: qraAddresses.toJson(), 
-      converter: QraAddresses.fromJson).validateResponse();
+  RepositoryResponse<QraAddresses> updateAddresssset(
+      QraAddresses qraAddresses) {
+    return _apiClient.network
+        .updateData(
+            endpoint: addressesEndpoint,
+            data: qraAddresses.toJson(),
+            converter: QraAddresses.fromJson)
+        .validateResponse();
   }
 }

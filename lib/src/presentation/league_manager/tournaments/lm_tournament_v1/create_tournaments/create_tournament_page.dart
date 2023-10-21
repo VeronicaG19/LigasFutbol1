@@ -8,12 +8,13 @@ import 'crteate_tournament.dart';
 import 'cubit/create_tournament_cubit.dart';
 
 class CreateTournamentPage extends StatelessWidget {
-  const CreateTournamentPage({Key? key}) : super(key: key);
+  CreateTournamentPage({Key? key, required this.fromPage}) : super(key: key);
+  int fromPage;
 
   @override
   Widget build(BuildContext context) {
     final leagueId =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: const PreferredSize(
@@ -26,7 +27,7 @@ class CreateTournamentPage extends StatelessWidget {
       body: BlocProvider(
         create: (context) => locator<CreateTournamentCubit>()
           ..getTypeTournaments(leagueId.leagueId),
-        child: const CreateTournament(),
+        child: CreateTournament(fromPage: fromPage),
       ),
     );
   }

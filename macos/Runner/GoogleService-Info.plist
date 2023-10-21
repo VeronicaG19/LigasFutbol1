@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>961689438961-4r4p7ug72rq9vq5t591c7cnt3sl45njg.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.961689438961-4r4p7ug72rq9vq5t591c7cnt3sl45njg</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDVhgK77hCCF1SWKseJJgoQR-gtl9fGUbk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>961689438961</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ccs.swat.iaas.spr.ligasfutbol.ligasFutbolFlutter.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>wiplif-80bf2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>wiplif-80bf2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:961689438961:ios:90567e03a577d528627750</string>
+</dict>
+</plist>

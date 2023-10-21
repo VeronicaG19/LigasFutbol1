@@ -6,6 +6,8 @@ enum BasicCubitScreenState {
   success,
   sending,
   submissionInProgress,
+  submissionSuccess,
+  submissionFailure,
   emptyData,
   invalidData,
   validating,
@@ -91,6 +93,8 @@ enum LMTournamentScreen {
   configLeagueLoaded,
   loadingQualifiedTeams,
   qualifiedTeamsLoaded,
+  loadingQualifyingMatchDetail,
+  qualifyingMatchDetailLoaded,
   teamsTournamentLoaded,
   createdConfiguration,
   errorOnCreatingRoles,
@@ -112,4 +116,26 @@ enum TieBreakerType {
 enum MatchForRound {
   ONEMATCH,
   ROUNDTRIP,
+}
+
+enum UserPostType {
+  TEAM_SEARCH_PLAYER,
+  LEAGUE_SEARCH_REFEREE,
+  PLAYERS_SEARCH_TEAM,
+  REFEREE_SEARCH_LEAGUE
+}
+
+enum TypeTopic {
+  PLAYER_TO_REFERE,
+  PLAYER_TO_FIELD,
+  REFEREE_TO_PLAYER,
+  REFEREE_TO_TEAM,
+  REFEREE_TO_FIELD,
+  FIELD_TO_MATCH
+}
+
+enum RefereeEventType {
+  yellowCard,
+  redCard,
+  all,
 }

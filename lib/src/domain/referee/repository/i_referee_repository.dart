@@ -1,3 +1,4 @@
+import '../../../core/models/address_filter.dart';
 import '../../../core/typedefs.dart';
 import '../dto/create_referee_dto.dart';
 import '../dto/referee_by_address.dart';
@@ -23,6 +24,6 @@ abstract class IRefereeRepository {
       int refereeId, int leagueId,
       {int? tournamentId});
   RepositoryResponse<String> updateReferee(Referee referee);
-  RepositoryResponse<List<RefereeByAddress>> getRefereeByAddress(int matchId,
-      {String? state, DateTime? matchDate});
+  RepositoryResponse<List<RefereeByAddress>> searchByFiltersReferee(
+      AddressFilter filter);
 }

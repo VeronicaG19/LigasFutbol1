@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/core/enums.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/referee_match.dart';
 import 'package:ligas_futbol_flutter/src/presentation/referee/matches_page/cubit/events/events_cubit.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class TypeMatchTeamRadioIput extends StatelessWidget {
   const TypeMatchTeamRadioIput({super.key, required this.match});
@@ -21,15 +20,18 @@ class TypeMatchTeamRadioIput extends StatelessWidget {
             fontSize: 30.0,
           ),
         ),
+        const SizedBox(height: 20),
         BlocBuilder<EventsCubit, EventsState>(
           builder: (context, state) {
             return Row(
+              //crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Column(
+                      Expanded(
+                          child: Column(
                         children: [
                           Text(
                             state.matchDetail.localTeam ?? '',
@@ -37,6 +39,8 @@ class TypeMatchTeamRadioIput extends StatelessWidget {
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
                             ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
                           ),
                           Text(
                             "Local",
@@ -45,35 +49,28 @@ class TypeMatchTeamRadioIput extends StatelessWidget {
                               fontSize: 20.0,
                             ),
                           ),
+                          Radio<TypeMatchTem>(
+                            value: TypeMatchTem.local,
+                            groupValue: state.typeMatchTeamSelected,
+                            onChanged: (TypeMatchTem? value) {
+                              context.read<EventsCubit>().onTypeMatchTeamChange(
+                                    type: value!,
+                                    teamId: match.teamIdLocal,
+                                  );
+                            },
+                          ),
                         ],
-                      ),
-                      Radio<TypeMatchTem>(
-                        value: TypeMatchTem.local,
-                        groupValue: state.typeMatchTeamSelected,
-                        onChanged: (TypeMatchTem? value) {
-                          context.read<EventsCubit>().onTypeMatchTeamChange(
-                            type: value!,
-                            teamId: match.teamIdLocal,
-                          );
-                        },
-                      ),
+                      )),
                     ],
                   ),
                 ),
+                const SizedBox(width: 15),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Radio<TypeMatchTem>(
-                        value: TypeMatchTem.vist,
-                        groupValue: state.typeMatchTeamSelected,
-                        onChanged: (TypeMatchTem? value) =>
-                            context.read<EventsCubit>().onTypeMatchTeamChange(
-                              type: value!,
-                              teamId: match.teamIdVisit,
-                            ),
-                      ),
-                      Column(
+                      Expanded(
+                          child: Column(
                         children: [
                           Text(
                             state.matchDetail.visitTeam ?? '',
@@ -81,6 +78,8 @@ class TypeMatchTeamRadioIput extends StatelessWidget {
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
                             ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
                           ),
                           Text(
                             "Visitante",
@@ -89,8 +88,18 @@ class TypeMatchTeamRadioIput extends StatelessWidget {
                               fontSize: 20.0,
                             ),
                           ),
+                          Radio<TypeMatchTem>(
+                            value: TypeMatchTem.vist,
+                            groupValue: state.typeMatchTeamSelected,
+                            onChanged: (TypeMatchTem? value) => context
+                                .read<EventsCubit>()
+                                .onTypeMatchTeamChange(
+                                  type: value!,
+                                  teamId: match.teamIdVisit,
+                                ),
+                          ),
                         ],
-                      )
+                      ))
                     ],
                   ),
                 ),

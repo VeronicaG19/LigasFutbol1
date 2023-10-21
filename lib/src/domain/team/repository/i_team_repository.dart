@@ -16,7 +16,11 @@ abstract class ITeamRepository {
   RepositoryResponse<List<Team>> getTransferHistoryPlayer(int partyId);
 
   RepositoryResponse<CommonPageableResponse<Team>> getAllTeams(
-      {int? page, int? size});
+      {int? page,
+      int? size,
+      int? categoryId,
+      String? requestPlayers,
+      String? teamName});
   RepositoryResponse<CommonPageableResponse<TeamLeagueManagerDTO>>
       getAllTeamsByLeague({int? page, int? size, int? leagueId});
 
@@ -73,10 +77,14 @@ abstract class ITeamRepository {
   ///
   /// * @return [Team]
   /// * @param [teamId]
-  RepositoryResponse<Team> getDetailTeamByIdTeam(int teamId);
+  RepositoryResponse<Team> getDetailTeamByIdTeam(int teamId,
+      {bool requiresAuthToken = true});
 
   RepositoryResponse<List<MatchesByTeamDTO>> getMatchesByTeam(int teamId);
 
   RepositoryResponse<List<TeamTournament>> getTeamClassifiedByTournament(
       int tournamentId);
+
+  /// Actualiza el equipo por el endpoint team-service-ws
+  RepositoryResponse<Team> updateTeamByTeamService(Team team);
 }

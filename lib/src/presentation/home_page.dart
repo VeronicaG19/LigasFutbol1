@@ -161,7 +161,7 @@ class _HomePageMobile extends StatelessWidget {
                         height: 15,
                       ),
                       Text(
-                        '¡Regístrate a Ligas fútbol !',
+                        '¡Ven y regístrate a Ligas fútbol!',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.montserrat(
                           fontSize: 20,
@@ -185,7 +185,7 @@ class _HomePageMobile extends StatelessWidget {
                       ),
                       TextButton(
                         child: Text(
-                          "¡Regístrate 𝐆𝐑𝐀𝐓𝐈𝐒 YA!",
+                          "¡Regístrate 𝐆𝐑𝐀𝐓𝐈𝐒 ahora!",
                           style: TextStyle(
                               color: Colors.blueGrey,
                               fontSize: 17,
@@ -286,7 +286,7 @@ class _HomePageWeb extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      '¡Ven y regístrate a Ligas Futbol!',
+                      '¡Ven y regístrate a Ligas fútbol!',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.montserrat(
                         fontSize: 30,

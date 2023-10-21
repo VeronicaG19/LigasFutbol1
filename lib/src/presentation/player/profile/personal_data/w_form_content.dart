@@ -362,16 +362,16 @@ class _DialogContent extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Cancelar'),
+        ),
+        TextButton(
+          onPressed: () {
             context.read<PersonalDataCubit>().onSendVerificationCode(user);
             Navigator.pop(context);
           },
           child: const Text('Continuar'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Cancelar'),
         ),
       ],
     );

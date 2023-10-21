@@ -170,7 +170,10 @@ class _FeeValue extends StatelessWidget {
         return TextFormField(
           key: const Key('fee_value'),
           keyboardType: TextInputType.number,
-          maxLength: 10,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly
+          ],
+          maxLength: 10, 
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           onChanged: cubit.onFeeValueChanged,
           onFieldSubmitted: (value) => state.statusForm.isSubmissionInProgress,

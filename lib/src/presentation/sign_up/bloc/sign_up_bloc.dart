@@ -161,10 +161,16 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       emit(state.copyWith(
           index: 2, status: Formz.validate([state.username, state.password])));
     } else if (state.index == 2) {
+      emit(state.copyWith(status: FormzStatus.pure));
       if (!state.tacStatus) {
-        emit(state.copyWith(status: FormzStatus.pure));
         emit(state.copyWith(status: FormzStatus.submissionFailure));
       } else {
+        if (state.password.value != state.password2.value) {
+          emit(state.copyWith(
+              password2: const Password.dirty(''),
+              status: FormzStatus.invalid));
+          return;
+        }
         emit(state.copyWith(status: FormzStatus.submissionInProgress));
         final user = User(
             userName: state.username.value,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:formz/formz.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -274,8 +275,10 @@ class _PasswordInputState extends State<_PasswordInput> {
             decoration: InputDecoration(
               labelText: 'Nueva contraseña:',
               errorText: state.password.invalid
-                  ? 'Introduce los datos faltantes'
+                  ? AppLocalizations.of(context)!.aeInvalidPasswordMsg(
+                      state.password.error?.toString() ?? '')
                   : null,
+              errorMaxLines: 2,
               suffixIcon: IconButton(
                 icon: isPasswordVisible
                     ? const Icon(Icons.visibility)
@@ -310,15 +313,18 @@ class _Password2InputState extends State<_Password2Input> {
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
     return BlocBuilder<AccountCubit, AccountState>(
-      buildWhen: (previous, current) => previous.password2 != current.password2,
+      buildWhen: (previous, current) =>
+          previous.password2 != current.password2 ||
+          current.password != previous.password,
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             obscureText: isPasswordVisible,
             keyboardType: TextInputType.visiblePassword,
-            autofocus: true,
-            enabled: !state.status.isSubmissionInProgress,
+            //autofocus: true,
+            enabled:
+                !state.status.isSubmissionInProgress && state.password.valid,
             onChanged: (value) =>
                 context.read<AccountCubit>().onPassword2Changed(value),
             onFieldSubmitted: (value) => state.status.isSubmissionInProgress

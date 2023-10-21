@@ -15,7 +15,7 @@ class AppBarPage extends StatelessWidget {
             color: Colors.grey[200], fontSize: 20, fontWeight: FontWeight.w900),
       ),
       elevation: 0.0,
-      flexibleSpace: Image(
+      flexibleSpace: const Image(
         image: AssetImage('assets/images/imageAppBar25.png'),
         fit: BoxFit.fitWidth,
       ), /*Container(

@@ -141,17 +141,18 @@ class ScoringSystemDialog extends StatelessWidget {
                         child: ElevatedButton.icon(
                           style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all(Colors.grey)),
+                                  MaterialStateProperty.all(Colors.blueGrey)),
                           onPressed: () {
                             context.read<ClasificationCubit>().onCancelUpdate();
                             Navigator.of(context).pop();
                           },
                           icon: const Icon(
                             // <-- Icon
-                            Icons.backspace,
-                            size: 24.0,
+                            Icons.arrow_back_outlined,
+                            size: 20.0,
                           ),
-                          label: const Text('Regresar'), // <-- Text
+                          label: const Text('Regresar',
+                              style: TextStyle(fontSize: 13)), // <-- Text
                         ),
                       ),
                       const SizedBox(
@@ -168,10 +169,11 @@ class ScoringSystemDialog extends StatelessWidget {
                           },
                           icon: Icon(
                             // <-- Icon
-                            Icons.save,
-                            size: 24.0,
+                            Icons.save_alt,
+                            size: 20.0,
                           ),
-                          label: const Text('Guardar'), // <-- Text
+                          label: const Text('Guardar',
+                              style: TextStyle(fontSize: 13)), // <-- Text
                         ),
                       ),
                     ],

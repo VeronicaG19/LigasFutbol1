@@ -19,6 +19,9 @@ class ScoringTournamentDTO extends Equatable {
   final int? pts;
   final int? pj;
 
+  final int? pgs;
+  final int? typeOfGame;
+
   const ScoringTournamentDTO({
     this.tournamentId,
     this.team,
@@ -32,6 +35,8 @@ class ScoringTournamentDTO extends Equatable {
     this.dif,
     this.pts,
     this.pj,
+    this.pgs,
+    this.typeOfGame,
   });
   static const empty = ScoringTournamentDTO();
 
@@ -56,6 +61,8 @@ class ScoringTournamentDTO extends Equatable {
     int? dif,
     int? pts,
     int? pj,
+    int? pgs,
+    int? typeOfGame,
   }) {
     return ScoringTournamentDTO(
       tournamentId: tournamentId ?? this.tournamentId,
@@ -70,6 +77,8 @@ class ScoringTournamentDTO extends Equatable {
       dif: dif ?? this.dif,
       pts: pts ?? this.pts,
       pj: pj ?? this.pj,
+      pgs: pgs ?? this.pgs,
+      typeOfGame: typeOfGame ?? this.typeOfGame,
     );
   }
 
@@ -87,5 +96,7 @@ class ScoringTournamentDTO extends Equatable {
         dif,
         pts,
         pj,
+        pgs,
+        typeOfGame,
       ];
 }

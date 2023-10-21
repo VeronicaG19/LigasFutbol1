@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/core/enums.dart';
@@ -21,10 +20,8 @@ class LeagueOption extends StatelessWidget {
     return BlocConsumer<TournamentMainCubit, TournamentMainState>(
       listener: (context, state) {
         if (state.screenState == LMTournamentScreen.createdConfiguration) {
-          context.read<TournamentMainCubit>()
-              .getConfigLeague(
-              tournamentId: state.selectedTournament.tournamentId!
-          );
+          context.read<TournamentMainCubit>().getConfigLeague(
+              tournamentId: state.selectedTournament.tournamentId!);
         }
       },
       builder: (context, state) {
@@ -46,6 +43,9 @@ class LeagueOption extends StatelessWidget {
                 ? const _LeagueConfigurationButton()
                 : const _BodyContent(),
           );
+        } else if (state.statusTournament == 'false' &&
+            state.configLeagueInterfaceDTO != ConfigLeagueInterfaceDTO.empty) {
+          return const _BodyContent();
         } else {
           return const _NeedFinishTournament();
         }
@@ -63,18 +63,17 @@ class _NeedFinishTournament extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/informacion.png',
-            width: 200,
-            height: 200,
-          ),
-          const SizedBox(
+        children: const [
+          SizedBox(
             width: 15,
           ),
-          const Text(
+          Icon(Icons.warning_rounded, color: Colors.deepOrange, size: 230),
+          SizedBox(
+            width: 15,
+          ),
+          Text(
             'El torneo debe finalizar.',
-            style: TextStyle(fontSize: 30),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
           )
         ],
       ),
@@ -276,14 +275,11 @@ class _QualifiedTeams extends StatelessWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => MatchLRolesMain(
-                                          tournament: state.selectedTournament,
-                                          rondaL: state
-                                              .configLeagueInterfaceDTO.ronda!,
-                                        )),
+                                MatchLRolesMain.route(
+                                    BlocProvider.of<TournamentMainCubit>(
+                                        context),
+                                    state.selectedTournament),
                               );
-
                               context
                                   .read<TournamentMainCubit>()
                                   .getQualifiedTeams(
@@ -357,7 +353,8 @@ class _QualifiedTeamCard extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Image(
-                  image: (teamTournament.teamId!.logoId!.document != '')
+                  image: (teamTournament.teamId?.logoId?.document != '' &&
+                          teamTournament.teamId?.logoId?.document != null)
                       ? Image.memory(base64Decode(
                               teamTournament.teamId!.logoId!.document!))
                           .image

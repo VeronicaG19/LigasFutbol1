@@ -20,11 +20,20 @@ class LMRequestContent extends StatelessWidget {
         if (requestType == LMRequestType.tournament ||
             requestType == LMRequestType.referee)
           SelectRequestTypeHeader(requestType: requestType),
-        ListTile(
-          leading: const Icon(Icons.flag),
-          title: Text(title),
-          subtitle: TextField(
-            decoration: const InputDecoration(hintText: 'Buscar'),
+        Padding(
+          padding:
+              const EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 30),
+          child: TextField(
+            decoration: const InputDecoration(
+              labelStyle: TextStyle(fontSize: 15),
+              labelText: 'Buscar',
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(25.0),
+                ),
+              ),
+            ),
             onChanged: context.read<LmRequestCubit>().onFilterRequestList,
           ),
         ),
@@ -48,15 +57,21 @@ class LMRequestContent extends StatelessWidget {
             }
             return SingleChildScrollView(
               child: GridView.builder(
+                padding: const EdgeInsets.only(
+                  right: 15,
+                  left: 15,
+                  bottom: 15,
+                ),
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 500,
-                    childAspectRatio: 5 / 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
+                    maxCrossAxisExtent: 400,
+                    childAspectRatio: 4 / 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10),
                 shrinkWrap: true,
                 physics: const ScrollPhysics(),
                 itemCount: list.length,
                 itemBuilder: (BuildContext ctx, index) => RequestCard(
+                  requestType: requestType,
                   request: list[index],
                 ),
               ),
@@ -105,7 +120,7 @@ class _SelectRequestTypeHeaderState extends State<SelectRequestTypeHeader> {
                   // if (widget.requestType == LMRequestType.referee) {
                   // }
                 },
-                title: const Text(receivedRequestLbl),
+                title: const Text(sentRequestLbl),
               ),
             ),
           ),
@@ -123,7 +138,7 @@ class _SelectRequestTypeHeaderState extends State<SelectRequestTypeHeader> {
                   // if (widget.requestType == LMRequestType.referee) {
                   // }
                 },
-                title: const Text(sentRequestLbl),
+                title: const Text(receivedRequestLbl),
               ),
             ),
           ),

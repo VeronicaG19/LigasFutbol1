@@ -48,8 +48,7 @@ class _DetailTeamTabState extends State<DetailTeamTab>
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+    // final leagueManager = context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
@@ -59,7 +58,7 @@ class _DetailTeamTabState extends State<DetailTeamTab>
           title: Text(
             'Equipo ${widget.team.teamName}',
           ),
-          flexibleSpace: Image(
+          flexibleSpace: const Image(
             image: AssetImage('assets/images/imageAppBar25.png'),
             fit: BoxFit.cover,
           ),
@@ -67,23 +66,23 @@ class _DetailTeamTabState extends State<DetailTeamTab>
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.only(top: 15, right: 8, left: 8),
+        padding: const EdgeInsets.only(top: 15, right: 8, left: 8),
         shrinkWrap: true,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TabBar(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   right: 10,
                   left: 10,
                 ),
                 controller: _nestedTabController,
-                indicatorColor: Color(0xff045a74),
+                indicatorColor: const Color(0xff045a74),
                 labelColor: Colors.black,
-                unselectedLabelColor: Color(0xff045a74),
+                unselectedLabelColor: const Color(0xff045a74),
                 isScrollable: true,
-                labelStyle: TextStyle(color: Colors.black54),
+                labelStyle: const TextStyle(color: Colors.black54),
                 tabs: const [
                   Tab(
                     text: 'Editar equipo',

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,31 +31,7 @@ class _DetailTeamContentState extends State<DetailTeamContent> {
 
   @override
   Widget build(BuildContext context) {
-    final Color? color2 = Colors.green[800];
-    return BlocConsumer<TeamLeagueManagerCubit, TeamLeagueManagerState>(
-      listener: (context, state) {
-        if (state.screenStatus == ScreenStatus.updateSucces) {
-          showTopSnackBar(
-            context,
-            CustomSnackBar.success(
-              backgroundColor: color2!,
-              textScaleFactor: 1.0,
-              message: "Se actualizarón correctamente los datos del equipo",
-            ),
-          );
-        }
-        if (state.screenStatus == ScreenStatus.deleteSucces) {
-          showTopSnackBar(
-            context,
-            CustomSnackBar.success(
-              backgroundColor: color2!,
-              textScaleFactor: 1.0,
-              message: "Se elimino el equipo correctamente",
-            ),
-          );
-        }
-        // TODO: implement listener
-      },
+    return BlocBuilder<TeamLeagueManagerCubit, TeamLeagueManagerState>(
       builder: (context, state) {
         if (state.screenStatus == ScreenStatus.loading) {
           return Center(
@@ -72,22 +50,24 @@ class _DetailTeamContentState extends State<DetailTeamContent> {
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 10,
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Datos del equipo",
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
-                    Text("Datos del equipo",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25)),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.only(
-                                bottom: 15, right: 15, top: 15, left: 15),
+                            padding: const EdgeInsets.only(
+                              bottom: 15,
+                              right: 15,
+                              top: 15,
+                              left: 15,
+                            ),
                             child: _TeamNameInput(team: widget.team),
                           ),
                         ),
@@ -95,15 +75,13 @@ class _DetailTeamContentState extends State<DetailTeamContent> {
                             child: Padding(
                           padding: EdgeInsets.only(
                               bottom: 15, right: 15, top: 15, left: 15),
-                          child: _CategoryInput(),
+                          child: _CategoryInput(team: widget.team),
                         ))
                       ],
                     ),
                   ],
                 )),
-                SizedBox(
-                  width: 20,
-                ),
+                const SizedBox(width: 20),
                 Expanded(child: DataRefereeTeamContent(team: widget.team)),
               ],
             ),
@@ -135,34 +113,47 @@ class _DetailTeamContentState extends State<DetailTeamContent> {
                       radius: 120,
                       //Color(0xff358aac)
                       backgroundColor: Colors.white54,
-                      child: state.showImage1?.path != null
+                      child: state.photoTeamSelected != ''
                           ? ClipRRect(
-                              child: Image.network(
-                              state.showImage1!.path,
+                              child: Image.memory(
+                              base64Decode(state.photoTeamSelected),
+                              //Image.network(
+                              //state.showImage1!.path,
                               width: 200,
                               height: 200,
                             ))
-                          : Container(
-                              width: 100,
-                              height: 100,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.cloud,
-                                    color: Color(0xff358aac),
+                          : (widget.team.logoId!.document != '' &&
+                                  widget.team.logoId!.document != null)
+                              ? ClipRRect(
+                                  child: Image.memory(
+                                    base64Decode(
+                                      '${widget.team.logoId!.document}',
+                                    ),
+                                    width: 200,
+                                    height: 200,
                                   ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    "Selecciona el logo",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.black),
-                                  )
-                                ],
-                              )),
+                                )
+                              : Container(
+                                  width: 100,
+                                  height: 100,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(
+                                        Icons.cloud,
+                                        color: Color(0xff358aac),
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Text(
+                                        "Selecciona el logo",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.black),
+                                      )
+                                    ],
+                                  )),
                     ),
                   ),
                   InkWell(
@@ -188,34 +179,46 @@ class _DetailTeamContentState extends State<DetailTeamContent> {
                       radius: 120,
                       //Color(0xff358aac)
                       backgroundColor: Colors.white54,
-                      child: state.showImage2?.path != null
+                      child: (
+                              // state.showImage3?.path != null
+                              state.uniformLocalImageSelected != '')
                           ? ClipRRect(
-                              child: Image.network(
-                              state.showImage2!.path,
+                              child: Image.memory(
+                              // Image.network
+                              // state.showImage3!.path,
+                              base64Decode(state.uniformLocalImageSelected),
                               width: 200,
                               height: 200,
                             ))
-                          : Container(
-                              width: 100,
-                              height: 100,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.cloud,
-                                    color: Color(0xff358aac),
+                          : (state.uniformL != '')
+                              ? ClipRRect(
+                                  child: Image.memory(
+                                    base64Decode('${state.uniformL}'),
+                                    width: 200,
+                                    height: 200,
                                   ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    "Selecciona el uniforme visitante",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.black),
-                                  )
-                                ],
-                              )),
+                                )
+                              : Container(
+                                  width: 100,
+                                  height: 100,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(
+                                        Icons.cloud,
+                                        color: Color(0xff358aac),
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Text(
+                                        "Selecciona el uniforme local",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.black),
+                                      )
+                                    ],
+                                  )),
                     ),
                   ),
                   InkWell(
@@ -224,51 +227,65 @@ class _DetailTeamContentState extends State<DetailTeamContent> {
                           .pickImage(source: ImageSource.gallery);
                       if (photo != null) {
                         showDialog(
-                            context: context,
-                            builder: (_) {
-                              return BlocProvider.value(
-                                value: BlocProvider.of<TeamLeagueManagerCubit>(
-                                    context),
-                                child: SelectedImage(
-                                  file: photo,
-                                  typeOption: 3,
-                                ),
-                              );
-                            });
+                          context: context,
+                          builder: (_) {
+                            return BlocProvider.value(
+                              value: BlocProvider.of<TeamLeagueManagerCubit>(
+                                  context),
+                              child: SelectedImage(
+                                file: photo,
+                                typeOption: 3,
+                              ),
+                            );
+                          },
+                        );
                       }
                     },
                     child: CircleAvatar(
                       radius: 120,
                       //Color(0xff358aac)
                       backgroundColor: Colors.white54,
-                      child: state.showImage3?.path != null
+                      child: (
+                              //state.showImage2?.path != null
+                              state.uniformVisitImageSelected != '')
                           ? ClipRRect(
-                              child: Image.network(
-                              state.showImage3!.path,
+                              child: Image.memory(
+                              base64Decode(
+                                  '${state.uniformVisitImageSelected}'),
+                              // Image.network(
+                              // state.showImage2!.path,
                               width: 200,
                               height: 200,
                             ))
-                          : Container(
-                              width: 100,
-                              height: 100,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.cloud,
-                                    color: Color(0xff358aac),
+                          : (state.uniformV != '')
+                              ? ClipRRect(
+                                  child: Image.memory(
+                                    base64Decode('${state.uniformV}'),
+                                    width: 200,
+                                    height: 200,
                                   ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    "Selecciona el uniforme local",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.black),
-                                  )
-                                ],
-                              )),
+                                )
+                              : Container(
+                                  width: 100,
+                                  height: 100,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(
+                                        Icons.cloud,
+                                        color: Color(0xff358aac),
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Text(
+                                        "Selecciona el uniforme visitante",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.black),
+                                      )
+                                    ],
+                                  )),
                     ),
                   ),
                 ],
@@ -313,8 +330,8 @@ class _TeamNameInput extends StatelessWidget {
 }
 
 class _CategoryInput extends StatefulWidget {
-  const _CategoryInput({Key? key}) : super(key: key);
-
+  const _CategoryInput({Key? key, required this.team}) : super(key: key);
+  final Team team;
   @override
   State<_CategoryInput> createState() => _CategoryInputState();
 }
@@ -322,93 +339,14 @@ class _CategoryInput extends StatefulWidget {
 class _CategoryInputState extends State<_CategoryInput> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TeamLeagueManagerCubit, TeamLeagueManagerState>(
-      builder: (context, state) {
-        return DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            isExpanded: true,
-            hint: Row(
-              children: const [
-                Icon(
-                  Icons.app_registration,
-                  size: 16,
-                  color: Colors.white70,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Text(
-                    'Tipo de categoria',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            items: state.categoryList
-                .map((item) => DropdownMenuItem<Category>(
-                      value: item,
-                      child: Text(
-                        item.categoryName ?? '-',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[200],
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              setState(() {
-                context
-                    .read<TeamLeagueManagerCubit>()
-                    .onCategoryChange(value as Category);
-              });
-            },
-            value: state.categorySelected,
-            icon: const Icon(
-              Icons.arrow_forward_ios_outlined,
-            ),
-            iconSize: 14,
-            iconEnabledColor: Colors.white70,
-            itemHighlightColor: Colors.white70,
-            iconDisabledColor: Colors.white70,
-            buttonHeight: 35,
-            buttonWidth: double.infinity,
-            buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-            buttonDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: Colors.blueGrey,
-              ),
-              color: Colors.blueGrey,
-            ),
-            buttonElevation: 2,
-            itemHeight: 40,
-            itemPadding: const EdgeInsets.only(left: 14, right: 14),
-            dropdownPadding: null,
-            dropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: const Color(0xff358aac),
-              ),
-              color: Colors.black54,
-            ),
-            dropdownElevation: 8,
-            scrollbarRadius: const Radius.circular(40),
-            scrollbarThickness: 6,
-            selectedItemHighlightColor: const Color(0xff358aac),
-            scrollbarAlwaysShow: true,
-            offset: const Offset(-20, 0),
-          ),
-        );
-      },
+    return BlocProvider(
+      create: (context) => locator<TeamLeagueManagerCubit>()
+        ..getTeamInfo(teamId: widget.team.teamId!),
+      child: BlocBuilder<TeamLeagueManagerCubit, TeamLeagueManagerState>(
+          builder: (context, state) {
+        return Text(
+            "Categoria: ${state.teamInfo2.categoryId?.categoryName ?? ""}");
+      }),
     );
   }
 }
@@ -520,7 +458,19 @@ class _SelectedImageState extends State<SelectedImage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24.0),
+              const SizedBox(height: 12.0),
+              BlocBuilder<TeamLeagueManagerCubit, TeamLeagueManagerState>(
+                builder: (context, state) {
+                  context.read<TeamLeagueManagerCubit>().convertImgToBs(
+                        xFile: _pickedFile,
+                        file: _croppedFile,
+                      );
+                  return (state.imageIsLarge!)
+                      ? const _ImageSizeAlert()
+                      : const SizedBox(height: 0);
+                },
+              ),
+              const SizedBox(height: 12.0),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -622,7 +572,7 @@ class ButtonPressed extends StatelessWidget {
                         context
                             .read<TeamLeagueManagerCubit>()
                             .deleteTeam(team.teamId!);
-                        //Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       },
                       child: Container(
                         width: double.infinity,
@@ -649,7 +599,7 @@ class ButtonPressed extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {
                         context.read<TeamLeagueManagerCubit>().updateTeam(team);
-                        // Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       },
                       child: Container(
                         width: double.infinity,
@@ -773,7 +723,7 @@ class _DataRefereeTeamContentState extends State<DataRefereeTeamContent> {
                           ],
                         ),
                       ),
-                    )),
+                    )), /*
                     Expanded(
                         child: Padding(
                       padding: EdgeInsets.only(
@@ -791,7 +741,7 @@ class _DataRefereeTeamContentState extends State<DataRefereeTeamContent> {
                           ],
                         ),
                       ),
-                    )),
+                    )),*/
                   ],
                 ),
               ],
@@ -805,6 +755,36 @@ class _DataRefereeTeamContentState extends State<DataRefereeTeamContent> {
             );
           }
         },
+      ),
+    );
+  }
+}
+
+class _ImageSizeAlert extends StatelessWidget {
+  const _ImageSizeAlert();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(left: 24.0, right: 24.0),
+      child: Card(
+        elevation: 2.5,
+        color: Colors.orange,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            bottom: 10,
+            left: 15,
+            right: 15,
+          ),
+          child: Text(
+            'El tamaño de la imagen es mas grande que el recomendado(1MB), esto puede tardar, por favor espere un poco.',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15.0,
+            ),
+          ),
+        ),
       ),
     );
   }

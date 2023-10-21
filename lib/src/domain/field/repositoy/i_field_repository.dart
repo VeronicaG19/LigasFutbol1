@@ -1,5 +1,6 @@
 import 'package:ligas_futbol_flutter/src/domain/field/entity/field.dart';
 
+import '../../../core/models/address_filter.dart';
 import '../../../core/typedefs.dart';
 
 abstract class IFieldRepository {
@@ -27,16 +28,9 @@ abstract class IFieldRepository {
   /// *@return [Field]
   /// * @param [fieldId]
   RepositoryResponse<Field> getFieldByFieldId(int fieldId);
-  RepositoryResponse<Field> getFieldByMatchId(int teamId);
-  RepositoryResponse<List<Field>> getFieldsRent();
+  RepositoryResponse<Field> getFieldByMatchId(int teamId,
+      {bool requiresAuthToken = true});
+  RepositoryResponse<List<Field>> getFieldsRent(int leagueId);
   RepositoryResponse<List<Field>> getRentalFields();
-  RepositoryResponse<List<Field>> searchFieldByAddress(
-      String town,
-      String state,
-      String postalCOde,
-      int matchId,
-      DateTime? datematch,
-      String county,
-      String countryCode,
-      String city);
+  RepositoryResponse<List<Field>> searchFieldByFilters(AddressFilter filter);
 }

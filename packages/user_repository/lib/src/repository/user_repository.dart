@@ -11,6 +11,7 @@ import 'user_interface.dart';
 
 class UserRepository implements UserInterface {
   final ApiClient _client;
+  late User _userData;
   UserRepository(this._client,
       {required String personBase, required String appName})
       : super() {
@@ -18,8 +19,10 @@ class UserRepository implements UserInterface {
   }
 
   @override
-  RepoResponse<Person> getPersonDataByPersonId(int personId) {
+  RepoResponse<Person> getPersonDataByPersonId(int personId,
+      {bool requiresAuthToken = true}) {
     return Task(() => _client.network.getData(
+        requiresAuthToken: requiresAuthToken,
         endpoint: Endpoints.getPersonDataByIdURL(personId),
         converter: Person.fromJson))._validateResponse();
   }
@@ -36,6 +39,7 @@ class UserRepository implements UserInterface {
   RepoResponse<User> getUserDataByUserName({String? userName}) async {
     final name = userName ?? await _client.localStorage.getAuthUserName();
     final response = await Task(() => _getUserData(name))._validateResponse();
+    _userData = response.fold((l) => User.empty, (r) => r);
     return response;
   }
 
@@ -241,6 +245,9 @@ class UserRepository implements UserInterface {
     );
     return request;
   }
+
+  @override
+  User get getUser => _userData;
 }
 
 extension _UserResponse<T> on Task<T> {

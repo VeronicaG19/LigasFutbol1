@@ -1,4 +1,5 @@
 import 'package:ligas_futbol_flutter/src/core/typedefs.dart';
+import 'package:user_repository/user_repository.dart';
 
 import '../../../core/enums.dart';
 import '../dto/request_match_to_referee_dto.dart';
@@ -15,6 +16,8 @@ abstract class IUserRequestsRepository {
   RepositoryResponse<List<UserRequests>> getRequestLeagueToAdmin();
 
   RepositoryResponse<List<UserRequests>> getRequestFieldToAdmin();
+
+  RepositoryResponse<List<UserRequests>> getDeleteLeaguesRequest();
 
   /// Get reques send to referee from league
   ///
@@ -83,7 +86,8 @@ abstract class IUserRequestsRepository {
   RepositoryResponse<List<UserRequests>> getRequestTournamentToTeam(
       {int? leagueId, int? teamId});
 
-  RepositoryResponse<int> getRequestCount(int requestTo, {RequestType? type});
+  RepositoryResponse<int> getRequestCount(int requestTo,
+      {RequestType? type, ApplicationRol? rol});
 
   RepositoryResponse<int> getRequestCountFiltered(
       int partyId, RequestType requestType);
@@ -105,4 +109,7 @@ abstract class IUserRequestsRepository {
 
   RepositoryResponse<String> sendRefereeResponseRequest(
       int requestId, bool accepted);
+
+  RepositoryResponse<UserRequests> patchUserRequest(UserRequests request);
+  RepositoryResponse<UserRequests> postUserRequest(UserRequests request);
 }

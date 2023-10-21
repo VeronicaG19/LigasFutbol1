@@ -19,9 +19,9 @@ class _LeagueContentState extends State<LeagueContent> {
       listener: (context, state) {
         if (state.screenStatus == ScreenStatus.error) {
           AnimatedSnackBar.rectangle(
-            'Error',
-            'No se pudo cargar la información',
-            type: AnimatedSnackBarType.error,
+            'Sin datos',
+            'No hay datos registrados para mostrar',
+            type: AnimatedSnackBarType.info,
             brightness: Brightness.light,
           ).show(
             context,
@@ -76,17 +76,17 @@ class _LeagueContentState extends State<LeagueContent> {
                       ),
                       items: state.leagueList
                           .map((item) => DropdownMenuItem<String>(
-                        value: item.leagueId.toString(),
-                        child: Text(
-                          item.leagueName,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[200],
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ))
+                                value: item.leagueId.toString(),
+                                child: Text(
+                                  item.leagueName,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[200],
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
                           .toList(),
                       onChanged: (value) {
                         print("Valor--->$value");

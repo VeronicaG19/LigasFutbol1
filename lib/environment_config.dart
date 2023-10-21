@@ -15,8 +15,8 @@ class EnvironmentConfig {
         _config = _Config.localConfig;
         break;
       case Environment.test:
-       _config = _Config.testConfig;
-      break;
+        _config = _Config.testConfig;
+        break;
     }
   }
 
@@ -29,7 +29,6 @@ class EnvironmentConfig {
   static String get promotionBaseURL => ':${_config[_Config.promotionURL]}';
 
   static String get oauthBaseURL => ':${_config[_Config.oauthURL]}';
-
 
   ///person-management-ws
   static String get personManagementBaseURL =>
@@ -60,6 +59,8 @@ class EnvironmentConfig {
 
   static int get orgId => _config[_Config.orgId];
 
+  static bool get showLogs => _config[_Config.showLogs];
+
   static String get refreshTokenURL =>
       '${_config[_Config.baseURL]}:${_config[_Config.oauthURL]}/oauth/token';
 
@@ -85,11 +86,12 @@ class _Config {
   static const iOSDownloadLink = 'iOSDownloadLink';
   static const orgId = 'orgId';
   static const apiHereBase = 'apiHereBase';
+  static const showLogs = 'showLogs';
 
   static Map<String, dynamic> prodConfig = {
     flavor: 'ligas_futbol_prod',
     appName: 'Ligas futbol',
-    baseURL: 'https://microservicioscontaboope.i-condor.com',
+    baseURL: 'https://ligasfutbol.i-condor.com',
     promotionURL: '32777/promotion-ws',
     oauthURL: '32783/auth',
     personManagementURL: '32781/person-management-ws',
@@ -99,42 +101,44 @@ class _Config {
     sprRefereeURL: '32799/spr-referee-ws',
     qraEventsURL: '32797/qra-events',
     logoImage: 'assets/images/soccer_logo_SaaS.png',
-    appVersion: '1.1.0',
-    buildNumber: '2',
+    appVersion: '1.8.56',
+    buildNumber: '42',
     androidDownloadLink: '',
     iOSDownloadLink: '',
     orgId: 4,
-    apiHereBase: 'https://geocoder.ls.hereapi.com'
+    apiHereBase: 'https://geocoder.ls.hereapi.com',
+    showLogs: true,
   };
 
   static Map<String, dynamic> devConfig = {
     flavor: 'ligas_futbol_dev',
     appName: 'Ligas futbol',
-    baseURL: 'https://microservicioscontaboope.i-condor.com',
+    baseURL: 'https://wiplif.i-condor.com',
     promotionURL: '32777/promotion-ws',
     oauthURL: '32783/auth',
     personManagementURL: '32781/person-management-ws',
-    notificationServiceURL: '32778/notifications-delivery-ws',
+    notificationServiceURL: '32788/notifications-delivery-ws',
     sprAdminURL: '32791/spr-admin-ws',
     sprTeamPlayerURL: '32795/team-service-ws',
     sprRefereeURL: '32799/spr-referee-ws',
     qraEventsURL: '32797/qra-events',
-    logoImage: 'assets/images/soccer_logo_SaaS.png',
-    appVersion: '1.0.0',
-    buildNumber: '1',
+    logoImage: 'assets/images/wiplifIcon.png',
+    appVersion: '1.1.22',
+    buildNumber: '27',
     androidDownloadLink: '',
     iOSDownloadLink: '',
     orgId: 4,
-    apiHereBase: 'https://geocoder.ls.hereapi.com'
+    apiHereBase: 'https://geocoder.ls.hereapi.com',
+    showLogs: true,
   };
 
   static Map<String, dynamic> localConfig = {
     flavor: 'ligas_futbol_local',
     appName: 'Ligas futbol',
-    baseURL: 'http://localhost',
+    baseURL: 'http://10.10.10.239',
     promotionURL: '32777/promotion-ws',
     oauthURL: '3443/auth',
-    personManagementURL: '8445/person-management-ws',
+    personManagementURL: '32781/person-management-ws',
     notificationServiceURL: '32778/notifications-delivery-ws',
     sprAdminURL: '9099/spr-admin',
     sprTeamPlayerURL: '9098/spr-teamplayer',
@@ -146,9 +150,10 @@ class _Config {
     androidDownloadLink: '',
     iOSDownloadLink: '',
     orgId: 4,
-     apiHereBase: 'https://geocoder.ls.hereapi.com'
+    apiHereBase: 'https://geocoder.ls.hereapi.com',
+    showLogs: false,
   };
-  
+
   //ligasfutbol.test.i-condor.com
   static Map<String, dynamic> testConfig = {
     flavor: 'ligas_futbol_test',
@@ -168,6 +173,7 @@ class _Config {
     androidDownloadLink: '',
     iOSDownloadLink: '',
     orgId: 4,
-     apiHereBase: 'https://geocoder.ls.hereapi.com'
+    apiHereBase: 'https://geocoder.ls.hereapi.com',
+    showLogs: true,
   };
 }

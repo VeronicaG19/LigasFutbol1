@@ -23,6 +23,7 @@ class ManageTeamState extends Equatable {
   final String? uniformVisitImageSelected;
   final XFile? showUniformL;
   final XFile? showUniformV;
+  final bool? imageIsLarge;
   final ScreenStatus screenStatus;
   final String? errorMessage;
 
@@ -37,6 +38,7 @@ class ManageTeamState extends Equatable {
     this.uniformVisitImageSelected = '',
     this.showUniformL,
     this.showUniformV,
+    this.imageIsLarge = false,
     this.screenStatus = ScreenStatus.initial,
     this.errorMessage,
   });
@@ -52,6 +54,7 @@ class ManageTeamState extends Equatable {
     String? uniformVisitImageSelected,
     XFile? showUniformL,
     XFile? showUniformV,
+    bool? imageIsLarge,
     ScreenStatus? screenStatus,
     String? errorMessage,
   }) {
@@ -69,6 +72,7 @@ class ManageTeamState extends Equatable {
           uniformVisitImageSelected ?? this.uniformVisitImageSelected,
       showUniformL: showUniformL ?? this.showUniformL,
       showUniformV: showUniformV ?? this.showUniformV,
+      imageIsLarge: imageIsLarge ?? this.imageIsLarge,
       screenStatus: screenStatus ?? this.screenStatus,
       errorMessage: errorMessage ?? this.errorMessage,
     );
@@ -86,6 +90,7 @@ class ManageTeamState extends Equatable {
         uniformVisitImageSelected,
         showUniformL,
         showUniformV,
+        imageIsLarge,
         screenStatus
       ];
 }

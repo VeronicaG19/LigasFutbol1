@@ -7,6 +7,7 @@ import 'package:formz/formz.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
+import 'package:ligas_futbol_flutter/src/core/enums.dart';
 import 'package:ligas_futbol_flutter/src/domain/category/entity/category.dart';
 import 'package:ligas_futbol_flutter/src/domain/category/service/i_category_service.dart';
 import 'package:ligas_futbol_flutter/src/domain/referee/referee_last_name.dart';
@@ -18,6 +19,7 @@ import 'package:ligas_futbol_flutter/src/domain/team/entity/team.dart';
 import 'package:ligas_futbol_flutter/src/domain/team/service/i_team_service.dart';
 import 'package:ligas_futbol_flutter/src/domain/team/validator/team_name.dart';
 import 'package:ligas_futbol_flutter/src/domain/team_tournament/service/i_team_tournament_service.dart';
+import 'package:ligas_futbol_flutter/src/domain/uniform/service/i_uniform_service.dart';
 import 'package:ligas_futbol_flutter/src/presentation/app/bloc/authentication_bloc.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -29,13 +31,14 @@ part 'team_league_manager_state.dart';
 @injectable
 class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
   TeamLeagueManagerCubit(
-      this._service,
-      this._teamTournamentService,
-      this._categoryService,
-      this._authenticationBloc,
-      this._repository,
-      this.userRepository)
-      : super(TeamLeagueManagerState());
+    this._service,
+    this._teamTournamentService,
+    this._categoryService,
+    this._authenticationBloc,
+    this._repository,
+    this.userRepository,
+    this._iUniformService,
+  ) : super(const TeamLeagueManagerState());
 
   final ITeamService _service;
   final ITeamTournamentService _teamTournamentService;
@@ -44,12 +47,14 @@ class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
   final AuthenticationRepository _repository;
   final UserRepository userRepository;
   final List<TeamLeagueManagerDTO> _originalTeamList = [];
+  final IUniformService _iUniformService;
+
   int page = 0;
   late int leagueId;
   Future<void> getTeams(int league) async {
     leagueId = league;
     print(
-        "Liga seleccionada ${_authenticationBloc.state.leagueManager.leagueId}");
+        "Liga seleccionada ${_authenticationBloc.state.selectedLeague.leagueId}");
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
     //   final response = await _service.getAllTeams(page: page, size: 21);
     final response = await _service.getAllTeamsByLeague(
@@ -139,6 +144,7 @@ class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
     emit(state.copyWith(
       screenStatus: ScreenStatus.loading,
     ));
+
     final response = await _categoryService.getCategoriesByLeagueId(legueId);
     response.fold(
         (l) => emit(state.copyWith(
@@ -148,8 +154,31 @@ class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
       emit(state.copyWith(
           screenStatus: ScreenStatus.loaded,
           categoryList: r,
-          categorySelected: r.isEmpty ? null : r.first));
+          categorySelected: r.isEmpty ? null : r.first,
+          uniformLocalImageSelected: '',
+          photoTeamSelected: '',
+          uniformVisitImageSelected: ''));
     });
+
+    initForm();
+  }
+
+  void initForm() {
+    emit(state.copyWith(
+      verificationSender: const VerificationSender.pure(),
+      teamName: const TeamName.pure(),
+      refereeLastName: const RefereeLastName.pure(),
+      refereeName: const RefereeName.pure(),
+    ));
+
+    emit(state.copyWith(
+      status: Formz.validate([
+        state.verificationSender,
+        state.teamName,
+        state.refereeLastName,
+        state.refereeName,
+      ]),
+    ));
   }
 
   void onChangeTeamName(String value) {
@@ -157,7 +186,7 @@ class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
     emit(state.copyWith(
         status: Formz.validate([
           teamName,
-          state.refereeLastName,
+          state.verificationSender,
           state.refereeLastName,
           state.refereeName,
         ]),
@@ -179,7 +208,7 @@ class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
           refereeName,
           state.refereeLastName,
           state.teamName,
-          state.refereeLastName,
+          state.verificationSender,
         ]),
         refereeName: refereeName));
   }
@@ -189,7 +218,7 @@ class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
     emit(state.copyWith(
         status: Formz.validate([
           refereeLastName,
-          state.refereeLastName,
+          state.verificationSender,
           state.refereeName,
           state.teamName,
         ]),
@@ -201,7 +230,6 @@ class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
     emit(state.copyWith(
         status: Formz.validate([
           verificationSender,
-          state.refereeLastName,
           state.refereeLastName,
           state.refereeName,
           state.teamName,
@@ -268,53 +296,62 @@ class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
     emit(state.copyWith(
         status: FormzStatus.submissionInProgress,
         screenStatus: ScreenStatus.loading));
-    final user = User(
-        userName: state.verificationSender.value,
-        password: "Welcome1",
-        person: Person.buildPerson(
-            firstName: state.refereeName.value,
-            lastName: state.refereeLastName.value,
-            areaCode: 'LF',
-            phone: state.getVerificationType() == VerificationType.phone
-                ? state.verificationSender.value
-                : null,
-            email: state.getVerificationType() == VerificationType.email
-                ? state.verificationSender.value
-                : null),
-        applicationRol: ApplicationRol.teamManager);
-    final signUpResponse = await _repository.signUp(user);
-    signUpResponse.fold(
-        (l) => emit(state.copyWith(
-            status: FormzStatus.submissionFailure,
-            errorMessage: l.message)), (r) {
-      createTeam(r);
-    });
+    if (state.userModel.isNotEmpty &&
+        state.verificationSender.value == state.userModel.userName &&
+        state.userModel.person.firstName == state.refereeName.value &&
+        state.userModel.person.lastName == state.refereeLastName.value) {
+      createTeam(state.userModel);
+    } else {
+      final user = User(
+          userName: state.verificationSender.value,
+          password: "Welcome1",
+          person: Person.buildPerson(
+              firstName: state.refereeName.value,
+              lastName: state.refereeLastName.value,
+              areaCode: 'LF',
+              phone: state.getVerificationType() == VerificationType.phone
+                  ? state.verificationSender.value
+                  : null,
+              email: state.getVerificationType() == VerificationType.email
+                  ? state.verificationSender.value
+                  : null),
+          applicationRol: ApplicationRol.teamManager);
+      final signUpResponse = await _repository.createLFUserAndAssignRoles(user);
+      signUpResponse.fold(
+          (l) => emit(state.copyWith(
+              status: FormzStatus.submissionFailure,
+              screenStatus: ScreenStatus.error,
+              errorMessage: l.message)), (r) {
+        createTeam(r);
+      });
+    }
   }
 
   Future<void> createTeam(User user) async {
-    print("valor 3");
     CreateTeamDTO createTeam = CreateTeamDTO(
         teamName: state.teamName.value,
         categoryId: state.categorySelected.categoryId,
-        leageAuxId: _authenticationBloc.state.leagueManager.leagueId,
+        leageAuxId: _authenticationBloc.state.selectedLeague.leagueId,
         teamPhothoImage: state.photoTeamSelected,
         logoImage: state.photoTeamSelected,
         uniformLocalImage: state.uniformLocalImageSelected,
         uniformVisitImage: state.uniformVisitImageSelected,
+        appoved: 1,
         firstManagerId: user.person.personId);
     final response = await _service.createTeam(createTeam);
-
     response.fold(
         (l) => emit(
               state.copyWith(
                   status: FormzStatus.submissionFailure,
+                  screenStatus: ScreenStatus.error,
+                  userModel: user,
                   errorMessage: l.errorMessage),
             ), (r) {
-      print("valor 3");
       emit(state.copyWith(
         screenStatus: ScreenStatus.createdSucces,
         status: FormzStatus.submissionSuccess,
       ));
+      cleanFormTeam();
     });
     page == 0;
     await getTeams(leagueId);
@@ -346,18 +383,25 @@ class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
     print("valor 3");
     CreateTeamDTO updateTeam = CreateTeamDTO(
         teamId: team.teamId,
-        teamName: state.teamName.value,
-        categoryId:
-            state.categorySelected.categoryId ?? team.categoryId!.categoryId!,
-        leageAuxId: _authenticationBloc.state.leagueManager.leagueId,
-        teamPhothoImage: team.logoId?.document != state.photoTeamSelected
+        teamName:
+            (state.teamName.value != '' || state.teamName.value.isNotEmpty)
+                ? state.teamName.value
+                : team.teamName,
+        categoryId: state.teamInfo2.categoryId?.categoryId ??
+            team.categoryId!.categoryId!,
+        leageAuxId: _authenticationBloc.state.selectedLeague.leagueId,
+        teamPhothoImage: (state.photoTeamSelected != '')
             ? state.photoTeamSelected
             : team.logoId?.document,
-        logoImage: team.logoId?.document != state.photoTeamSelected
+        logoImage: (state.photoTeamSelected != '')
             ? state.photoTeamSelected
             : team.logoId?.document,
-        uniformLocalImage: state.uniformLocalImageSelected,
-        uniformVisitImage: state.uniformVisitImageSelected,
+        uniformLocalImage: (state.uniformLocalImageSelected != '')
+            ? state.uniformLocalImageSelected
+            : state.uniformL,
+        uniformVisitImage: (state.uniformVisitImageSelected != '')
+            ? state.uniformVisitImageSelected
+            : state.uniformV,
         firstManagerId: team.firstManager);
     final response = await _service.updateTeam(updateTeam);
 
@@ -372,8 +416,83 @@ class TeamLeagueManagerCubit extends Cubit<TeamLeagueManagerState> {
         status: FormzStatus.submissionSuccess,
         screenStatus: ScreenStatus.updateSucces,
       ));
+      cleanFormTeam();
     });
     page == 0;
+    //await getImagesOfUniforms(teamId: team.teamId);
     await getTeams(leagueId);
+  }
+
+  Future<void> getImagesOfUniforms({required teamId}) async {
+    final response = await _iUniformService.getUniformsByTeamId(teamId);
+
+    response.fold(
+      (l) {
+        emit(state.copyWith());
+      },
+      (r) {
+        if (r.isNotEmpty) {
+          r.forEach((e) {
+            if (e.uniformType == TypeMatchTem.local.name.toUpperCase()) {
+              emit(state.copyWith(uniformL: e.uniformTshirtImage));
+            } else {
+              emit(state.copyWith(uniformV: e.uniformTshirtImage));
+            }
+          });
+        }
+      },
+    );
+  }
+
+  void cleanFormTeam() {
+    emit(state.copyWith(
+      status: FormzStatus.pure,
+      photoTeamSelected: '',
+      uniformLocalImageSelected: '',
+      uniformVisitImageSelected: '',
+      userModel: User.empty,
+    ));
+  }
+
+  Future<void> getTeamInfo({required int teamId}) async {
+    emit(state.copyWith(screenStatus: ScreenStatus.loading));
+    final request = await _service.getDetailTeamByIdTeam(teamId);
+    request.fold(
+      (l) => emit(state.copyWith(
+        screenStatus: ScreenStatus.error,
+        errorMessage: l.errorMessage,
+      )),
+      (r) {
+        emit(state.copyWith(screenStatus: ScreenStatus.loaded, teamInfo2: r));
+      },
+    );
+  }
+
+  /*Future<bool> assignRolesWhenUserIsCreated(
+      User user, Rolesnm rol, String primary) async {
+    Rol newRol = Rol(orgId: 4, roleName: rol.name);
+    UserRol usrRol = UserRol(
+        primaryFlag: primary,
+        rol: newRol,
+        configuration: UserConfiguration.empty,
+        userRolId: 0,
+        user: user);
+    final response = await _iRolService.createUserRolAndUpdate(usrRol);
+    return response.fold((l) => false, (r) => true);
+  }*/
+
+  Future<void> convertImgToBs({
+    XFile? xFile,
+    CroppedFile? file,
+  }) async {
+    final imgLength = await file?.readAsBytes() ?? await xFile?.readAsBytes();
+
+    // Convertir bytes a megabytes
+    double megabytesImagen = imgLength!.length / (1024 * 1024);
+
+    // Devolver el tamaño de la imagen
+    emit(state.copyWith(
+      imageIsLarge: !(megabytesImagen < 1),
+    ));
   }
 }

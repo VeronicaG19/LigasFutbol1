@@ -6,12 +6,14 @@ part 'referee_match_event_dto.g.dart';
 @JsonSerializable()
 class RefereeMatchEventDTO extends Equatable{
   final String? causalDesc;
+  final int? teamMatchId;
   final String? eventType;
   final String? fullName;
   final String? fullName2;
   final int? matchEventTime;
 
   const RefereeMatchEventDTO({
+    this.teamMatchId,
     this.causalDesc,
     this.eventType,
     this.fullName,
@@ -25,6 +27,7 @@ class RefereeMatchEventDTO extends Equatable{
   Map<String, dynamic> toJson() => _$RefereeMatchEventDTOToJson(this);
 
   RefereeMatchEventDTO copyWith({
+    int? teamMatchId,
     String? causalDesc,
     String? eventType,
     String? fullName,
@@ -32,6 +35,7 @@ class RefereeMatchEventDTO extends Equatable{
     int? matchEventTime,
   }) {
     return RefereeMatchEventDTO(
+      teamMatchId: teamMatchId ?? this.teamMatchId,
       causalDesc: causalDesc ?? this.causalDesc,
       eventType: eventType ?? this.eventType,
       fullName: fullName ?? this.fullName,
@@ -42,6 +46,7 @@ class RefereeMatchEventDTO extends Equatable{
 
   @override
   List<Object?> get props => [
+    teamMatchId,
     causalDesc,
     eventType,
     fullName,

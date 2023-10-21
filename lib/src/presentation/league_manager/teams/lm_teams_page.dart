@@ -1,8 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/core/enums.dart';
 import 'package:ligas_futbol_flutter/src/domain/category/category.dart';
+import 'package:ligas_futbol_flutter/src/domain/resource_file/entity/resource_file.dart';
 import 'package:ligas_futbol_flutter/src/domain/team/entity/team.dart';
 import 'package:ligas_futbol_flutter/src/presentation/app/app.dart';
 import 'package:ligas_futbol_flutter/src/presentation/league_manager/teams/add_team_page.dart';
@@ -10,6 +12,8 @@ import 'package:ligas_futbol_flutter/src/presentation/league_manager/teams/cubit
 import 'package:ligas_futbol_flutter/src/presentation/league_manager/teams/detail_team_tab.dart';
 import 'package:ligas_futbol_flutter/src/service_locator/injection.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class LMTeamPage extends StatelessWidget {
   const LMTeamPage({super.key});
@@ -17,7 +21,7 @@ class LMTeamPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return BlocProvider(
       create: (_) =>
           locator<TeamLeagueManagerCubit>()..getTeams(leagueManager.leagueId),
@@ -32,13 +36,48 @@ class LMTeamContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
+    final Color? color2 = Colors.green[800];
     return Stack(
       clipBehavior: Clip.hardEdge,
       alignment: AlignmentDirectional.bottomEnd,
       fit: StackFit.loose,
       children: [
-        BlocBuilder<TeamLeagueManagerCubit, TeamLeagueManagerState>(
+        BlocConsumer<TeamLeagueManagerCubit, TeamLeagueManagerState>(
+          listenWhen: (previous, current) =>
+              previous.screenStatus != current.screenStatus,
+          listener: (context, state) {
+            if (state.screenStatus == ScreenStatus.createdSucces) {
+              showTopSnackBar(
+                context,
+                CustomSnackBar.success(
+                  backgroundColor: color2!,
+                  textScaleFactor: 1.0,
+                  message: "Se creo el equipo correctamente",
+                ),
+              );
+            }
+            if (state.screenStatus == ScreenStatus.updateSucces) {
+              showTopSnackBar(
+                context,
+                CustomSnackBar.success(
+                  backgroundColor: color2!,
+                  textScaleFactor: 1.0,
+                  message: "Se actualizarón correctamente los datos del equipo",
+                ),
+              );
+            }
+            if (state.screenStatus == ScreenStatus.deleteSucces) {
+              showTopSnackBar(
+                context,
+                CustomSnackBar.success(
+                  backgroundColor: color2!,
+                  textScaleFactor: 1.0,
+                  message: "Se elimino el equipo correctamente",
+                ),
+              );
+            }
+          },
           builder: (context, state) {
             if (state.screenStatus == ScreenStatus.loading) {
               return Center(
@@ -140,18 +179,34 @@ class LMTeamContent extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 15,
-                                    bottom: 8,
+                                padding: const EdgeInsets.only(
+                                  top: 15,
+                                  bottom: 8,
+                                ),
+                                child: SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: Image(
+                                    image: (state.teamPageable.content[index]
+                                                    .logo !=
+                                                '' &&
+                                            state.teamPageable.content[index]
+                                                    .logo !=
+                                                null)
+                                        ? Image.memory(base64Decode(state
+                                                .teamPageable
+                                                .content[index]
+                                                .logo!))
+                                            .image
+                                        : Image.asset(
+                                                'assets/images/equipo2.png')
+                                            .image,
                                   ),
-                                  child: Image.asset(
-                                    'assets/images/equipo2.png',
-                                    fit: BoxFit.cover,
-                                    height: 35,
-                                    width: 35,
-                                  )),
+                                ),
+                              ),
                               Padding(
-                                padding: EdgeInsets.only(top: 8, bottom: 8),
+                                padding:
+                                    const EdgeInsets.only(top: 8, bottom: 8),
                                 child: Text(
                                   '${state.teamPageable.content[index].teamName}',
                                   textAlign: TextAlign.start,
@@ -188,11 +243,17 @@ class LMTeamContent extends StatelessWidget {
                                 categoryName: '-'),
                             firstManager:
                                 state.teamPageable.content[index].firstManager,
+                            logoId: ResourceFile(
+                                document:
+                                    state.teamPageable.content[index].logo),
                           );
 
                           context
                               .read<TeamLeagueManagerCubit>()
                               .onChangeUpdateTeam(teamData);
+                          context
+                              .read<TeamLeagueManagerCubit>()
+                              .getImagesOfUniforms(teamId: teamData.teamId!);
                           Navigator.push(
                             context,
                             DetailTeamTab.route(

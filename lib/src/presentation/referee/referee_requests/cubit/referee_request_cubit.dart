@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:ligas_futbol_flutter/src/core/enums.dart';
+
 import '../../../../domain/agenda/agenda.dart';
 import '../../../../domain/agenda/entity/qra_event.dart';
 import '../../../../domain/user_requests/dto/request_match_to_referee_dto.dart';
@@ -13,8 +14,7 @@ part 'referee_request_state.dart';
 
 @injectable
 class RefereeRequestCubit extends Cubit<RefereeRequestState> {
-  RefereeRequestCubit(this._service,
-      this._agendaService)
+  RefereeRequestCubit(this._service, this._agendaService)
       : super(const RefereeRequestState());
 
   final IUserRequestsService _service;
@@ -32,11 +32,10 @@ class RefereeRequestCubit extends Cubit<RefereeRequestState> {
     final requestMatch = await _service.getRequestMatchToReferee(refereeId);
     emit(
       state.copyWith(
-        screenStatus: BasicCubitScreenState.loaded,
-        sentRequestsList: sentRequests,
-        receivedRequestsList: receivedRequests,
-        requestMatchRefereeList: requestMatch
-      ),
+          screenStatus: BasicCubitScreenState.loaded,
+          sentRequestsList: sentRequests,
+          receivedRequestsList: receivedRequests,
+          requestMatchRefereeList: requestMatch),
     );
   }
 
@@ -62,11 +61,12 @@ class RefereeRequestCubit extends Cubit<RefereeRequestState> {
     required int refereeId,
   }) async {
     emit(state.copyWith(screenStatus: BasicCubitScreenState.loading));
-    final response = await _service.sendRefereeResponseRequest(requestId, status);
+    final response =
+        await _service.sendRefereeResponseRequest(requestId, status);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: BasicCubitScreenState.error,
-            errorMessage: l.errorMessage)), (r) { 
+            errorMessage: l.errorMessage)), (r) {
       loadUserRequests(personId: personId, refereeId: refereeId);
     });
   }
@@ -78,9 +78,10 @@ class RefereeRequestCubit extends Cubit<RefereeRequestState> {
     required int refereeId,
   }) async {
     emit(state.copyWith(screenStatus: BasicCubitScreenState.loading));
-    final response = await _service.sendRefereeResponseRequest(requestId, accepted);
+    final response =
+        await _service.sendRefereeResponseRequest(requestId, accepted);
     response.fold(
-            (l) => emit(state.copyWith(
+        (l) => emit(state.copyWith(
             screenStatus: BasicCubitScreenState.error,
             errorMessage: l.errorMessage)), (r) {
       loadUserRequests(personId: personId, refereeId: refereeId);
@@ -116,15 +117,14 @@ class RefereeRequestCubit extends Cubit<RefereeRequestState> {
     );
     final eventRequest = await _agendaService.createQraEvents(event);
     eventRequest.fold(
-            (l) => emit(state.copyWith(
+        (l) => emit(state.copyWith(
             screenStatus: BasicCubitScreenState.error,
             errorMessage: l.errorMessage)), (r) async {
-
-      final response = await
-      _service.sendRefereeResponseRequest(request.requestId!, accepted);
+      final response = await _service.sendRefereeResponseRequest(
+          request.requestId!, accepted);
 
       response.fold(
-              (l) => emit(state.copyWith(
+          (l) => emit(state.copyWith(
               screenStatus: BasicCubitScreenState.error,
               errorMessage: l.errorMessage)), (r) {
         loadUserRequests(personId: personId, refereeId: refereeId);

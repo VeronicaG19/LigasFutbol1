@@ -11,46 +11,59 @@ class AuthenticationState extends Equatable {
   final AuthenticationStatus status;
   final User user;
   final Locale locale;
-  final League leagueManager;
+  final List<League> managerLeagues;
+  final League selectedLeague;
+  final Team selectedTeam;
   final League refereeLeague;
   final List<League> refereeLeagues;
   final List<Team> teamManagerTeams;
   final Referee refereeData;
-  final Team teamManager;
+
+  final Player playerData;
+  final bool isUpdating;
 
   const AuthenticationState({
     this.status = AuthenticationStatus.unknown,
     this.locale = const Locale('es', ''),
     this.refereeLeagues = const [],
     this.teamManagerTeams = const [],
+    this.managerLeagues = const [],
     this.refereeData = Referee.empty,
     this.user = User.empty,
-    this.leagueManager = League.empty,
+    this.selectedLeague = League.empty,
+    this.selectedTeam = Team.empty,
     this.refereeLeague = League.empty,
-    this.teamManager = Team.empty,
+    this.playerData = Player.empty,
+    this.isUpdating = false,
   });
 
   AuthenticationState copyWith({
     AuthenticationStatus? status,
     User? user,
     Locale? locale,
-    League? leagueManager,
+    League? selectedLeague,
+    Team? selectedTeam,
     League? refereeLeague,
     List<League>? refereeLeagues,
     List<Team>? teamManagerTeams,
+    List<League>? managerLeagues,
     Referee? refereeData,
-    Team? teamManager,
+    Player? playerData,
+    bool? isUpdating,
   }) {
     return AuthenticationState(
       status: status ?? this.status,
       user: user ?? this.user,
       locale: locale ?? this.locale,
-      leagueManager: leagueManager ?? this.leagueManager,
+      selectedLeague: selectedLeague ?? this.selectedLeague,
+      selectedTeam: selectedTeam ?? this.selectedTeam,
+      managerLeagues: managerLeagues ?? this.managerLeagues,
       refereeLeague: refereeLeague ?? this.refereeLeague,
       refereeLeagues: refereeLeagues ?? this.refereeLeagues,
       teamManagerTeams: teamManagerTeams ?? this.teamManagerTeams,
       refereeData: refereeData ?? this.refereeData,
-      teamManager: teamManager ?? this.teamManager,
+      playerData: playerData ?? this.playerData,
+      isUpdating: isUpdating ?? this.isUpdating,
     );
   }
 
@@ -59,12 +72,15 @@ class AuthenticationState extends Equatable {
         status,
         user,
         locale,
-        leagueManager,
+        selectedLeague,
+        selectedTeam,
+        managerLeagues,
         refereeLeague,
         refereeLeagues,
         teamManagerTeams,
         refereeData,
-        teamManager,
+        playerData,
+        isUpdating,
       ];
 // /// Convert a JSON object into a [AuthenticationState] Model.
 // factory AuthenticationState.fromJson(Map<String, dynamic> json) {

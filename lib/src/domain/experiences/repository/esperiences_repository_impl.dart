@@ -17,7 +17,6 @@ class ExperienceRepositoryImpl implements IExperiencesRepository {
   RepositoryResponse<List<Experiences>> getAllExperiencesByPlayer(int partyId) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
             endpoint: getAllExperiencesByPlayerEndpoint + "/$partyId",
             converter: Experiences.fromJson)
         .validateResponse();

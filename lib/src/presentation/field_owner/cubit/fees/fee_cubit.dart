@@ -40,10 +40,10 @@ class FeeCubit extends Cubit<FeeState> {
 
     emit(state.copyWith(periotTimeLoader: Loaders.loadingTimeTypes));
 
-    timeTypeList.add(const EventUtil(
+    /*  timeTypeList.add(const EventUtil(
       code: "0",
       label: "Seleccionar periodo",
-    ));
+    ));*/
 
     timeTypeList.add(EventUtil(
       code: TimeType.MINUTE.name,
@@ -99,12 +99,12 @@ class FeeCubit extends Cubit<FeeState> {
   }
 
 // * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  Future<void> onDurationTimeChange({required String duration}) async {
+/*  Future<void> onDurationTimeChange({required String duration}) async {
     final xDurationTime = DurationTime.dirty(duration);
     emit(state.copyWith(
       durationTimeValidator: xDurationTime,
     ));
-  }
+  }*/
 
   Future<void> onPriceChange({required String price}) async {
     final xPrice = Price.dirty(price);
@@ -124,14 +124,16 @@ class FeeCubit extends Cubit<FeeState> {
 
   Future<void> onPressSaveFee({required activeId}) async {
     emit(state.copyWith(
-      durationTimeValidator:
-          DurationTime.dirty(state.durationTimeValidator.value),
       priceValidator: Price.dirty(state.priceValidator.value),
       periotTimeValidator: PeriotTime.dirty(state.periotTimeValidator.value),
     ));
-
-    if (state.durationTimeValidator.valid == true &&
-        state.priceValidator.valid == true &&
+    if (state.periotTimeSelected.code == 0) {
+      emit(state.copyWith(
+        screenState: BasicCubitScreenState.error,
+        errorMessage: "Favor de seleccionar periodo",
+      ));
+    }
+    if (state.priceValidator.valid == true &&
         state.periotTimeValidator.valid == true) {
       emit(state.copyWith(
         screenState: BasicCubitScreenState.sending,
@@ -142,7 +144,8 @@ class FeeCubit extends Cubit<FeeState> {
           activeId: activeId,
         ),
         currency: Currency.MXN,
-        durationTime: int.tryParse(state.durationTimeValidator.value),
+        //durationTime: int.tryParse(state.durationTimeValidator.value),
+        durationTime: 1,
         periotTime: TimeType.values
             .firstWhere((elmnt) => elmnt.name == state.periotTimeSelected.code),
         price: double.tryParse(state.priceValidator.value),

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:ligas_futbol_flutter/src/core/enums.dart';
-import 'package:ligas_futbol_flutter/src/core/utils.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../../../../../core/utils.dart';
 import '../../../../../../../domain/agenda/entity/qra_event.dart';
 import '../cubit/lm_field_schedule_cubit.dart';
 
@@ -17,7 +17,7 @@ class FieldScheduleDialog extends StatelessWidget {
     return AlertDialog(
       contentPadding: const EdgeInsets.all(25),
       title: Text(
-          'Disponibilidad del ${type.name == LMRequestType.fieldOwner.name ? 'campo' : 'árbitro'}'),
+          'Disponibilidad del ${type == LMRequestType.fieldOwner ? 'campo' : 'árbitro'}'),
       content: BlocBuilder<LmFieldScheduleCubit, LmFieldScheduleState>(
         builder: (context, state) {
           if (state.screenState == BasicCubitScreenState.loading) {
@@ -28,107 +28,64 @@ class FieldScheduleDialog extends StatelessWidget {
               ),
             );
           }
-          return state.availabilityList.isEmpty
-              ? const Center(
-                  child: Text('No hay disponibilidad'),
-                )
-              : type.name == LMRequestType.fieldOwner.name
-                  ? Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 600,
-                            width: 400,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: state.availabilityList.length,
-                              itemBuilder: (context, index) {
-                                final item = state.availabilityList[index];
-                                const noDateLabel = 'Sin fecha asignada';
-                                final firstDate = item.openingDate == null
-                                    ? noDateLabel
-                                    : DateFormat('dd-MM-yyyy HH:mm')
-                                        .format(item.openingDate!);
-                                final secondDate = item.expirationDate == null
-                                    ? noDateLabel
-                                    : DateFormat('dd-MM-yyyy HH:mm')
-                                        .format(item.expirationDate!);
-                                return Column(
-                                  children: [
-                                    const Divider(),
-                                    ListTile(
-                                      title: const Text(
-                                          'Periodo de fecha disponible'),
-                                      subtitle:
-                                          Text('$firstDate a $secondDate'),
-                                      onTap: () => context
-                                          .read<LmFieldScheduleCubit>()
-                                          .onLoadEvents(item),
-                                    ),
-                                    const Divider()
-                                  ],
-                                );
-                              },
-                            ),
+          if (state.availabilityList.isEmpty) {
+            return const Center(
+              child: Text('No hay disponibilidad'),
+            );
+          }
+          return Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 600,
+                  width: 400,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.availabilityList.length,
+                    itemBuilder: (context, index) {
+                      final item = state.availabilityList[index];
+                      const noDateLabel = 'Sin fecha asignada';
+                      final firstDate = item.openingDate == null
+                          ? noDateLabel
+                          : DateFormat('dd/MM/yyyy').format(item.openingDate!);
+                      final secondDate = item.expirationDate == null
+                          ? noDateLabel
+                          : DateFormat('dd/MM/yyyy')
+                              .format(item.expirationDate!);
+                      final firstHour = item.openingDate == null
+                          ? noDateLabel
+                          : DateFormat('HH:mm').format(item.openingDate!);
+                      final secondHour = item.expirationDate == null
+                          ? noDateLabel
+                          : DateFormat('HH:mm').format(item.expirationDate!);
+                      return Column(
+                        children: [
+                          const Divider(),
+                          ListTile(
+                            title: Text('$firstDate a $secondDate'),
+                            subtitle: Text('$firstHour a $secondHour'),
+                            onTap: () => context
+                                .read<LmFieldScheduleCubit>()
+                                .onLoadEvents(item, type),
+                            selectedColor: Colors.blue,
+                            selected: state.selectedAvailability == item,
                           ),
-                        ),
-                        const Expanded(
-                          child: SizedBox(
-                            height: 600,
-                            width: 800,
-                            child: _CalendarSchedule(),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 600,
-                            width: 400,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: state.availabilityList.length,
-                              itemBuilder: (context, index) {
-                                final item = state.availabilityList[index];
-                                const noDateLabel = 'Sin fecha asignada';
-                                final firstDate = item.openingDate == null
-                                    ? noDateLabel
-                                    : DateFormat('dd-MM-yyyy HH:mm')
-                                        .format(item.openingDate!);
-                                final secondDate = item.expirationDate == null
-                                    ? noDateLabel
-                                    : DateFormat('dd-MM-yyyy HH:mm')
-                                        .format(item.expirationDate!);
-                                return Column(
-                                  children: [
-                                    const Divider(),
-                                    ListTile(
-                                      title: const Text(
-                                          'Periodo de fecha disponible'),
-                                      subtitle:
-                                          Text('$firstDate a $secondDate'),
-                                      onTap: () => context
-                                          .read<LmFieldScheduleCubit>()
-                                          .onLoadEvents(item),
-                                    ),
-                                    const Divider()
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        const Expanded(
-                          child: SizedBox(
-                            height: 600,
-                            width: 800,
-                            child: _CalendarSchedule(),
-                          ),
-                        ),
-                      ],
-                    );
+                          const Divider()
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+              const Expanded(
+                child: SizedBox(
+                  height: 600,
+                  width: 800,
+                  child: _CalendarSchedule(),
+                ),
+              ),
+            ],
+          );
         },
       ),
       actions: [
@@ -179,8 +136,8 @@ class _CalendarScheduleState extends State<_CalendarSchedule> {
           children: [
             TableCalendar<QraEvent>(
               locale: 'es_ES',
-              firstDay: kFirstDay,
-              lastDay: kLastDay,
+              firstDay: state.firstDay ?? kFirstDay,
+              lastDay: state.lastDay ?? kLastDay,
               focusedDay: state.focusedDay ?? DateTime.now(),
               calendarFormat: _calendarFormat,
               rangeStartDay: state.rangeStart,

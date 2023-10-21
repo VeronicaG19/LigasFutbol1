@@ -12,6 +12,7 @@ class FieldOwnerScheduleState extends Equatable {
   final DateTime? startHour;
   final DateTime? finalHour;
   final List<Field> fieldList;
+  final List<QualificationByMatch> quaLifications;
   final Field selectedField;
   final RangeSelectionMode rangeSelectionMode;
   final FormzStatus formzStatus;
@@ -19,6 +20,7 @@ class FieldOwnerScheduleState extends Equatable {
   final String? errorMessage;
 
   const FieldOwnerScheduleState({
+    this.quaLifications = const [],
     this.selectedEvents = const [],
     this.screenState = BasicCubitScreenState.initial,
     this.firstDay,
@@ -54,6 +56,7 @@ class FieldOwnerScheduleState extends Equatable {
     FormzStatus? formzStatus,
     SimpleTextValidator? description,
     String? errorMessage,
+    List<QualificationByMatch>? quaLifications
   }) {
     return FieldOwnerScheduleState(
       selectedEvents: selectedEvents ?? this.selectedEvents,
@@ -72,6 +75,7 @@ class FieldOwnerScheduleState extends Equatable {
       formzStatus: formzStatus ?? this.formzStatus,
       description: description ?? this.description,
       errorMessage: errorMessage ?? this.errorMessage,
+      quaLifications: quaLifications ?? this.quaLifications
     );
   }
 
@@ -92,5 +96,6 @@ class FieldOwnerScheduleState extends Equatable {
         rangeSelectionMode,
         formzStatus,
         description,
+        quaLifications
       ];
 }

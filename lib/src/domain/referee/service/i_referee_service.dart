@@ -1,5 +1,6 @@
 import 'package:user_repository/user_repository.dart';
 
+import '../../../core/models/address_filter.dart';
 import '../../../core/typedefs.dart';
 import '../dto/create_referee_dto.dart';
 import '../dto/referee_by_address.dart';
@@ -46,6 +47,5 @@ abstract class IRefereeService {
 
   RepositoryResponse<String> updateReferee(Referee referee);
 
-  Future<List<RefereeByAddress>> getRefereeByAddress(int matchId,
-      {String? state, DateTime? matchDate});
+  Future<List<RefereeByAddress>> searchByFiltersReferee(AddressFilter filter);
 }

@@ -192,9 +192,8 @@ class _PageContentState extends State<_PageContent> {
                             trailing: Text(
                               (state.selectedEvents[index].matchDate == null)
                                   ? "Fecha pendiente por agendar"
-                                  : DateFormat('dd-MM-yyyy HH:mm').format(state
-                                      .selectedEvents[index]
-                                      .matchDate as DateTime),
+                                  : DateFormat('dd-MM-yyyy HH:mm').format(
+                                      state.selectedEvents[index].matchDate!),
                               //: "${state.matchesList[index].fecha}",
                               textAlign: TextAlign.left,
                               style: const TextStyle(

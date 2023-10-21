@@ -18,13 +18,13 @@ class _CategoryLeagueManagerPageState extends State<CategoryLeagueManagerPage> {
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return BlocProvider(
       create: (_) => locator<CategoryLmCubit>()
         ..getCategoryByTournamentByAndLeagueId(legueId: leagueManager.leagueId),
       child: ListView(
         shrinkWrap: true,
-        children: [
+        children: const [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

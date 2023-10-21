@@ -1,12 +1,12 @@
 import 'package:datasource_client/datasource_client.dart';
 import 'package:injectable/injectable.dart';
-import 'package:intl/intl.dart';
 import 'package:ligas_futbol_flutter/src/core/typedefs.dart';
 import 'package:ligas_futbol_flutter/src/domain/field/entity/field.dart';
 import 'package:ligas_futbol_flutter/src/domain/field/repositoy/i_field_repository.dart';
 
 import '../../../core/endpoints.dart';
 import '../../../core/extensions.dart';
+import '../../../core/models/address_filter.dart';
 
 @LazySingleton(as: IFieldRepository)
 class FieldRepositoryImpl implements IFieldRepository {
@@ -34,7 +34,7 @@ class FieldRepositoryImpl implements IFieldRepository {
   }
 
   @override
-  RepositoryResponse<Field> getFieldByName(String nameField) {
+  RepositoryResponse<Field> getFieldByName(nameField) {
     return _apiClient.network
         .getData(endpoint: '$getFieldName$nameField', converter: Field.fromJson)
         .validateResponse();
@@ -48,9 +48,11 @@ class FieldRepositoryImpl implements IFieldRepository {
   }
 
   @override
-  RepositoryResponse<Field> getFieldByMatchId(int teamId) {
+  RepositoryResponse<Field> getFieldByMatchId(int teamId,
+      {bool requiresAuthToken = true}) {
     return _apiClient.network
         .getData(
+            requiresAuthToken: requiresAuthToken,
             endpoint: '$getFieldByMatchIdEndpoint/$teamId',
             converter: Field.fromJson)
         .validateResponse();
@@ -65,10 +67,11 @@ class FieldRepositoryImpl implements IFieldRepository {
   }
 
   @override
-  RepositoryResponse<List<Field>> getFieldsRent() {
+  RepositoryResponse<List<Field>> getFieldsRent(int leagueId) {
     return _apiClient.network
         .getCollectionData(
-            endpoint: getFieldRentNFEndpoint, converter: Field.fromJson)
+            endpoint: "$getFieldRentNFEndpoint?leagueId=$leagueId",
+            converter: Field.fromJson)
         .validateResponse();
   }
 
@@ -83,31 +86,11 @@ class FieldRepositoryImpl implements IFieldRepository {
   }
 
   @override
-  RepositoryResponse<List<Field>> searchFieldByAddress(
-      String town,
-      String state,
-      String postalCOde,
-      int matchId,
-      DateTime? datematch,
-      String county,
-      String countryCode,
-      String city) {
-    final params = <String, dynamic>{};
-    params.addAll({
-      'city': '',
-      'countryCode': '',
-      'county': '',
-      'datematch': datematch != null
-          ? DateFormat('yyy/MM/dd HH:mm:ss').format(datematch)
-          : '',
-      'postalCOde': '',
-      'state': state,
-      'town': '',
-    });
+  RepositoryResponse<List<Field>> searchFieldByFilters(AddressFilter filter) {
     return _apiClient.network
         .getCollectionData(
-            endpoint: '$getFieldRentEndpoint/$matchId',
-            queryParams: params,
+            endpoint: getFieldRentEndpoint,
+            queryParams: filter.toMap(),
             converter: Field.fromJson)
         .validateResponse();
   }

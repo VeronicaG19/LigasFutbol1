@@ -159,7 +159,9 @@ class _PasswordInput2State extends State<_PasswordInput2> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpBloc, SignUpState>(
-      buildWhen: (previous, current) => previous.password2 != current.password2,
+      buildWhen: (previous, current) =>
+          previous.password2 != current.password2 ||
+          current.password != previous.password,
       builder: (context, state) {
         return TextFormField(
           key: const Key('userDataForm_passwordInput_textField2'),
@@ -172,6 +174,7 @@ class _PasswordInput2State extends State<_PasswordInput2> {
               : context.read<SignUpBloc>().add(SignUpOnNextStep()),
           keyboardType: TextInputType.visiblePassword,
           obscureText: isPasswordVisible,
+          enabled: state.password.valid,
           decoration: InputDecoration(
             labelText: AppLocalizations.of(context)!.aePasswordLbl,
             helperText: '',
@@ -225,8 +228,10 @@ class _PasswordInputState extends State<_PasswordInput> {
             labelText: AppLocalizations.of(context)!.aePasswordLbl,
             helperText: '',
             errorText: state.password.invalid
-                ? AppLocalizations.of(context)!.aeInvalidPasswordMsg
+                ? AppLocalizations.of(context)!.aeInvalidPasswordMsg(
+                    state.password.error?.toString() ?? '')
                 : null,
+            errorMaxLines: 2,
             suffixIcon: IconButton(
               icon: isPasswordVisible
                   ? const Icon(Icons.visibility)

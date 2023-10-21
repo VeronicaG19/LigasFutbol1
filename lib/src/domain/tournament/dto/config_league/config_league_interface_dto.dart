@@ -29,6 +29,9 @@ class ConfigLeagueInterfaceDTO extends Equatable {
     tieBreakType: '',
   );
 
+  bool get isEmpty => this == empty;
+  bool get isNotEmpty => this != empty;
+
   ConfigLeagueInterfaceDTO copyWith({
     String? matchFinal,
     String? ronda,

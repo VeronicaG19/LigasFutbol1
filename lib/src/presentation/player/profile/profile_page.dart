@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ligas_futbol_flutter/environment_config.dart';
+import 'package:ligas_futbol_flutter/src/presentation/account/account_delete_page.dart';
 import 'package:ligas_futbol_flutter/src/presentation/splash/responsive_widget.dart';
 
 import '../../../service_locator/injection.dart';
@@ -57,160 +59,40 @@ class _ProfilePageBodyMobile extends StatelessWidget {
           mainAxisSpacing: 10.0),
       children: [
         InkWell(
-          child: Card(
-            color: Colors.grey[100],
-            elevation: 3.0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Image(
-                  image: AssetImage("assets/images/perfil_image.png"),
-                  width: 60,
-                  height: 60,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Datos de cuenta',
-                  style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 15,
-                      fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'Edite los datos de usuario o contraseña',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300),
-                ),
-              ],
-            ),
+          child: const _ProfileOptionCard(
+            pathImg: "assets/images/perfil_image.png",
+            title: "Datos de cuenta",
+            subtitle: "Edite los datos de usuario o contraseña",
           ),
           onTap: () {
             Navigator.push(context, AccountPage.route());
           },
         ),
         InkWell(
-          child: Card(
-            color: Colors.grey[100],
-            elevation: 3.0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Image(
-                  image: AssetImage("assets/images/acount_perfil.png"),
-                  width: 50,
-                  height: 50,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Datos personales',
-                  style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 15,
-                      fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'Edite los datos de nombre, telefono o correo',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300),
-                ),
-              ],
-            ),
+          child: const _ProfileOptionCard(
+            pathImg: "assets/images/acount_perfil.png",
+            title: "Datos personales",
+            subtitle: "Edite los datos de nombre, telefono o correo",
           ),
           onTap: () {
             Navigator.push(context, PersonalData.route());
           },
         ),
         InkWell(
-          child: Card(
-            color: Colors.grey[100],
-            elevation: 3.0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Image(
-                  image: AssetImage("assets/images/change_rol.png"),
-                  width: 60,
-                  height: 60,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Roles',
-                  style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 15,
-                      fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'Cambiar de rol',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300),
-                ),
-              ],
-            ),
+          child: const _ProfileOptionCard(
+            pathImg: "assets/images/change_rol.png",
+            title: "Roles",
+            subtitle: "Solicitar o cambiar de rol.",
           ),
           onTap: () {
             Navigator.push(context, RolePage.route());
           },
         ),
         InkWell(
-          child: Card(
-            color: Colors.grey[100],
-            elevation: 3.0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Image(
-                  image: AssetImage("assets/images/notif.png"),
-                  width: 60,
-                  height: 60,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Notificaciones',
-                  style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 15,
-                      fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'Recibir notificaciones acerca de ligas fútbol',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300),
-                ),
-              ],
-            ),
+          child: const _ProfileOptionCard(
+            pathImg: "assets/images/notif.png",
+            title: "Notificaciones",
+            subtitle: "Recibir notificaciones acerca de ligas fútbol",
           ),
           onTap: () {
             showModalBottomSheet<void>(
@@ -225,7 +107,70 @@ class _ProfilePageBodyMobile extends StatelessWidget {
             );
           },
         ),
+        InkWell(
+          child: const _ProfileOptionCard(
+            pathImg: "assets/images/delete_user.png",
+            title: "Cerrar cuenta",
+            subtitle: "Cerrar cuenta de forma permanente",
+          ),
+          onTap: () {
+            Navigator.push(context, AccountDeletePage.route());
+          },
+        ),
       ],
+    );
+  }
+}
+
+class _ProfileOptionCard extends StatelessWidget {
+  const _ProfileOptionCard({
+    Key? key,
+    required this.pathImg,
+    required this.title,
+    required this.subtitle,
+  }) : super(key: key);
+
+  final String pathImg;
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.grey[100],
+      elevation: 3.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image(
+            image: AssetImage(pathImg),
+            width: 60,
+            height: 60,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            title,
+            style: TextStyle(
+                color: Colors.grey[800],
+                fontSize: 15,
+                fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.grey[800],
+              fontSize: 12,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -269,76 +214,62 @@ class _MenuBodyWeb extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 const SizedBox(height: 10),
-                ListTile(
-                    leading: const CircleAvatar(
-                        radius: 28,
-                        backgroundColor: Color(0xff358aac),
-                        child: Icon(
-                          Icons.person_rounded,
-                          size: 25,
-                        )),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 18,
-                    ),
-                    title:
-                        const Text('Mis datos', style: TextStyle(fontSize: 20)),
-                    subtitle: const Text(
-                        'Visualice o edite los datos personales.',
-                        style: TextStyle(fontSize: 15)),
-                    onTap: () {
-                      Navigator.push(context, AccountWebPage.route());
-                    }),
+                _ProfileOptionList(
+                  icon: Icons.person_rounded,
+                  title: 'Mis datos',
+                  subtitle: 'Visualice o edite los datos personales.',
+                  normal: true,
+                  onTap: () {
+                    Navigator.push(context, AccountWebPage.route());
+                  },
+                ),
+                const Divider(),
+                _ProfileOptionList(
+                  icon: Icons.recent_actors,
+                  title: 'Roles',
+                  subtitle: 'Consulta la información de los roles disponibles.',
+                  normal: true,
+                  onTap: () {
+                    Navigator.push(context, RolePage.route());
+                  },
+                ),
+                const Divider(),
+                _ProfileOptionList(
+                  icon: Icons.notifications,
+                  title: 'Notificaciones',
+                  subtitle: 'Recibir notificaciones acerca de ligas fútbol.',
+                  normal: true,
+                  onTap: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return BlocProvider(
+                          create: (_) => locator<NotificationCubit>()
+                            ..onGetUserConfiguration(user.id ?? 0),
+                          child: const NotificationV(),
+                        );
+                      },
+                    );
+                  },
+                ),
+                const Divider(),
+                _ProfileOptionList(
+                  icon: Icons.delete_forever,
+                  title: 'Eliminar cuenta',
+                  subtitle: 'Eliminar cuenta de forma permanente',
+                  normal: false,
+                  onTap: () {
+                    Navigator.push(context, AccountDeletePage.route());
+                  },
+                ),
                 const Divider(),
                 ListTile(
-                    leading: const CircleAvatar(
-                        radius: 28,
-                        backgroundColor: Color(0xff358aac),
-                        child: Icon(
-                          Icons.recent_actors,
-                          size: 25,
-                        )),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 18,
-                    ),
-                    title: const Text('Roles', style: TextStyle(fontSize: 20)),
-                    subtitle: const Text(
-                        'Consulta la información de los roles disponibles.',
-                        style: TextStyle(fontSize: 15)),
-                    onTap: () {
-                      Navigator.push(context, RolePage.route());
-                    }),
-                const Divider(),
-                ListTile(
-                    leading: const CircleAvatar(
-                        radius: 28,
-                        backgroundColor: Color(0xff358aac),
-                        child: Icon(
-                          Icons.notifications,
-                          size: 25,
-                        )),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 18,
-                    ),
-                    title: const Text('Notificaciones',
-                        style: TextStyle(fontSize: 20)),
-                    subtitle: const Text(
-                        'Recibir notificaciones acerca de ligas fútbol.',
-                        style: TextStyle(fontSize: 15)),
-                    onTap: () {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return BlocProvider(
-                            create: (_) => locator<NotificationCubit>()
-                              ..onGetUserConfiguration(user.id ?? 0),
-                            child: const NotificationV(),
-                          );
-                        },
-                      );
-                    }),
+                  title: Text(
+                    'v${EnvironmentConfig.appVersion}',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w300, color: Colors.grey),
+                  ),
+                ),
               ],
             ),
           ],
@@ -408,6 +339,48 @@ class _CardUserProfile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ProfileOptionList extends StatelessWidget {
+  const _ProfileOptionList({
+    Key? key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.normal,
+    this.onTap,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool normal;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: normal
+          ? CircleAvatar(
+              radius: 28,
+              backgroundColor: const Color(0xff358aac),
+              child: Icon(icon, size: 25),
+            )
+          : CircleAvatar(
+              radius: 28,
+              backgroundColor: Colors.red.shade700,
+              foregroundColor: Colors.white,
+              child: Icon(icon, size: 25),
+            ),
+      trailing: const Icon(
+        Icons.arrow_forward_ios_rounded,
+        size: 18,
+      ),
+      title: Text(title, style: const TextStyle(fontSize: 20)),
+      subtitle: Text(subtitle, style: const TextStyle(fontSize: 15)),
+      onTap: () => onTap!(),
     );
   }
 }

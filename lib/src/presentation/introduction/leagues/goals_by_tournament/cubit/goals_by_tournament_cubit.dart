@@ -11,17 +11,16 @@ part 'goals_by_tournament_state.dart';
 @injectable
 class GoalsByTournamentCubit extends Cubit<GoalsByTournamentState> {
   GoalsByTournamentCubit(this._tournamentService)
-      : super(GoalsByTournamentState());
+      : super(const GoalsByTournamentState());
   final ITournamentService _tournamentService;
   Future<void> getFindByNameAndCategory(
       {required Category category, required Tournament tournament}) async {
     emit(state.copyWith(
       screenStatus: ScreenStatus.loading,
     ));
-    print("Torneo-------->$tournament");
-    print("Categoria-------->$category");
     final response = await _tournamentService.getFindByNameAndCategory(
-        category.categoryId!, tournament.tournamentName!);
+        category.categoryId!, tournament.tournamentName!,
+        requiresAuthToken: false);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
@@ -31,15 +30,16 @@ class GoalsByTournamentCubit extends Cubit<GoalsByTournamentState> {
   }
 
   Future<void> getGoalsByTournament({required int tournamentId}) async {
-    print("Valor del torneo---->$tournamentId");
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
-    final response =
-        await _tournamentService.getGoalsTournamentId(tournamentId);
+    final response = await _tournamentService.getGoalsTournamentId(tournamentId,
+        requiresAuthToken: false);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
             errorMessage: l.errorMessage)), (r) {
-      print("Datos ${r.length}");
+      for (final i in r) {
+        print('jugador -> ${i.player} Goles -> ${i.goals}');
+      }
       emit(state.copyWith(
           screenStatus: ScreenStatus.loaded, goalsTournament: r));
     });

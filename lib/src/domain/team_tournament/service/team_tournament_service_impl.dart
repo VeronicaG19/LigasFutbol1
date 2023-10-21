@@ -1,8 +1,8 @@
 import 'package:injectable/injectable.dart';
+import 'package:ligas_futbol_flutter/src/core/typedefs.dart';
 import 'package:ligas_futbol_flutter/src/domain/countResponse/entity/register_count_interface.dart';
 import 'package:ligas_futbol_flutter/src/domain/team_tournament/dto/team_tournament_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/team_tournament/entity/team_tournament.dart';
-import 'package:ligas_futbol_flutter/src/core/typedefs.dart';
 import 'package:ligas_futbol_flutter/src/domain/team_tournament/service/i_team_tournament_service.dart';
 import 'package:ligas_futbol_flutter/src/domain/tournament/dto/scoring_by_tournament/scoring_tournament_dto.dart';
 
@@ -46,8 +46,10 @@ class TeamTournamentServiceImpl implements ITeamTournamentService {
 
   @override
   RepositoryResponse<List<ScoringTournamentDTO>> getGeneralTableByTournament(
-      int tournamentId) {
-    return _repository.getGeneralTableByTournament(tournamentId);
+      int tournamentId,
+      {bool requiresAuthToken = true}) {
+    return _repository.getGeneralTableByTournament(tournamentId,
+        requiresAuthToken: requiresAuthToken);
   }
 
   @override

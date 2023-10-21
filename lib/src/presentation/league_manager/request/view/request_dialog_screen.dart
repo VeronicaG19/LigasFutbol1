@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ligas_futbol_flutter/src/domain/category/entity/category.dart';
 
 import '../cubit/lm_request_cubit.dart';
 
@@ -18,8 +17,8 @@ class RequestDialogScreen extends StatelessWidget {
       ),
     );
     return SizedBox(
-      height: 600.0,
-      width: 900.0,
+      height: 400.0,
+      width: 700.0,
       child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,18 +35,44 @@ class RequestDialogScreen extends StatelessWidget {
                         if (state.selectedTeam.isEmpty) {
                           return const Text('Nombre del equipo');
                         }
-                        return TextFormField(
-                          decoration: inputDecoration.copyWith(
-                              labelText: 'Nombre del equipo'),
-                          onChanged:
-                              context.read<LmRequestCubit>().onChangeTeamName,
-                          initialValue: state.selectedTeam.teamName,
+                        return ListTile(
+                          title: const Text('Nombre del equpo'),
+                          subtitle: Text(context
+                                  .watch<LmRequestCubit>()
+                                  .state
+                                  .selectedTeam
+                                  .teamName! ??
+                              "sin nombre"),
                         );
                       },
                     ),
                   ),
                 ),
                 Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: BlocBuilder<LmRequestCubit, LmRequestState>(
+                      buildWhen: (previous, current) =>
+                          previous.selectedTeam != current.selectedTeam,
+                      builder: (context, state) {
+                        if (state.selectedTeam.isEmpty) {
+                          return const Text('Nombre de la categoria');
+                        }
+                        return ListTile(
+                          title: const Text('Nombre de la categoria'),
+                          subtitle: Text(context
+                                  .watch<LmRequestCubit>()
+                                  .state
+                                  .selectedTeam
+                                  .categoryId!
+                                  .categoryName ??
+                              "sin nombre"),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                /*  Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8),
                     child: BlocBuilder<LmRequestCubit, LmRequestState>(
@@ -77,11 +102,11 @@ class RequestDialogScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                ),
+                ),*/
                 const Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Text('Fecha de solicitud'),
+                  child: ListTile(
+                    title: Text('Fecha de solicitud'),
+                    subtitle: Text(''),
                   ),
                 ),
               ],
@@ -136,7 +161,7 @@ class RequestDialogScreen extends StatelessWidget {
                   child: TextField(
                     decoration: const InputDecoration(hintText: "Comentarios"),
                     keyboardType: TextInputType.multiline,
-                    maxLines: 5,
+                    maxLines: 2,
                     onChanged: context.read<LmRequestCubit>().onCommentChanged,
                   ),
                 ),

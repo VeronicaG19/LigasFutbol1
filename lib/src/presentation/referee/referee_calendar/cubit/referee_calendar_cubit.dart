@@ -21,6 +21,7 @@ class RefereeCalendarCubit extends Cubit<RefereeCalendarState> {
   late final List<RefereeMatchDTO> _matches;
 
   Future<void> onLoadInitialData(int refereeId) async {
+    print("id del referee $refereeId");
     emit(state.copyWith(screenState: BasicCubitScreenState.loading));
     _matches =
         await _matchService.getCalendarRefereeMatches(refereeId: refereeId);

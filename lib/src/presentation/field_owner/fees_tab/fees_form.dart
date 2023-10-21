@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/core/enums.dart';
 import 'package:ligas_futbol_flutter/src/domain/field/entity/field.dart';
 import 'package:ligas_futbol_flutter/src/presentation/field_owner/cubit/fees/fee_cubit.dart';
-import 'package:ligas_futbol_flutter/src/presentation/field_owner/fees_tab/widgets/duration_time_input.dart';
 import 'package:ligas_futbol_flutter/src/presentation/field_owner/fees_tab/widgets/periot_time_input.dart';
 import 'package:ligas_futbol_flutter/src/presentation/field_owner/fees_tab/widgets/price_input.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -41,7 +40,7 @@ class FeesForm extends StatelessWidget {
             CustomSnackBar.success(
               backgroundColor: Colors.green[800]!,
               textScaleFactor: 1.0,
-              message: 'Se ha creado la tarifa correctamente correctamente',
+              message: 'Se ha creado la tarifa correctamente',
             ),
           );
           Navigator.pop(context);
@@ -49,15 +48,20 @@ class FeesForm extends StatelessWidget {
       },
       builder: (context, state) {
         return AlertDialog(
-          content: Column(
+          content: const Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
               Center(
                 child: Text('Nueva tarifa'),
               ),
               PriceInput(),
-              DurationTimeInput(),
-              SizedBox(height: 10),
+              // DurationTimeInput(),
+              SizedBox(height: 20),
+              Text("Seleccionar periodo: ",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 14, color: Colors.black54)),
+              SizedBox(height: 5),
               PeriotTimeInput(),
             ],
           ),
@@ -70,13 +74,14 @@ class FeesForm extends StatelessWidget {
                     ),
                   )
                 : TextButton.icon(
-                    icon: const Icon(Icons.save, color: Color(0xff358aac)),
+                    icon: const Icon(Icons.save_alt, color: Color(0xff358aac)),
                     onPressed: () async {
                       context
                           .read<FeeCubit>()
                           .onPressSaveFee(activeId: field.activeId);
                     },
-                    label: const Text('Guardar'),
+                    label: const Text('Guardar',
+                        style: TextStyle(color: Color(0xff358aac))),
                   ),
           ],
         );

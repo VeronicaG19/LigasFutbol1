@@ -16,7 +16,8 @@ class CardField extends StatelessWidget {
       required this.direction,
       required this.quealify,
       required this.fieldId,
-      required this.activeId, required this.field})
+      required this.activeId,
+      required this.field})
       : super(key: key);
 
   final String name;
@@ -55,17 +56,17 @@ class CardField extends StatelessWidget {
                     ),
                     Expanded(
                         child: Padding(
-                          padding: EdgeInsets.only(
-                              bottom: 10, top: 10, right: 10, left: 10),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                                isDense: true,
-                                labelText: 'Dirección :',
-                                enabled: false),
-                            style: TextStyle(fontSize: 13),
-                            initialValue: direction,
-                          ),
-                        ))
+                      padding: EdgeInsets.only(
+                          bottom: 10, top: 10, right: 10, left: 10),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                            isDense: true,
+                            labelText: 'Dirección :',
+                            enabled: false),
+                        style: TextStyle(fontSize: 13),
+                        initialValue: direction,
+                      ),
+                    ))
                   ],
                 ),
                 actions: [
@@ -108,7 +109,7 @@ class CardField extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) {
-                          return  BlocProvider(
+                          return BlocProvider(
                             create: (_) => locator<LmFieldScheduleCubit>()
                               ..onLoadPrices(activeId ?? 0),
                             child: DialogPricesActive(),
@@ -234,14 +235,20 @@ class CardField extends StatelessWidget {
                 ),
               ),
               Text(name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  softWrap: true,
                   style: TextStyle(
                       color: Colors.grey[800],
                       fontSize: 12,
                       fontWeight: FontWeight.w900)),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Text(direction,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  softWrap: true,
                   style: TextStyle(
                       color: Colors.grey[800],
                       fontSize: 10,

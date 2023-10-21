@@ -25,10 +25,9 @@ class MatchesByTournamentCubit extends Cubit<MatchesByTournamentState> {
     emit(state.copyWith(
       screenStatus: ScreenStatus.loading,
     ));
-    print("Torneo-------->$tournament");
-    print("Categoria-------->$category");
     final response = await _tournamentService.getFindByNameAndCategory(
-        category.categoryId!, tournament.tournamentName!);
+        category.categoryId!, tournament.tournamentName!,
+        requiresAuthToken: false);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
@@ -38,57 +37,51 @@ class MatchesByTournamentCubit extends Cubit<MatchesByTournamentState> {
   }
 
   Future<void> getMatchesByTournament({required Tournament tournament}) async {
-    print("Valor del torneo---->$tournament");
-
-    final response =
-        await _matchesService.getMatchesByTournament(tournament.tournamentId!);
+    final response = await _matchesService.getMatchesByTournament(
+        tournament.tournamentId!,
+        requiresAuthToken: false);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
             errorMessage: l.errorMessage)), (r) {
-      print("Datos ${r.length}");
       emit(state.copyWith(screenStatus: ScreenStatus.loaded, matchesList: r));
     });
     // pedro
     getTournamentFinishedStatus(tournamentId: tournament.tournamentId!);
     getTournamentChampion(tournamentId: tournament.tournamentId!);
-
   }
 
   Future<void> getFieldByMatchId({required int teamId}) async {
-    print("Valor del torneo---->$teamId");
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
-    final response = await _fieldService.getFieldByMatchId(teamId);
+    final response =
+        await _fieldService.getFieldByMatchId(teamId, requiresAuthToken: false);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
             errorMessage: l.errorMessage)), (r) {
-      print("Datos----->${r}");
       emit(state.copyWith(screenStatus: ScreenStatus.loaded, fieldData: r));
     });
   }
 
   Future<void> getTournamentFinishedStatus({required int tournamentId}) async {
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
-    final response =
-    await _tournamentService.getTournamentMatchesStatus(tournamentId);
+    final response = await _tournamentService
+        .getTournamentMatchesStatus(tournamentId, requiresAuthToken: false);
     response.fold(
-            (l) => emit(state.copyWith(
+        (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
             errorMessage: l.errorMessage)), (r) {
-      print("Datos ${r.length}");
       emit(state.copyWith(
           screenStatus: ScreenStatus.loaded, statusTournament: r));
     });
   }
 
-
   Future<void> getTournamentChampion({required int tournamentId}) async {
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
-    final response =
-    await _tournamentService.getTournamentChampion(tournamentId);
+    final response = await _tournamentService
+        .getTournamentChampion(tournamentId, requiresAuthToken: false);
     response.fold(
-            (l) => emit(state.copyWith(
+        (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
             errorMessage: l.errorMessage)), (r) {
       emit(state.copyWith(

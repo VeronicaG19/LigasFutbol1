@@ -96,4 +96,9 @@ class Availability extends Equatable {
       status: status ?? this.status,
     );
   }
+
+  @override
+  String toString() {
+    return 'Availability{activeId: $activeId, availabilityId: $availabilityId, expirationDate: $expirationDate, openingDate: $openingDate, hourClose: $hourClose, hourOpen: $hourOpen, partyId: $partyId, status: $status}';
+  }
 }

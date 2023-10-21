@@ -26,7 +26,7 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
     debugPrint('\tENTERING REFRESH TOKEN INTERCEPTOR');
-    /*if (err.response != null) {
+    if (err.response != null) {
       if (err.response!.data != null) {
         debugPrint('\tREFRESH TOKEN INTERCEPTOR: ${err.response!.statusCode}');
         if (err.response!.statusCode == 401) {
@@ -61,7 +61,7 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
           }
         }
       }
-    }*/
+    }
     debugPrint('\tEXITING REFRESH TOKEN INTERCEPTOR');
     return super.onError(err, handler);
   }

@@ -4,6 +4,7 @@ import 'package:datasource_client/datasource_client.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:ligas_futbol_flutter/src/domain/countResponse/entity/register_count_interface.dart';
+import 'package:ligas_futbol_flutter/src/domain/matches/dto/detail_eliminatory_dto/qualifying_match_detail_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/detail_match/detailMatchDTO.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/detail_rol_match_dto/detail_rol_match_DTO.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/edit_match_dto/edit_match_dto.dart';
@@ -32,10 +33,10 @@ class CategoryRepositoryImpl implements IMatchesRepository {
 
   @override
   RepositoryResponse<List<MatchesByTournamentsInterface>>
-      getMatchesByTournament(int tournamenId) {
+      getMatchesByTournament(int tournamenId, {bool requiresAuthToken = true}) {
     return _apiClient.network
         .getCollectionData(
-            requiresAuthToken: false,
+            requiresAuthToken: requiresAuthToken,
             converter: MatchesByTournamentsInterface.fromJson,
             //  queryParams: {'idLeague': leagueId},
             endpoint: "$getMatchesByTournamentEndpoint/$tournamenId")
@@ -75,7 +76,8 @@ class CategoryRepositoryImpl implements IMatchesRepository {
   }
 
   @override
-  RepositoryResponse<ResultDTO> createRolesGamesByTournamentId(int tournamentId) {
+  RepositoryResponse<ResultDTO> createRolesGamesByTournamentId(
+      int tournamentId) {
     return _apiClient.network
         .postData(
             data: null,
@@ -240,10 +242,10 @@ class CategoryRepositoryImpl implements IMatchesRepository {
     final data = jsonEncode(listMatchRoleDTO);
     return _apiClient.network
         .postData(
-        endpoint: '$getCreateRolsC/$tournamentId',
-        data: {},
-        dataAsString: data,
-        converter: MatchTeamMatchesRefereeDTO.fromJson)
+            endpoint: '$getCreateRolsC/$tournamentId',
+            data: {},
+            dataAsString: data,
+            converter: MatchTeamMatchesRefereeDTO.fromJson)
         .validateResponse();
   }
 
@@ -323,5 +325,26 @@ class CategoryRepositoryImpl implements IMatchesRepository {
             data: {},
             converter: (response) => response['result'] as String)
         .validateResponse();
+  }
+
+  @override
+  RepositoryResponse<QualifyingMatchDetailDTO> getDetailEliminatory(
+      int matchId) {
+    return _apiClient.network
+        .getData(
+            endpoint: "$getDetailEliminatoryEndpoint/$matchId",
+            converter: QualifyingMatchDetailDTO.fromJson)
+        .validateResponse();
+  }
+
+  @override
+  RepositoryResponse<MatchSpr> getMatchDetailByEventId(int eventId) {
+    // TODO: implement getMatchDetailByEventId
+    return _apiClient.network
+        .getData(
+            endpoint: "$getMatchByEventId/$eventId",
+            converter: MatchSpr.fromJson)
+        .validateResponse();
+    //    //getMatchByEventId
   }
 }

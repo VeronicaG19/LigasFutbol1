@@ -3,25 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../service_locator/injection.dart';
 import '../../../app/app.dart';
-import '../../../widgets/notification_icon/cubit/notification_count_cubit.dart';
 import '../cubit/fo_request_cubit.dart';
 import 'fo_request_content.dart';
 
 class FoRequestPage extends StatelessWidget {
   const FoRequestPage({Key? key}) : super(key: key);
 
-  static Route route(NotificationCountCubit notificationCountCubit) =>
-      MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: notificationCountCubit,
-          child: const FoRequestPage(),
-        ),
+  static Route route() => MaterialPageRoute(
+        builder: (_) => const FoRequestPage(),
       );
 
   @override
   Widget build(BuildContext context) {
-    final league = context
-        .select((AuthenticationBloc bloc) => bloc.state.leagueManager.leagueId);
+    final league = context.select(
+        (AuthenticationBloc bloc) => bloc.state.selectedLeague.leagueId);
     return Scaffold(
       appBar: AppBar(
         title: const Text(

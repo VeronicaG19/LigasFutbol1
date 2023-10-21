@@ -7,6 +7,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../../../../domain/player/entity/position.dart';
 import '../../../../widgets/edit_profile_image/view/profile_image_widget.dart';
 import '../../cubit/player_profile_cubit.dart';
+import 'edit_address_profile.dart';
 
 class EditPlayerProfileContent extends StatefulWidget {
   const EditPlayerProfileContent({Key? key}) : super(key: key);
@@ -28,13 +29,12 @@ class _EditPlayerProfileContentState extends State<EditPlayerProfileContent>{
       Positions(preferencePosition: 'Media punta', preferencePositionId: 6),
       Positions(preferencePosition: 'Delantero', preferencePositionId: 7),
       Positions(preferencePosition: 'Extremo', preferencePositionId: 8),
-      Positions(
-          preferencePosition: 'Delantero central', preferencePositionId: 8)
+      Positions(preferencePosition: 'Delantero central', preferencePositionId: 9)
     ];
     return BlocConsumer<PlayerProfileCubit, PlayerProfileState>(
         
         listener: (context, state) {
-          if (state.formStatus.isSubmissionSuccess) {
+          if (state.formStatus == FormzStatus.submissionSuccess) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -123,7 +123,7 @@ class _EditPlayerProfileContentState extends State<EditPlayerProfileContent>{
                                     ? DateTime.now()
                                     : state.playerInfo.birthday!,
                               )}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                               ),
                             ),
@@ -152,10 +152,10 @@ class _EditPlayerProfileContentState extends State<EditPlayerProfileContent>{
                                   (index) {
                                 final content = positions[index].preferencePosition;
                                 return DropdownMenuItem(
+                                  value: positions[index],
                                   child: Text(content.trim().isEmpty
                                       ? 'Selecciona la posicion'
                                       : content),
-                                  value: positions[index],
                                 );
                               },
                             ),
@@ -166,7 +166,26 @@ class _EditPlayerProfileContentState extends State<EditPlayerProfileContent>{
                             },
                           ),
                         ),
-                        Padding(
+                         Container(
+                          width: MediaQuery.of(context).size.width * .99,
+                          height: 50,
+                          padding: const EdgeInsets.fromLTRB(10, 0, 25, 0),
+                          child: OutlinedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                            context,
+                            EditAddressProfile.route(BlocProvider.of<PlayerProfileCubit>(context), state.playerInfo));
+                            },
+                            icon: const Icon(Icons.edit),
+                            label: Text(
+                              state.playerInfo.playerAddress ?? 'Sin dirección',
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                        /*Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 18, vertical: 16),
                           child: TextFormField(
@@ -177,20 +196,21 @@ class _EditPlayerProfileContentState extends State<EditPlayerProfileContent>{
                               icon: Icon(Icons.place),
                               border: OutlineInputBorder(),
                               labelText: 'Dirección',
-                            ),
+                            ), 
                             onChanged: (value) => context
                                 .read<PlayerProfileCubit>()
                                 .onchangeAddresPlayer(value),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                     // MyCustomForm(player: state.playerInfo),
                     GestureDetector(
-                      onTap: () {
-                        context
+                      onTap: () async {
+                        await context
                             .read<PlayerProfileCubit>()
                             .onUpdatePersonName();
+                        Navigator.pop(context);
                       },
                       child: Container(
                         //onUpdatePersonName

@@ -21,6 +21,8 @@ class ConfigurationTournament extends StatelessWidget {
             context
                 .read<TournamentMainCubit>()
                 .onUpdateSelectedTournament(state.tournamentSelected);
+          } else if (state.screenStatus == ScreenStatus.tournamentDeleted) {
+            context.read<TournamentMainCubit>().onReloadTournaments();
           }
         },
         builder: (context, state) {
@@ -30,7 +32,12 @@ class ConfigurationTournament extends StatelessWidget {
                 : SingleChildScrollView(
                     child: Column(
                       children: [
+                        const SizedBox(
+                          height: 30,
+                        ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                                 child: Column(
@@ -39,11 +46,14 @@ class ConfigurationTournament extends StatelessWidget {
                                   children: [
                                     const Text(
                                       'Estado del torneo',
-                                      style: TextStyle(fontSize: 29),
+                                      style: TextStyle(
+                                        fontFamily: 'SF Pro',
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.0,
+                                      ),
                                     ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
+                                    const Divider(indent: 1),
                                     SwitchListTile(
                                         activeThumbImage: const AssetImage(
                                             'assets/images/unlocked.png'),
@@ -53,8 +63,24 @@ class ConfigurationTournament extends StatelessWidget {
                                         title: state.tournamentSelected
                                                     .tournamentPrivacy ==
                                                 'Y'
-                                            ? const Text('Publico')
-                                            : const Text('Privado'),
+                                            ? const Text(
+                                                'Publico',
+                                                style: TextStyle(
+                                                  fontFamily: 'SF Pro',
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15.0,
+                                                ),
+                                              )
+                                            : const Text(
+                                                'Privado',
+                                                style: TextStyle(
+                                                  fontFamily: 'SF Pro',
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
                                         value: state.tournamentSelected
                                                     .tournamentPrivacy ==
                                                 'Y'
@@ -74,8 +100,24 @@ class ConfigurationTournament extends StatelessWidget {
                                         title: state.tournamentSelected
                                                     .statusBegin ==
                                                 'Y'
-                                            ? const Text('Abierto')
-                                            : const Text('Cerrado'),
+                                            ? const Text(
+                                                'Abierto',
+                                                style: TextStyle(
+                                                  fontFamily: 'SF Pro',
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15.0,
+                                                ),
+                                              )
+                                            : const Text(
+                                                'Cerrado',
+                                                style: TextStyle(
+                                                  fontFamily: 'SF Pro',
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
                                         value: state.tournamentSelected
                                                     .statusBegin ==
                                                 'Y'
@@ -90,6 +132,9 @@ class ConfigurationTournament extends StatelessWidget {
                                 ),
                               ],
                             )),
+                            const SizedBox(
+                              width: 10,
+                            ),
                             Expanded(
                                 child: Row(
                               children: [
@@ -98,15 +143,21 @@ class ConfigurationTournament extends StatelessWidget {
                                     children: [
                                       const Text(
                                         'Ajustes del torneo',
-                                        style: TextStyle(fontSize: 29),
+                                        style: TextStyle(
+                                          fontFamily: 'SF Pro',
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20.0,
+                                        ),
                                       ),
+                                      const Divider(indent: 1),
                                       const SizedBox(
                                         height: 15,
                                       ),
                                       TextFormField(
                                         decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
                                           labelText: 'Nombre del torneo',
+                                          labelStyle: TextStyle(fontSize: 13),
                                         ),
                                         initialValue: state
                                             .tournamentSelected.tournamentName,
@@ -116,6 +167,7 @@ class ConfigurationTournament extends StatelessWidget {
                                               .onChangeName(
                                                   tournamentName: val);
                                         },
+                                        style: const TextStyle(fontSize: 13),
                                       ),
                                       const SizedBox(
                                         height: 20,
@@ -123,54 +175,19 @@ class ConfigurationTournament extends StatelessWidget {
 
                                       Row(
                                         children: [
-                                          Expanded(
-                                            child: DropdownButtonFormField<
-                                                LookUpValue>(
-                                              value: state.lookUpValues[state
-                                                  .lookUpValues
-                                                  .indexWhere((element) =>
-                                                      element.lookupValue
-                                                          .toString() ==
-                                                      state.tournamentSelected
-                                                          .typeTournament)],
-                                              decoration: const InputDecoration(
-                                                label: Text('Tipo de torneo'),
-                                                border: OutlineInputBorder(),
-                                              ),
-                                              //icon: const Icon(Icons.sports_soccer),
-                                              isExpanded: true,
-                                              hint: const Text(
-                                                  'Selecciona un tipo de torneo'),
-                                              items: List.generate(
-                                                state.lookUpValues.length,
-                                                (index) {
-                                                  final content = state
-                                                      .lookUpValues[index]
-                                                      .lookupName!;
-                                                  return DropdownMenuItem(
-                                                    child: Text(content
-                                                            .trim()
-                                                            .isEmpty
-                                                        ? 'Selecciona un tipo de torneo'
-                                                        : content),
-                                                    value: state
-                                                        .lookUpValues[index],
-                                                  );
-                                                },
-                                              ),
-                                              onChanged: (value) {
-                                                context
-                                                    .read<TournamentCubit>()
-                                                    .ontTournamentChange(
-                                                        tyTournamnet: value!);
-                                              },
-                                            ),
+                                          const Expanded(
+                                            child: _TournamentTypeSelection(),
                                           ),
                                           const SizedBox(
                                             width: 20,
                                           ),
                                           Expanded(
                                               child: ElevatedButton.icon(
+                                            style: const ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStatePropertyAll<
+                                                      Color>(Colors.blueGrey),
+                                            ),
                                             onPressed: () async {
                                               DateTime? pickedDate =
                                                   await showDatePicker(
@@ -187,17 +204,18 @@ class ConfigurationTournament extends StatelessWidget {
                                                   .onchangeTournamentDate(
                                                       pickedDate!);
                                             },
-                                            icon: const Icon(Icons.date_range),
+                                            icon: const Icon(Icons.date_range,
+                                                size: 18),
                                             label: Text(
-                                              'Fecha de inicio ${DateFormat('yyyy-MM-dd').format(
-                                                state.tournamentSelected
-                                                            .inscriptionDate ==
-                                                        null
-                                                    ? DateTime.now()
-                                                    : state.tournamentSelected
-                                                        .inscriptionDate!,
-                                              )}',
-                                            ),
+                                                'Fecha de inicio ${DateFormat('yyyy-MM-dd').format(
+                                                  state.tournamentSelected
+                                                              .inscriptionDate ==
+                                                          null
+                                                      ? DateTime.now()
+                                                      : state.tournamentSelected
+                                                          .inscriptionDate!,
+                                                )}',
+                                                style: TextStyle(fontSize: 13)),
                                           )),
                                         ],
                                       ),
@@ -210,11 +228,11 @@ class ConfigurationTournament extends StatelessWidget {
                                             child: TextFormField(
                                               enabled: false,
                                               decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
                                                 labelText: 'Categoria',
                                               ),
                                               initialValue:
                                                   '${state.tournamentSelected.categoryId?.categoryName}',
+                                              style: TextStyle(fontSize: 13),
                                             ),
                                           ),
                                           const SizedBox(
@@ -224,9 +242,11 @@ class ConfigurationTournament extends StatelessWidget {
                                             child: TextFormField(
                                               enabled: false,
                                               decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
+                                                labelStyle:
+                                                    TextStyle(fontSize: 13),
                                                 labelText: 'Género',
                                               ),
+                                              style: TextStyle(fontSize: 13),
                                               initialValue: (state
                                                           .tournamentSelected
                                                           .categoryId
@@ -237,7 +257,7 @@ class ConfigurationTournament extends StatelessWidget {
                                                               .tournamentSelected
                                                               .categoryId
                                                               ?.gender ==
-                                                          1)
+                                                          2)
                                                       ? 'Femenil'
                                                       : 'Mixto',
                                             ),
@@ -252,15 +272,16 @@ class ConfigurationTournament extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: TextFormField(
-                                              inputFormatters: <
-                                                  TextInputFormatter>[
+                                              inputFormatters: <TextInputFormatter>[
                                                 FilteringTextInputFormatter
                                                     .digitsOnly
                                               ],
                                               decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
+                                                labelStyle:
+                                                    TextStyle(fontSize: 13),
                                                 labelText: 'Equipos permitidos',
                                               ),
+                                              style: TextStyle(fontSize: 13),
                                               initialValue:
                                                   '${state.tournamentSelected.maxTeams ?? 0}',
                                               onChanged: (val) {
@@ -275,16 +296,17 @@ class ConfigurationTournament extends StatelessWidget {
                                           ),
                                           Expanded(
                                             child: TextFormField(
-                                              inputFormatters: <
-                                                  TextInputFormatter>[
+                                              inputFormatters: <TextInputFormatter>[
                                                 FilteringTextInputFormatter
                                                     .digitsOnly
                                               ],
                                               decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
+                                                labelStyle:
+                                                    TextStyle(fontSize: 13),
                                                 labelText:
                                                     'Jugadores por equipo',
                                               ),
+                                              style: TextStyle(fontSize: 13),
                                               initialValue:
                                                   '${state.tournamentSelected.maxPlayers ?? 0}',
                                               onChanged: (val) {
@@ -299,27 +321,29 @@ class ConfigurationTournament extends StatelessWidget {
                                       ),
 
                                       const SizedBox(
-                                        width: 20,
+                                        height: 10,
                                       ),
-                                      const Text('Días de partidos'),
+                                      /*  const Text('Días de partidos'),
                                       const SizedBox(
                                         width: 20,
                                       ),
-                                      GridView.builder(
+                                     GridView.builder(
                                         shrinkWrap: true,
                                         gridDelegate:
                                             SliverGridDelegateWithMaxCrossAxisExtent(
-                                                maxCrossAxisExtent: 180,
-                                                childAspectRatio: 5 / 3,
-                                                crossAxisSpacing: 9,
-                                                mainAxisSpacing: 15),
+                                                maxCrossAxisExtent: 145,
+                                                childAspectRatio: 2 / 1,
+                                                crossAxisSpacing: 20,
+                                                mainAxisSpacing: 20),
                                         itemCount: state.daysList.length,
                                         itemBuilder: (context, index) {
                                           return CheckboxListTile(
                                             enabled: true,
-                                            title: Text(state.daysList[index]
-                                                    .daysEnum?.name ??
-                                                ''),
+                                            title: Text(
+                                                state.daysList[index].daysEnum
+                                                        ?.name ??
+                                                    '',
+                                                style: TextStyle(fontSize: 13)),
                                             value: state
                                                 .daysList[index].isSelected,
                                             onChanged: (bool? value) {
@@ -330,111 +354,118 @@ class ConfigurationTournament extends StatelessWidget {
                                             }, //  <-- leading Checkbox
                                           );
                                         },
-                                      )
+                                      )*/
                                       //DaysCheckBoc()
                                     ],
                                   ),
                                 )
                               ],
                             )),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Text(
-                          'Configuración de partidos',
-                          style: TextStyle(fontSize: 29),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: DropdownButtonFormField<LookUpValue>(
-                                value: state.typeOfGames.isNotEmpty
-                                    ? state.typeOfGames[state.typeOfGames
-                                        .indexWhere((element) =>
-                                            element.lookupValue.toString() ==
-                                            state
-                                                .tournamentSelected.typeOfGame)]
-                                    : null,
-                                decoration: const InputDecoration(
-                                  label: Text('Tipo de juego'),
-                                  border: OutlineInputBorder(),
-                                ),
-                                //icon: const Icon(Icons.sports_soccer),
-                                isExpanded: true,
-                                hint: const Text('Tipo de juego'),
-                                items: List.generate(
-                                  state.typeOfGames.length,
-                                  (index) {
-                                    final content =
-                                        state.typeOfGames[index].lookupName!;
-                                    return DropdownMenuItem(
-                                      enabled: false,
-                                      child: Text(content.trim().isEmpty
-                                          ? 'Tipo de juego'
-                                          : content),
-                                      value: state.typeOfGames[index],
-                                    );
-                                  },
-                                ),
-                                onChanged: (value) {},
-                              ),
+                            const SizedBox(
+                              width: 10,
                             ),
                             Expanded(
-                              child: Column(
+                              child: Row(
                                 children: [
-                                  const Text('Permite tarjetas azules'),
-                                  Checkbox(
-                                    checkColor: Colors.white,
-                                    //fillColor: MaterialStateProperty.resolveWith(Colors.green),
-                                    value: ((state.tournamentSelected
-                                                    .activateBlueCard ??
-                                                'N') ==
-                                            'Y')
-                                        ? true
-                                        : false,
-                                    onChanged: (value) {},
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
+                                  Expanded(
+                                      child: Column(
                                     children: [
                                       const Text(
-                                        'Partidos',
-                                        style: TextStyle(fontSize: 29),
+                                        'Configuración de partidos',
+                                        style: TextStyle(
+                                          fontFamily: 'SF Pro',
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20.0,
+                                        ),
                                       ),
+                                      const Divider(indent: 1),
                                       const SizedBox(
-                                        height: 15,
+                                        height: 6,
+                                      ),
+                                      Row(children: [
+                                        Expanded(
+                                          child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: 100, left: 100),
+                                              child: DropdownButtonFormField<
+                                                  LookUpValue>(
+                                                value: state
+                                                        .typeOfGames.isNotEmpty
+                                                    ? state.typeOfGames[state
+                                                        .typeOfGames
+                                                        .indexWhere((element) =>
+                                                            element.lookupValue
+                                                                .toString() ==
+                                                            state
+                                                                .tournamentSelected
+                                                                .typeOfGame)]
+                                                    : null,
+                                                style: const TextStyle(
+                                                    fontSize: 13),
+                                                decoration:
+                                                    const InputDecoration(
+                                                  label: Text('Tipo de juego',
+                                                      style: const TextStyle(
+                                                          fontSize: 13)),
+                                                ),
+                                                //icon: const Icon(Icons.sports_soccer),
+                                                isExpanded: true,
+                                                hint:
+                                                    const Text('Tipo de juego'),
+                                                items: List.generate(
+                                                  state.typeOfGames.length,
+                                                  (index) {
+                                                    final content = state
+                                                        .typeOfGames[index]
+                                                        .lookupName!;
+                                                    return DropdownMenuItem(
+                                                      enabled: false,
+                                                      child: Text(
+                                                          content.trim().isEmpty
+                                                              ? 'Tipo de juego'
+                                                              : content),
+                                                      value: state
+                                                          .typeOfGames[index],
+                                                    );
+                                                  },
+                                                ),
+                                                onChanged: (value) {},
+                                              )),
+                                        ),
+                                      ]),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(children: [
+                                        Expanded(
+                                          child: const Text(
+                                            'Partidos',
+                                            style: TextStyle(
+                                              fontFamily: 'SF Pro',
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ]),
+                                      const SizedBox(
+                                        height: 10,
                                       ),
                                       Row(
                                         children: [
                                           Expanded(
                                             child: TextFormField(
-                                              inputFormatters: <
-                                                  TextInputFormatter>[
+                                              inputFormatters: <TextInputFormatter>[
                                                 FilteringTextInputFormatter
                                                     .digitsOnly
                                               ],
                                               initialValue:
                                                   '${state.tournamentSelected.gameTimes}',
                                               decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
+                                                labelStyle:
+                                                    TextStyle(fontSize: 13),
                                                 labelText: 'Tiempo(s)',
                                               ),
                                               onChanged: (value) {
@@ -442,24 +473,27 @@ class ConfigurationTournament extends StatelessWidget {
                                                     .read<TournamentCubit>()
                                                     .onchangeMatchTime(value);
                                               },
+                                              style: TextStyle(fontSize: 13),
                                             ),
                                           ),
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
+                                          Expanded(
+                                              child: SizedBox(
+                                            width: 5,
+                                          )),
                                           Expanded(
                                             child: TextFormField(
-                                              inputFormatters: <
-                                                  TextInputFormatter>[
+                                              inputFormatters: <TextInputFormatter>[
                                                 FilteringTextInputFormatter
                                                     .digitsOnly
                                               ],
                                               initialValue:
                                                   '${state.tournamentSelected.durationByTime}',
                                               decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
+                                                labelStyle:
+                                                    TextStyle(fontSize: 13),
                                                 labelText: 'Duración',
                                               ),
+                                              style: TextStyle(fontSize: 13),
                                               onChanged: (value) {
                                                 context
                                                     .read<TournamentCubit>()
@@ -476,10 +510,137 @@ class ConfigurationTournament extends StatelessWidget {
                                       Row(
                                         children: [
                                           Expanded(
+                                            child: Row(
+                                              children: [
+                                                /* Expanded(
+                                                  child: Column(
+                                                    children: [
+                                                      const Text(
+                                                        'Permite tarjetas azules',
+                                                        style: TextStyle(
+                                                            fontSize: 13),
+                                                      ),
+                                                      Checkbox(
+                                                        checkColor:
+                                                            Colors.white,
+                                                        //fillColor: MaterialStateProperty.resolveWith(Colors.green),
+                                                        value: ((state.tournamentSelected
+                                                                        .activateBlueCard ??
+                                                                    'N') ==
+                                                                'Y')
+                                                            ? true
+                                                            : false,
+                                                        onChanged: (value) {},
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),*/
+                                                Expanded(
+                                                    child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Column(
+                                                        children: [
+                                                          const Text(
+                                                            'Sanciones',
+                                                            style: TextStyle(
+                                                                fontSize: 13),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 15,
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child:
+                                                                    TextFormField(
+                                                                  inputFormatters: <TextInputFormatter>[
+                                                                    FilteringTextInputFormatter
+                                                                        .digitsOnly
+                                                                  ],
+                                                                  initialValue:
+                                                                      '${state.tournamentSelected.breaksNumber}',
+                                                                  decoration:
+                                                                      const InputDecoration(
+                                                                    labelStyle: TextStyle(
+                                                                        fontSize:
+                                                                            13),
+                                                                    labelText:
+                                                                        'Descanso(s)',
+                                                                  ),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          13),
+                                                                  onChanged:
+                                                                      (value) {
+                                                                    context
+                                                                        .read<
+                                                                            TournamentCubit>()
+                                                                        .onchangebreaksNumber(
+                                                                            value);
+                                                                  },
+                                                                ),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 20,
+                                                              ),
+                                                              Expanded(
+                                                                child:
+                                                                    TextFormField(
+                                                                  inputFormatters: <TextInputFormatter>[
+                                                                    FilteringTextInputFormatter
+                                                                        .digitsOnly
+                                                                  ],
+                                                                  initialValue:
+                                                                      '${state.tournamentSelected.breaksDuration}',
+                                                                  decoration:
+                                                                      const InputDecoration(
+                                                                    labelStyle: TextStyle(
+                                                                        fontSize:
+                                                                            13),
+                                                                    labelText:
+                                                                        'Duración',
+                                                                  ),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          13),
+                                                                  onChanged:
+                                                                      (value) {
+                                                                    context
+                                                                        .read<
+                                                                            TournamentCubit>()
+                                                                        .onchangebreaksDuration(
+                                                                            value);
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                )),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
                                             child: Column(
                                               children: [
                                                 const Text(
-                                                    'Sanciones por tarjeta'),
+                                                    'Sanciones por tarjeta',
+                                                    style: TextStyle(
+                                                        fontSize: 14)),
                                                 Checkbox(
                                                   checkColor: Colors.white,
                                                   //fillColor: MaterialStateProperty.resolveWith(Colors.green),
@@ -505,20 +666,23 @@ class ConfigurationTournament extends StatelessWidget {
                                           Expanded(
                                             child: Column(
                                               children: [
-                                                const Text('Tarjeta roja'),
+                                                const Text('Tarjeta roja',
+                                                    style: TextStyle(
+                                                        fontSize: 13)),
                                                 TextFormField(
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
+                                                  inputFormatters: <TextInputFormatter>[
                                                     FilteringTextInputFormatter
                                                         .digitsOnly
                                                   ],
                                                   decoration:
                                                       const InputDecoration(
-                                                    border:
-                                                        OutlineInputBorder(),
+                                                    labelStyle:
+                                                        TextStyle(fontSize: 13),
                                                     labelText:
                                                         'Partidos por sanción',
                                                   ),
+                                                  style:
+                                                      TextStyle(fontSize: 13),
                                                   initialValue:
                                                       '${state.tournamentSelected.redCardFine ?? ''}',
                                                   onChanged: (value) {
@@ -544,21 +708,23 @@ class ConfigurationTournament extends StatelessWidget {
                                                   : false,
                                               child: Column(
                                                 children: [
-                                                  const Text(
-                                                      'Tarjeta amarilla'),
+                                                  const Text('Tarjeta amarilla',
+                                                      style: TextStyle(
+                                                          fontSize: 14)),
                                                   TextFormField(
-                                                    inputFormatters: <
-                                                        TextInputFormatter>[
+                                                    inputFormatters: <TextInputFormatter>[
                                                       FilteringTextInputFormatter
                                                           .digitsOnly
                                                     ],
                                                     decoration:
                                                         const InputDecoration(
-                                                      border:
-                                                          OutlineInputBorder(),
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 13),
                                                       labelText:
                                                           'Partidos por sanción',
                                                     ),
+                                                    style:
+                                                        TextStyle(fontSize: 13),
                                                     initialValue:
                                                         '${state.tournamentSelected.yellowCardFine ?? ''}',
                                                     onChanged: (value) {
@@ -584,8 +750,9 @@ class ConfigurationTournament extends StatelessWidget {
                                           Expanded(
                                             child: Column(
                                               children: [
-                                                const Text(
-                                                    'Cambios ilimitados'),
+                                                const Text('Cambios ilimitados',
+                                                    style: TextStyle(
+                                                        fontSize: 13)),
                                                 Checkbox(
                                                   checkColor: Colors.white,
                                                   //fillColor: MaterialStateProperty.resolveWith(Colors.green),
@@ -605,9 +772,6 @@ class ConfigurationTournament extends StatelessWidget {
                                               ],
                                             ),
                                           ),
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
                                           Expanded(
                                             child: Visibility(
                                               visible: ((state.tournamentSelected
@@ -618,19 +782,22 @@ class ConfigurationTournament extends StatelessWidget {
                                                   : true,
                                               child: Column(
                                                 children: [
-                                                  const Text('Cambios'),
+                                                  const Text('Cambios',
+                                                      style: TextStyle(
+                                                          fontSize: 13)),
                                                   TextFormField(
-                                                    inputFormatters: <
-                                                        TextInputFormatter>[
+                                                    inputFormatters: <TextInputFormatter>[
                                                       FilteringTextInputFormatter
                                                           .digitsOnly
                                                     ],
                                                     decoration:
                                                         const InputDecoration(
-                                                      border:
-                                                          OutlineInputBorder(),
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 13),
                                                       labelText: 'Total',
                                                     ),
+                                                    style:
+                                                        TextStyle(fontSize: 13),
                                                     initialValue:
                                                         '${state.tournamentSelected.gameChanges ?? ''}',
                                                     onChanged: (value) {
@@ -647,94 +814,24 @@ class ConfigurationTournament extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                                child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      const Text(
-                                        'Sanciones',
-                                        style: TextStyle(fontSize: 29),
-                                      ),
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextFormField(
-                                              inputFormatters: <
-                                                  TextInputFormatter>[
-                                                FilteringTextInputFormatter
-                                                    .digitsOnly
-                                              ],
-                                              initialValue:
-                                                  '${state.tournamentSelected.breaksNumber}',
-                                              decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                labelText: 'Descanso(s)',
-                                              ),
-                                              onChanged: (value) {
-                                                context
-                                                    .read<TournamentCubit>()
-                                                    .onchangebreaksNumber(
-                                                        value);
-                                              },
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            child: TextFormField(
-                                              inputFormatters: <
-                                                  TextInputFormatter>[
-                                                FilteringTextInputFormatter
-                                                    .digitsOnly
-                                              ],
-                                              initialValue:
-                                                  '${state.tournamentSelected.breaksDuration}',
-                                              decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                labelText: 'Duración',
-                                              ),
-                                              onChanged: (value) {
-                                                context
-                                                    .read<TournamentCubit>()
-                                                    .onchangebreaksDuration(
-                                                        value);
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
                                       const SizedBox(
                                         height: 20,
                                       ),
                                     ],
-                                  ),
-                                )
-                              ],
-                            )),
+                                  ))
+                                ],
+                              ),
+                            )
                           ],
+                        ),
+                        const SizedBox(
+                          height: 20,
                         ),
                         Row(
                           children: [
                             Expanded(
-                              child: ElevatedButton.icon(
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all(Colors.red)),
-                                onPressed: () {
+                              child: TextButton(
+                                onPressed: () async {
                                   showDialog(
                                       context: context,
                                       builder: (_) {
@@ -746,30 +843,57 @@ class ConfigurationTournament extends StatelessWidget {
                                             child: DeleteTournamentModal());
                                       });
                                 },
-                                icon: Icon(
-                                  // <-- Icon
-                                  Icons.delete_forever_outlined,
-                                  size: 24.0,
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.fromLTRB(
+                                      16.0, 10.0, 16.0, 10.0),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xff740404),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15.0)),
+                                  ),
+                                  child: Text(
+                                    'Eliminar',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'SF Pro',
+                                      color: Colors.grey[200],
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 10.0,
+                                    ),
+                                  ),
                                 ),
-                                label: Text('Eliminar'), // <-- Text
                               ),
                             ),
                             Expanded(
-                              child: ElevatedButton.icon(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.green)),
-                                onPressed: () {
+                              child: TextButton(
+                                onPressed: //state.formzStatus.isValidated
+                                    //?
+                                    () {
                                   context
                                       .read<TournamentCubit>()
                                       .updateTournament();
                                 },
-                                icon: Icon(
-                                  // <-- Icon
-                                  Icons.save,
-                                  size: 24.0,
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.fromLTRB(
+                                      16.0, 10.0, 16.0, 10.0),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xff045a74),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15.0)),
+                                  ),
+                                  child: Text(
+                                    'Guardar cambios',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'SF Pro',
+                                      color: Colors.grey[200],
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 10.0,
+                                    ),
+                                  ),
                                 ),
-                                label: Text('Guardar cambios'), // <-- Text
                               ),
                             ),
                           ],
@@ -788,5 +912,63 @@ class ConfigurationTournament extends StatelessWidget {
             return NeedSlctTournamentPage();
           }
         });
+  }
+}
+
+class _TournamentTypeSelection extends StatelessWidget {
+  const _TournamentTypeSelection({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedTournament =
+        context.select((TournamentCubit bloc) => bloc.state.tournamentSelected);
+    final selectedValue = context.select((TournamentCubit bloc) =>
+        bloc.state.lookUpValues.firstWhere((element) =>
+            element.lookupValue.toString() ==
+            selectedTournament.typeTournament));
+    final status = context
+        .select((TournamentMainCubit bloc) => bloc.validateTournamentType());
+    return BlocBuilder<TournamentCubit, TournamentState>(
+      buildWhen: (previous, current) =>
+          previous.lookUpValues != current.lookUpValues,
+      builder: (context, state) {
+        return DropdownButtonFormField<LookUpValue>(
+          // value: state.lookUpValues[state.lookUpValues.indexWhere((element) =>
+          //     element.lookupValue.toString() ==
+          //     state.tournamentSelected.typeTournament)],
+          value: selectedValue,
+          decoration: const InputDecoration(
+            label: Text('Tipo de torneo', style: TextStyle(fontSize: 13)),
+          ),
+          //icon: const Icon(Icons.sports_soccer),
+          isExpanded: true,
+          hint: const Text('Selecciona un tipo de torneo',
+              style: TextStyle(fontSize: 13)),
+          style: const TextStyle(fontSize: 13),
+          items: List.generate(
+            state.lookUpValues.length,
+            (index) {
+              final content = state.lookUpValues[index].lookupName!;
+              return DropdownMenuItem(
+                value: state.lookUpValues[index],
+                child: Text(
+                  content.trim().isEmpty
+                      ? 'Selecciona un tipo de torneo'
+                      : content,
+                  style: const TextStyle(fontSize: 13),
+                ),
+              );
+            },
+          ),
+          onChanged: status
+              ? null
+              : (value) {
+                  context
+                      .read<TournamentCubit>()
+                      .ontTournamentChange(tyTournamnet: value!);
+                },
+        );
+      },
+    );
   }
 }

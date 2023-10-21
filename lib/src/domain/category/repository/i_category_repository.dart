@@ -4,9 +4,10 @@ import '../../countResponse/entity/register_count_interface.dart';
 import '../entity/category.dart';
 import '../entity/player_statics.dart';
 
-abstract class ICategoryRepository { 
+abstract class ICategoryRepository {
   RepositoryResponse<List<Category>> getCategoryByTournamentByAndLeagueId(
-      int leagueId, String tournamentName);
+      int leagueId, String tournamentName,
+      {bool requiresAuthToken = true});
 
   /// Get all categoris by league id
   RepositoryResponse<List<Category>> getCategoriesByLeagueId(int leagueId);

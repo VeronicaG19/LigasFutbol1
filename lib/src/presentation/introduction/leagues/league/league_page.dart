@@ -12,7 +12,7 @@ class LeaguePage extends StatelessWidget {
   const LeaguePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    if(ResponsiveWidget.isSmallScreen(context)) {
+    if (ResponsiveWidget.isSmallScreen(context)) {
       return const _BodyMobile();
     } else {
       return const _BodyWeb();
@@ -37,8 +37,7 @@ class _BodyMobile extends StatelessWidget {
             ),
             TournamentsByLeagueContent()
           ],
-        )
-    );
+        ));
   }
 }
 
@@ -50,18 +49,18 @@ class _BodyWeb extends StatelessWidget {
     return BlocProvider(
         create: (_) => locator<LeagueCubit>()..loadLeagues(),
         child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size(screenSize.width, 1000),
-            child: TopBarContents(),
-          ),
-          body: Column(
-            children: [
-              Container(
-                width: 400,
-                child: const LeagueContent(),
-              ),
-              SizedBox(height: screenSize.height / 55),
-              const Text(
+            appBar: PreferredSize(
+              preferredSize: Size(screenSize.width, 1000),
+              child: TopBarContents(),
+            ),
+            body: Column(
+              children: [
+                Container(
+                  width: 400,
+                  child: const LeagueContent(),
+                ),
+                SizedBox(height: screenSize.height / 55),
+                const Text(
                   "Torneos",
                   textAlign: TextAlign.right,
                   style: TextStyle(
@@ -69,12 +68,8 @@ class _BodyWeb extends StatelessWidget {
                       fontSize: 20,
                       fontWeight: FontWeight.w900),
                 ),
-              Expanded(
-                  child: TournamentsByLeagueContent()
-              )
-            ],
-          )
-        )
-    );
+                Expanded(child: TournamentsByLeagueContent())
+              ],
+            )));
   }
 }

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 import 'package:ligas_futbol_flutter/src/domain/team/entity/team.dart';
 
 import '../../tournament/entity/tournament.dart';
@@ -81,6 +80,11 @@ class TeamTournament extends Equatable {
       winGamesShootOut: winGamesShootOut ?? this.winGamesShootOut,
     );
   }
+
+  static const empty = TeamTournament();
+
+  bool get isEmpty => this == TeamTournament.empty;
+  bool get isNotEmpty => this != TeamTournament.empty;
 
   /// Connect the generated [_$TeamTournamentFromJson] function to the `fromJson`
   /// factory.

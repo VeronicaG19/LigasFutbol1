@@ -19,7 +19,7 @@
     "@aePhoneNumberLbl": {
         "description": "Etiqueta para teléfono"
     },
-    "emailOrPhoneLabel": "correo electrónico o teléfono",
+    "emailOrPhoneLabel": "Correo electrónico o teléfono",
     "@emailOrPhoneLabel": {
         "description": "Etiqueta para correo electrónico o teléfono"
     },
@@ -68,7 +68,16 @@
     "aeInvalidDataMsg": "Datos no válidos",
     "aeEmailNotFoundMsg": "El email que introdujiste no está registrado con nosotros",
     "aePhoneNotFoundMsg": "El teléfono que introdujiste no está registrado con nosotros",
-    "aeInvalidPasswordMsg": "Contraseña no válida",
+    "aeInvalidPasswordMsg": "{errorCode, select, invalidLength{La contraseña debe tener al menos 8 dígitos} noLowerCase{La contraseña debe tener al menos una letra minúscula} noUpperCase{La contraseña debe tener al menos una letra mayúscula} noDigit{La contraseña debe tener al menos un dígito númerico} noSymbol{La contraseña debe tener al menos un carácter especial} consecutiveNumber{La contraseña no puede tener dígitos consecutivos} invalid{Contraseña inválida} other{Contraseña no válida}}",
+    "@aeInvalidPasswordMsg": {
+        "description": "Evaluates the error code and shows a message",
+        "placeholders": {
+            "errorCode": {
+                "type": "String",
+                "example": "no valid"
+            }
+        }
+    },
     "aeInvalidUsernameMsg": "Usuario no válido",
     "aeInvalidPhoneNumberMsg": "Número de teléfono inválido",
     "aeInvalidEmailMsg": "Correo electrónico inválido",

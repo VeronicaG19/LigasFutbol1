@@ -17,6 +17,7 @@ class EventsState extends Equatable {
   final List<PlayerDTO> playersList;
   final List<EventUtil> eventsList;
   final Tournament tournamentSelected;
+  final QualifyingMatchDetailDTO? qualifyingMatchDetail;
   // ? -- Inputs
   final int? teamIdSelected;
   final PlayerDTO? playerSelected;
@@ -33,6 +34,7 @@ class EventsState extends Equatable {
   // ? -- Loaders
   final Loaders loaderPlayers;
   final Loaders loaderEvents;
+  final String statusMessage;
 
   const EventsState({
     this.matchDetail = MatchDetailDTO.empty,
@@ -42,6 +44,7 @@ class EventsState extends Equatable {
     this.playersList = const [],
     this.eventsList = const [],
     this.tournamentSelected = Tournament.empty,
+    this.qualifyingMatchDetail,
     this.teamIdSelected,
     this.playerSelected,
     this.eventUtilSelected = EventUtil.empty,
@@ -55,6 +58,7 @@ class EventsState extends Equatable {
     this.errorMessage,
     this.loaderPlayers = Loaders.loadingPlayers,
     this.loaderEvents = Loaders.loadingEvents,
+    this.statusMessage = "",
   });
 
   EventsState copyWith({
@@ -65,6 +69,7 @@ class EventsState extends Equatable {
     List<PlayerDTO>? playersList,
     List<EventUtil>? eventsList,
     Tournament? tournamentSelected,
+    QualifyingMatchDetailDTO? qualifyingMatchDetail,
     int? teamIdSelected,
     PlayerDTO? playerSelected,
     EventUtil? eventUtilSelected,
@@ -78,52 +83,57 @@ class EventsState extends Equatable {
     Loaders? loaderEvents,
     BasicCubitScreenState? screenState,
     String? errorMessage,
+    String? statusMessage,
   }) {
     return EventsState(
-      matchDetail: matchDetail ?? this.matchDetail,
-      scoreShoutOutLocal: scoreShoutOutLocal ?? this.scoreShoutOutLocal,
-      scoreShoutOutVisit: scoreShoutOutVisit ?? this.scoreShoutOutVisit,
-      matches: matches ?? this.matches,
-      playersList: playersList ?? this.playersList,
-      eventsList: eventsList ?? this.eventsList,
-      tournamentSelected : tournamentSelected ?? this.tournamentSelected,
-      teamIdSelected: teamIdSelected ?? teamIdSelected,
-      playerSelected: playerSelected ?? playerSelected,
-      eventUtilSelected: eventUtilSelected ?? this.eventUtilSelected,
-      typeMatchTeamSelected:
-          typeMatchTeamSelected ?? this.typeMatchTeamSelected,
-      typeMatchTeamValidator:
-          typeMatchTeamValidator ?? this.typeMatchTeamValidator,
-      playerValidator: playerValidator ?? this.playerValidator,
-      typeEventValidator: typeEventValidator ?? this.typeEventValidator,
-      minutValidator: minutValidator ?? this.minutValidator,
-      formzStatus: formzStatus ?? this.formzStatus,
-      screenState: screenState ?? this.screenState,
-      errorMessage: errorMessage ?? this.errorMessage,
-      loaderPlayers: loaderPlayers ?? this.loaderPlayers,
-      loaderEvents: loaderEvents ?? this.loaderEvents,
-    );
+        matchDetail: matchDetail ?? this.matchDetail,
+        scoreShoutOutLocal: scoreShoutOutLocal ?? this.scoreShoutOutLocal,
+        scoreShoutOutVisit: scoreShoutOutVisit ?? this.scoreShoutOutVisit,
+        matches: matches ?? this.matches,
+        playersList: playersList ?? this.playersList,
+        eventsList: eventsList ?? this.eventsList,
+        tournamentSelected: tournamentSelected ?? this.tournamentSelected,
+        qualifyingMatchDetail:
+            qualifyingMatchDetail ?? this.qualifyingMatchDetail,
+        teamIdSelected: teamIdSelected ?? teamIdSelected,
+        playerSelected: playerSelected ?? playerSelected,
+        eventUtilSelected: eventUtilSelected ?? this.eventUtilSelected,
+        typeMatchTeamSelected:
+            typeMatchTeamSelected ?? this.typeMatchTeamSelected,
+        typeMatchTeamValidator:
+            typeMatchTeamValidator ?? this.typeMatchTeamValidator,
+        playerValidator: playerValidator ?? this.playerValidator,
+        typeEventValidator: typeEventValidator ?? this.typeEventValidator,
+        minutValidator: minutValidator ?? this.minutValidator,
+        formzStatus: formzStatus ?? this.formzStatus,
+        screenState: screenState ?? this.screenState,
+        errorMessage: errorMessage ?? this.errorMessage,
+        loaderPlayers: loaderPlayers ?? this.loaderPlayers,
+        loaderEvents: loaderEvents ?? this.loaderEvents,
+        statusMessage: statusMessage ?? this.statusMessage);
   }
 
   @override
   List<Object?> get props => [
-    matchDetail,
-    scoreShoutOutLocal,
-    scoreShoutOutVisit,
-    screenState,
-    matches,
-    playersList,
-    eventsList,
-    tournamentSelected,
-    teamIdSelected,
-    playerSelected,
-    eventUtilSelected,
-    typeMatchTeamSelected,
-    typeMatchTeamValidator,
-    playerValidator,
-    minutValidator,
-    formzStatus,
-    loaderPlayers,
-    loaderEvents,
-  ];
+        matchDetail,
+        scoreShoutOutLocal,
+        scoreShoutOutVisit,
+        screenState,
+        matches,
+        playersList,
+        eventsList,
+        tournamentSelected,
+        qualifyingMatchDetail,
+        teamIdSelected,
+        playerSelected,
+        eventUtilSelected,
+        typeMatchTeamSelected,
+        typeMatchTeamValidator,
+        playerValidator,
+        minutValidator,
+        formzStatus,
+        loaderPlayers,
+        loaderEvents,
+        statusMessage
+      ];
 }

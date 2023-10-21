@@ -9,33 +9,68 @@ import 'referee_dialog_content.dart';
 import 'request_dialog_screen.dart';
 
 class RequestCard extends StatelessWidget {
-  const RequestCard({Key? key, required this.request}) : super(key: key);
+  const RequestCard(
+      {Key? key, required this.request, required this.requestType})
+      : super(key: key);
 
   final UserRequests request;
+  final LMRequestType requestType;
 
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return Card(
+      elevation: 0.0,
+      color: Colors.grey[100],
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          Expanded(
-            child: ListTile(
-              leading: const Icon(Icons.arrow_drop_down_circle),
-              title: Text(request.requestMadeBy),
-              subtitle: Text(
-                request.content ?? '',
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
+          if (requestType.name == LMRequestType.league.name)
+            Expanded(
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: const Color(0xff0791a3),
+                  child: Image.asset(
+                    'assets/images/equipo.png',
+                    fit: BoxFit.cover,
+                    height: 30,
+                    width: 30,
+                    color: Colors.grey[300],
+                  ),
+                ),
+                title: Text("Equipo ${request.requestMadeBy}"),
+                subtitle: Text(
+                  request.content ?? '',
+                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                ),
               ),
             ),
-          ),
+          if (requestType.name == LMRequestType.referee.name)
+            Expanded(
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: const Color(0xff0791a3),
+                  child: Image.asset(
+                    'assets/images/referee.png',
+                    fit: BoxFit.cover,
+                    height: 30,
+                    width: 30,
+                    color: Colors.grey[300],
+                  ),
+                ),
+                title: Text("Referee ${request.requestMadeBy}"),
+                subtitle: Text(
+                  request.content ?? '',
+                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                ),
+              ),
+            ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'Pendiente de aprobación',
+                'Solicitud para formar parte de tu liga.',
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
             ),
@@ -57,7 +92,7 @@ class RequestCard extends StatelessWidget {
                         child: BlocBuilder<LmRequestCubit, LmRequestState>(
                           builder: (context, state) {
                             return AlertDialog(
-                              title: const Text('Detalles de solicitud'),
+                              title: const Text('Detalles de la solicitud'),
                               content: state.currentRequestType ==
                                       LMRequestType.league
                                   ? const RequestDialogScreen()
@@ -74,16 +109,19 @@ class RequestCard extends StatelessWidget {
                                     } else {
                                       context
                                           .read<LmRequestCubit>()
+                                          .onSubmitRequest(request, true);
+                                      /* context
+                                          .read<LmRequestCubit>()
                                           .onCancelRequest(request.requestId,
-                                              leagueManager.leagueId);
+                                              leagueManager.leagueId);*/
                                     }
                                     Navigator.pop(dialogContext);
                                   },
                                   child: state.requestStatus == 1 ||
                                           state.currentRequestType ==
                                               LMRequestType.league
-                                      ? const Text('RECHAZAR')
-                                      : const Text('CANCELAR'),
+                                      ? const Text('Rechazar')
+                                      : const Text('Aprobar referee'),
                                 ),
                                 if (state.requestStatus == 1 ||
                                     state.currentRequestType ==
@@ -95,7 +133,7 @@ class RequestCard extends StatelessWidget {
                                             .onSubmitRequest(request, true);
                                         Navigator.pop(dialogContext);
                                       },
-                                      child: const Text('ACEPTAR')),
+                                      child: const Text('Aprobar')),
                               ],
                             );
                           },
@@ -104,7 +142,8 @@ class RequestCard extends StatelessWidget {
                     },
                   );
                 },
-                child: const Text('Editar solicitud'),
+                child: const Text('Aprobar solicitud',
+                    style: TextStyle(color: Color(0xff0791a3))),
               ),
             ],
           ),

@@ -29,6 +29,9 @@ String get getSearchPlayerEndpoint =>
 String get getAllLeaguesEndpoint =>
     '${EnvironmentConfig.sprTeamPlayerBaseURL}$_apiBasePath/leagues';
 
+String get leagueBaseEndpoint =>
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/league';
+
 String get getLeagueByIdEndpoint =>
     '${EnvironmentConfig.personManagementBaseURL}$_apiBasePath/leagues';
 
@@ -53,9 +56,16 @@ String get getGoalsTournamentIdEndpoint =>
 String get getRequestTeamByLeagueEndpoint =>
     '${EnvironmentConfig.sprTeamPlayerBaseURL}$_apiBasePath/teams/requestplayer';
 
+String get teamServiceTeamsEndpoint =>
+    '${EnvironmentConfig.sprTeamPlayerBaseURL}$_apiBasePath/teams';
+
 /// Endpoint to get data Request By Status And Type
 String get getRequestByStatusAndTypeEndpoint =>
     '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/lookupValue/requestByStatusAndType';
+
+/// Endpoint to get data RequestLeagueToAdmin
+String get requestBaseEndpoint =>
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/request';
 
 /// Endpoint to get data RequestLeagueToAdmin
 String get getRequestLeagueToAdminEndpoint =>
@@ -98,6 +108,9 @@ String get getRequestTeamToPlayerEndpoint =>
     '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/request/requestTeamToPlayer';
 String get getUserDeleteRequestEndpoint =>
     '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/request/requestDeletePLayers';
+
+String get getDeleteLeaguesRequestsEndpoint =>
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/request/requestToDeleteLeagues';
 
 /// Endpoint to cancelRequest
 String get cancelRequestEndpoint =>
@@ -159,6 +172,12 @@ String get getTransferHistoryPlayerEndpoint =>
 
 String get postRecommendationsEndpoint =>
     '${EnvironmentConfig.sprTeamPlayerBaseURL}$_apiBasePath/recommendation/playerForTeam';
+
+String get getRecomendationsByTeamEndpoint =>
+    '${EnvironmentConfig.sprTeamPlayerBaseURL}$_apiBasePath/recommendation/recommendedplayer/';
+
+String get responseRecomendationEndpoint =>
+    '${EnvironmentConfig.sprTeamPlayerBaseURL}$_apiBasePath/recommendation/responserecomendation/';
 
 String get getAllTeamsEndpoint =>
     '${EnvironmentConfig.sprTeamPlayerBaseURL}$_apiBasePath/teams/allTeams';
@@ -793,6 +812,8 @@ String get getMatchesByTeamEndpoint =>
 //?----Matchs-----?//
 String get getRefereeMatchesEndpoint =>
     '${EnvironmentConfig.sprRefereeBaseURL}$_apiBasePath/matchesReferee/myMatchesReferee';
+String get getMatchesRefereeStatsEndpoint =>
+    '${EnvironmentConfig.sprRefereeBaseURL}$_apiBasePath/matchesReferee/myMatchesReferee/statics';
 String get getRefereeMatchDetailsEndpoint =>
     '${EnvironmentConfig.sprRefereeBaseURL}$_apiBasePath/matches/detailRef/';
 String get startMatchEndpoint =>
@@ -813,11 +834,10 @@ String get getFieldByMatchIdEndpoint =>
     '${EnvironmentConfig.sprTeamPlayerBaseURL}$_apiBasePath/field';
 
 String get getFieldRentEndpoint =>
-    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/field/searchFieldByAddres';
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/field/searchFieldByFilters';
 
 String get getFieldRentNFEndpoint =>
     '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/field/fieldsRent';
-
 
 //?----Scoring table-----?//
 
@@ -935,6 +955,9 @@ String get createMatchEventEndpoint =>
 String get getMatchEventsRefereeEndpoint =>
     '${EnvironmentConfig.sprRefereeBaseURL}$_apiBasePath/matchEvent/teamMatchId';
 
+String get getMatchEventsRefereeEndpointAll =>
+    '${EnvironmentConfig.sprRefereeBaseURL}$_apiBasePath/matchEvent/matchId';
+
 String get getFieldOwnerRequestEndpoint =>
     '${EnvironmentConfig.sprRefereeBaseURL}$_apiBasePath/request/requestOwnes';
 
@@ -987,4 +1010,54 @@ String get inscribeLeagueTeamsEndpoint =>
 String get getQualifiedTeamsEndpoint => '$_teamPresidentPath/teamsclassified';
 
 String get getRefereeByAddressEndpoint =>
-    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/referee/searchByAddress';
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/referee/searchByFilters';
+
+String get getDetailEliminatoryEndpoint =>
+    '${EnvironmentConfig.sprRefereeBaseURL}$_apiBasePath/matches/detailEliminatory';
+
+String get userPostEndpoint =>
+    '${EnvironmentConfig.sprTeamPlayerBaseURL}$_apiBasePath/posts';
+
+String get getUserPostByTournamentEndpoint =>
+    '$userPostEndpoint/getPostByTournament';
+
+String get deleteUserPostEndpoint => '$userPostEndpoint/deletePost';
+
+String get getUserPostByPostIdEndpoint => '$userPostEndpoint/getPostById';
+
+String get getUserPostByAuthorAndTypeEndpoint =>
+    '$userPostEndpoint/getPostByMadeByAndType';
+
+String get topicsEvaluation =>
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/topicEvaluation';
+
+String get qualificationToTopics =>
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/qualificationToTopics';
+
+String get getTopicsEvaluationEndpoint => '$topicsEvaluation/getByType';
+
+String get saveQualifications =>
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/qualifications';
+
+String get getQualificationToTopics => '$qualificationToTopics/';
+
+String get qualificationTopicsEndpoint =>
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/qualificationToTopics';
+
+String get getDetailevaluated =>
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/qualificationToTopics/getDetailevaluated';
+
+String get getExistQualificationEndpoint =>
+    '$qualificationToTopics/existQualification';
+
+String get getMatchByEventId =>
+    '${EnvironmentConfig.sprRefereeBaseURL}$_apiBasePath/matches/matchByEvent/';
+
+String get deactivateAccountEndpoint =>
+    '${EnvironmentConfig.personManagementBaseURL}$_apiBasePath/users/deactivateUser';
+
+String get deleteAccountEndpoint =>
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/admin/player/delete';
+
+String get getRefereeGlobalStaticsEndpoint =>
+    '${EnvironmentConfig.sprRefereeBaseURL}$_apiBasePath/global/statics';

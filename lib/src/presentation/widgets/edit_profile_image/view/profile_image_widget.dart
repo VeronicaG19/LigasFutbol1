@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../../core/constans.dart';
 import '../../../app/bloc/authentication_bloc.dart';
@@ -59,6 +60,13 @@ class _EditImageContent extends StatelessWidget {
         children: <Widget>[
           BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (context, state) {
+              if (state.isUpdating) {
+                return LoadingAnimationWidget.fourRotatingDots(
+                  color: Colors.blueAccent,
+                  size: 50,
+                );
+              }
+
               return CircleAvatar(
                 backgroundColor: Colors.black38,
                 radius: radius ?? 29,

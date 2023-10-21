@@ -25,10 +25,11 @@ class _DataRefereeTeamContentState extends State<DataRefereeTeamContent> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text("Datos de representante",
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+                const Text(
+                  "Datos de representante",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -136,7 +137,7 @@ class _VerificationSenderInput extends StatelessWidget {
               .read<TeamLeagueManagerCubit>()
               .onVerificationSenderChanged(value),
           decoration: InputDecoration(
-            labelText: AppLocalizations.of(context)!.emailOrPhoneLabel,
+            labelText: "Correo electrónico o teléfono del representante",
             helperText: '',
             errorText: state.verificationSender.invalid
                 ? AppLocalizations.of(context)!.aeInvalidDataMsg

@@ -292,7 +292,19 @@ class _SelectedImageState extends State<SelectedImage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24.0),
+              const SizedBox(height: 12.0),
+              BlocBuilder<TeamLeagueManagerCubit, TeamLeagueManagerState>(
+                builder: (context, state) {
+                  context.read<TeamLeagueManagerCubit>().convertImgToBs(
+                        xFile: _pickedFile,
+                        file: _croppedFile,
+                      );
+                  return (state.imageIsLarge!)
+                      ? const _ImageSizeAlert()
+                      : const SizedBox(height: 0);
+                },
+              ),
+              const SizedBox(height: 12.0),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -341,6 +353,36 @@ class _SelectedImageState extends State<SelectedImage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ImageSizeAlert extends StatelessWidget {
+  const _ImageSizeAlert();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(left: 24.0, right: 24.0),
+      child: Card(
+        elevation: 2.5,
+        color: Colors.orange,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            bottom: 10,
+            left: 15,
+            right: 15,
+          ),
+          child: Text(
+            'El tamaño de la imagen es mas grande que el recomendado(1MB), esto puede tardar, por favor espere un poco.',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15.0,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

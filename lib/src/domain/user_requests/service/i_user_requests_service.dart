@@ -1,3 +1,5 @@
+import 'package:user_repository/user_repository.dart';
+
 import '../../../core/enums.dart';
 import '../../../core/typedefs.dart';
 import '../dto/request_match_to_referee_dto.dart';
@@ -77,7 +79,8 @@ abstract class IUserRequestsService {
   Future<List<UserRequests>> getRequestTournamentToTeam(
       {int? leagueId, int? teamId});
 
-  Future<int> getRequestCount(int requestTo, {RequestType? type});
+  Future<int> getRequestCount(int requestTo,
+      {RequestType? type, ApplicationRol? rol});
 
   RepositoryResponse<int> getRequestCountFiltered(
       int partyId, RequestType requestType);
@@ -98,4 +101,10 @@ abstract class IUserRequestsService {
 
   RepositoryResponse<String> sendRefereeResponseRequest(
       int requestId, bool accepted);
+
+  RepositoryResponse<UserRequests> patchUserRequest(UserRequests request);
+
+  RepositoryResponse<UserRequests> postUserRequest(UserRequests request);
+
+  Future<List<UserRequests>> getDeleteLeaguesRequest();
 }

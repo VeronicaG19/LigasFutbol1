@@ -41,7 +41,8 @@ abstract class ITeamTournamentService {
   ///
   ///* param [tournamentId]
   RepositoryResponse<List<ScoringTournamentDTO>> getGeneralTableByTournament(
-      int tournamentId);
+      int tournamentId,
+      {bool requiresAuthToken = true});
 
   RepositoryResponse<List<TeamTournament>> getQualifiedTeams(int tournamentId);
 }

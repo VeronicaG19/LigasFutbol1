@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -185,5 +187,20 @@ class ManageTeamCubit extends Cubit<ManageTeamState> {
         getUniformsOfTeamById(teamId: uniformDto.teamId!);
       },
     );
+  }
+
+  Future<void> convertImgToBs({
+    XFile? xFile,
+    CroppedFile? file,
+  }) async {
+    final imgLength = await file?.readAsBytes() ?? await xFile?.readAsBytes();
+
+    // Convertir bytes a megabytes
+    double megabytesImagen = imgLength!.length / (1024 * 1024);
+
+    // Devolver el tamaño de la imagen
+    emit(state.copyWith(
+      imageIsLarge: !(megabytesImagen < 1),
+    ));
   }
 }

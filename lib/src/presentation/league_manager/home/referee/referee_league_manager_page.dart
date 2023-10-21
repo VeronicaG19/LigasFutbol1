@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:ligas_futbol_flutter/src/presentation/league_manager/home/referee/search_referee_page.dart';
-import 'package:ligas_futbol_flutter/src/presentation/league_manager/home/referee/show_create_referee.dart';
 import 'package:ligas_futbol_flutter/src/presentation/league_manager/home/widget/card_referee.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -16,7 +15,7 @@ class RefereeLeagueManagerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final leagueManager =
-        context.select((AuthenticationBloc bloc) => bloc.state.leagueManager);
+        context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
 
     return BlocProvider(
         create: (_) => locator<RefereeLmCubit>()
@@ -100,8 +99,8 @@ class RefereeLeagueManagerPage extends StatelessWidget {
                             );
                           },
                           child: Container(
-                            padding: const EdgeInsets.fromLTRB(
-                                5.0, 10.0, 5.0, 10.0),
+                            padding:
+                                const EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
                             decoration: const BoxDecoration(
                               color: Color(0xff0791a3),
                               borderRadius:
@@ -131,10 +130,11 @@ class RefereeLeagueManagerPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     print(state.refereetList[index].refereePhoto);
                     return CardReferee(
-                        name: state.refereetList[index].refereeName,
-                        photo: state.refereetList[index].refereePhoto ?? '',
-                        refereeId: state.refereetList[index].refereeId,
-                        activeId: state.refereetList[index].activeId,);
+                      name: state.refereetList[index].refereeName,
+                      photo: state.refereetList[index].refereePhoto ?? '',
+                      refereeId: state.refereetList[index].refereeId,
+                      activeId: state.refereetList[index].activeId,
+                    );
                   },
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
