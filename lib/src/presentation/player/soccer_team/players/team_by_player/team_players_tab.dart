@@ -203,7 +203,7 @@ class _TeamPlayerTabState extends State<TeamPlayerTab> {
                 ],
               )),
         ),
-        body: TabBarView(children: [
+        body: TabBarView(physics: const ScrollPhysics(), children: [
           //  ManageMembersPage(),
           Container(
             padding: EdgeInsets.only(left: 15, right: 15, bottom: 40, top: 20),

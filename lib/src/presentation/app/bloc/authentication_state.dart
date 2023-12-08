@@ -14,6 +14,7 @@ class AuthenticationState extends Equatable {
   final List<League> managerLeagues;
   final League selectedLeague;
   final Team selectedTeam;
+  final String selectedLanguage;
   final League refereeLeague;
   final List<League> refereeLeagues;
   final List<Team> teamManagerTeams;
@@ -32,6 +33,7 @@ class AuthenticationState extends Equatable {
     this.user = User.empty,
     this.selectedLeague = League.empty,
     this.selectedTeam = Team.empty,
+    this.selectedLanguage = 'es',
     this.refereeLeague = League.empty,
     this.playerData = Player.empty,
     this.isUpdating = false,
@@ -43,6 +45,7 @@ class AuthenticationState extends Equatable {
     Locale? locale,
     League? selectedLeague,
     Team? selectedTeam,
+    String? selectedLanguage,
     League? refereeLeague,
     List<League>? refereeLeagues,
     List<Team>? teamManagerTeams,
@@ -57,6 +60,7 @@ class AuthenticationState extends Equatable {
       locale: locale ?? this.locale,
       selectedLeague: selectedLeague ?? this.selectedLeague,
       selectedTeam: selectedTeam ?? this.selectedTeam,
+      selectedLanguage: selectedLanguage ?? this.selectedLanguage,
       managerLeagues: managerLeagues ?? this.managerLeagues,
       refereeLeague: refereeLeague ?? this.refereeLeague,
       refereeLeagues: refereeLeagues ?? this.refereeLeagues,
@@ -74,6 +78,7 @@ class AuthenticationState extends Equatable {
         locale,
         selectedLeague,
         selectedTeam,
+        selectedLanguage,
         managerLeagues,
         refereeLeague,
         refereeLeagues,

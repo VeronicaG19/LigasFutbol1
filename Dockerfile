@@ -29,11 +29,18 @@ RUN flutter config --enable-web
 RUN mkdir /app/
 COPY . /app/
 WORKDIR /app/
+RUN dart pub upgrade
 RUN flutter pub get
 RUN flutter pub run build_runner build --delete-conflicting-outputs
-RUN flutter pub cache repair  
+RUN flutter pub cache repair
 RUN flutter build web -t lib/ligas_futbol_dev.dart
+
+#EXPOSE 8000
 
 # Stage 2 - Create the run-time image
 FROM nginx:1.21.1-alpine
 COPY --from=build-env /app/build/web /usr/share/nginx/html
+
+# RUN ["chmod", "+x", "/app/server/server.sh"]
+
+# ENTRYPOINT ["/app/server/server.sh"]

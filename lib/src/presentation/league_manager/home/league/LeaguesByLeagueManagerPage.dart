@@ -59,9 +59,19 @@ class LeaguesByLeagueManagerPage extends StatelessWidget {
                         fontWeight: FontWeight.w500),
                   ),
                 ),
+                /*  Expanded(
+                  child: Text(
+                    "Editar",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.grey[200],
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),*/
                 Expanded(
                   child: Text(
-                    "Acción",
+                    "Eliminar",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.grey[200],
@@ -118,6 +128,21 @@ class LeaguesByLeagueManagerPage extends StatelessWidget {
                                   fontWeight: FontWeight.w500),
                             ),
                           ),
+                          /*  Expanded(
+                            child: InkWell(
+                              child: Icon(Icons.edit,
+                                  size: 18, color: Colors.blue[800]),
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (dialogContext) {
+                                    return EditLeaguePage(
+                                        league: leagueManager[index]);
+                                  },
+                                );
+                              },
+                            ),
+                          ),*/
                           Expanded(
                             child: InkWell(
                               child: Icon(Icons.delete,

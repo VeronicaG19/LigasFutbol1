@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:time_picker_sheet/widget/sheet.dart';
+import 'package:time_picker_sheet/widget/time_picker.dart';
 //import 'package:time_pickerr/time_pickerr.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -258,12 +260,21 @@ class _AgendaContent extends StatelessWidget {
                                         color: Color(0xff358aac)),
                                     onPressed: () async {
                                       DateTime now = DateTime.now();
-                                      final TimeOfDay? time =
-                                          await showTimePicker(
-                                              initialEntryMode:
-                                                  TimePickerEntryMode.input,
-                                              context: context,
-                                              initialTime: TimeOfDay.now());
+                                      final time =
+                                          await TimePicker.show<DateTime?>(
+                                        context: context,
+                                        sheet: TimePickerSheet(
+                                          sheetCloseIconColor:
+                                              Color(0xff358aac),
+                                          saveButtonColor: Color(0xff358aac),
+                                          sheetTitle:
+                                              'Selecciona una hora inicio',
+                                          hourTitle: 'Hora',
+                                          minuteTitle: 'Minuto',
+                                          saveButtonText: 'Guardar',
+                                          minuteInterval: 5,
+                                        ),
+                                      );
                                       if (time != null) {
                                         context
                                             .read<RefereeAgendaCubit>()
@@ -316,12 +327,24 @@ class _AgendaContent extends StatelessWidget {
                                         color: Color(0xff358aac)),
                                     onPressed: () async {
                                       DateTime now = DateTime.now();
-                                      final TimeOfDay? time =
-                                          await showTimePicker(
+                                      final time =
+                                          await TimePicker.show<DateTime?>(
+                                        context: context,
+                                        sheet: TimePickerSheet(
+                                          sheetCloseIconColor:
+                                              Color(0xff358aac),
+                                          saveButtonColor: Color(0xff358aac),
+                                          sheetTitle: 'Selecciona una hora fin',
+                                          hourTitle: 'Hora',
+                                          minuteTitle: 'Minuto',
+                                          saveButtonText: 'Guardar',
+                                          minuteInterval: 5,
+                                        ),
+                                      ); /*showTimePicker(
                                               initialEntryMode:
                                                   TimePickerEntryMode.input,
                                               context: context,
-                                              initialTime: TimeOfDay.now());
+                                              initialTime: TimeOfDay.now());*/
                                       if (time != null) {
                                         context
                                             .read<RefereeAgendaCubit>()

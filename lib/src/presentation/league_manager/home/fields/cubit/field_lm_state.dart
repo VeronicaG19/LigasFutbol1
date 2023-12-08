@@ -14,6 +14,7 @@ enum ScreenStatus {
 
 class FieldLmState extends Equatable {
   final List<Field> fieldtList;
+  final List<Field> otherFieldList;
   final String? errorMessage;
   final Field detailField;
   final ScreenStatus screenStatus;
@@ -36,6 +37,7 @@ class FieldLmState extends Equatable {
 
   const FieldLmState({
     this.fieldtList = const [],
+    this.otherFieldList = const [],
     this.errorMessage,
     this.detailField = Field.empty,
     this.screenStatus = ScreenStatus.initial,
@@ -58,6 +60,7 @@ class FieldLmState extends Equatable {
 
   FieldLmState copyWith({
     List<Field>? fieldtList,
+    List<Field>? otherFieldList,
     String? errorMessage,
     Field? detailField,
     ScreenStatus? screenStatus,
@@ -80,6 +83,7 @@ class FieldLmState extends Equatable {
   }) {
     return FieldLmState(
       fieldtList: fieldtList ?? this.fieldtList,
+      otherFieldList: otherFieldList ?? this.otherFieldList,
       errorMessage: errorMessage ?? this.errorMessage,
       detailField: detailField ?? this.detailField,
       screenStatus: screenStatus ?? this.screenStatus,
@@ -105,6 +109,7 @@ class FieldLmState extends Equatable {
   @override
   List<Object> get props => [
         fieldtList,
+        otherFieldList,
         screenStatus,
         fieldName,
         fieldAddres,

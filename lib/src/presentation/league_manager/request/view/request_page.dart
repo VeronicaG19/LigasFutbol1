@@ -80,7 +80,7 @@ class _RequestContent extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               centerTitle: true,
-              backgroundColor: Colors.grey[200],
+              // backgroundColor: Color(0xFFFFFFFF),
               flexibleSpace: const Image(
                 image: AssetImage('assets/images/imageAppBar25.png'),
                 fit: BoxFit.fitWidth,
@@ -88,6 +88,8 @@ class _RequestContent extends StatelessWidget {
               elevation: 0.0,
               bottom: TabBar(
                 onTap: context.read<LmRequestCubit>().onChangeTap,
+                labelColor: Color(0xFFFFFFFF),
+                unselectedLabelColor: Color(0xFFFFFFFF),
                 tabs: [
                   Tab(
                     text:

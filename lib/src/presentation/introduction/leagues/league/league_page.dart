@@ -53,22 +53,26 @@ class _BodyWeb extends StatelessWidget {
               preferredSize: Size(screenSize.width, 1000),
               child: TopBarContents(),
             ),
-            body: Column(
+            body: ListView(
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
               children: [
-                Container(
-                  width: 400,
-                  child: const LeagueContent(),
+                const SizedBox(
+                  height: 15,
                 ),
+
+                const Align(
+                    alignment: Alignment.center, child: LeagueContent()),
                 SizedBox(height: screenSize.height / 55),
-                const Text(
+                /*const Text(
                   "Torneos",
                   textAlign: TextAlign.right,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.w900),
-                ),
-                Expanded(child: TournamentsByLeagueContent())
+                ),*/
+                TournamentsByLeagueContent()
               ],
             )));
   }

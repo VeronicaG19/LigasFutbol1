@@ -8,7 +8,7 @@ import 'package:ligas_futbol_flutter/src/presentation/league_manager/category/ca
 import 'package:ligas_futbol_flutter/src/presentation/league_manager/home/home.dart';
 import 'package:ligas_futbol_flutter/src/presentation/league_manager/teams/lm_teams_page.dart';
 import 'package:ligas_futbol_flutter/src/presentation/player/profile/profile_page.dart';
-import 'package:new_version_plus/new_version_plus.dart';
+//import 'package:new_version_plus/new_version_plus.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/constans.dart';
@@ -27,23 +27,21 @@ class LeagueManagerMainPage extends StatefulWidget {
 }
 
 class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
-   @override
-  void initState(){
-
-    final newvVersion = NewVersionPlus(
+  @override
+  void initState() {
+    /*final newvVersion = NewVersionPlus(
       iOSId: 'dev.ias.swat.ccs.com.Wiplif',
       androidId: 'com.ccs.swat.iaas.spr.ligas_futbol.ligas_futbol_flutter'
-    );
+    );*/
 
-    Timer(const Duration(milliseconds: 800),(){
-      checkNewVersion(newvVersion);
-
+    Timer(const Duration(milliseconds: 800), () {
+      //checkNewVersion(newvVersion);
     });
 
     super.initState();
   }
 
-  void checkNewVersion(NewVersionPlus newVersion ) async{
+  /*void checkNewVersion(NewVersionPlus newVersion ) async{
     final status = await newVersion.getVersionStatus();
       if(status != null) {
         if (status.canUpdate) {
@@ -52,11 +50,11 @@ class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
             versionStatus: status,
             dialogText: 'Nueva version disponible en la tienda (${status.storeVersion}), Actualiza ahora',
             dialogTitle: 'Actualización disponible',
-
+s
             );
         }
       }
-  }
+  }*/
   @override
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
@@ -76,7 +74,7 @@ class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
           title: Padding(
             padding: EdgeInsets.only(top: 25),
             child: ListTile(
-                leading: Image(
+                leading: const Image(
                   image: AssetImage('assets/images/soccer_logo_SaaS.png'),
                 ),
                 title: Row(
@@ -88,14 +86,14 @@ class _LeagueManagerMainPageState extends State<LeagueManagerMainPage> {
                           fontSize: 28,
                           fontWeight: FontWeight.w900),
                     ),
-                    SizedBox(
+                   const SizedBox(
                       width: 15,
                     ),
                   ],
                 )),
           ),
           backgroundColor: Colors.grey[200],
-          flexibleSpace: Image(
+          flexibleSpace: const Image(
             image: AssetImage('assets/images/imageAppBar25.png'),
             fit: BoxFit.fitWidth,
           ),

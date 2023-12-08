@@ -67,10 +67,11 @@ class FieldRepositoryImpl implements IFieldRepository {
   }
 
   @override
-  RepositoryResponse<List<Field>> getFieldsRent(int leagueId) {
+  RepositoryResponse<List<Field>> getFieldsRent(int leagueId, int status) {
     return _apiClient.network
         .getCollectionData(
-            endpoint: "$getFieldRentNFEndpoint?leagueId=$leagueId",
+            endpoint:
+                "$getFieldRentNFEndpoint?leagueId=$leagueId&status=$status",
             converter: Field.fromJson)
         .validateResponse();
   }

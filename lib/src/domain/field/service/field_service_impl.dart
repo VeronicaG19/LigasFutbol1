@@ -46,8 +46,8 @@ class FieldServiceImpl implements IFieldService {
   }
 
   @override
-  RepositoryResponse<List<Field>> getFieldsRent(int leagueId) {
-    return _repository.getFieldsRent(leagueId);
+  RepositoryResponse<List<Field>> getFieldsRent(int leagueId, int status) {
+    return _repository.getFieldsRent(leagueId, status);
   }
 
   @override

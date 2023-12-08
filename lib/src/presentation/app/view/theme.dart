@@ -23,7 +23,7 @@ final auxilioAppTheme = ThemeData(
         onPrimary: Colors.black45,
         onSecondary: Color(0xffB3B6B8),
         secondary: Color(0xffEBECEF),
-        primaryVariant: Colors.white),
+        primary: Colors.white),
     scaffoldBackgroundColor: Colors.grey[200],
     inputDecorationTheme: InputDecorationTheme(
       hintStyle: const TextStyle(color: Colors.blueGrey),

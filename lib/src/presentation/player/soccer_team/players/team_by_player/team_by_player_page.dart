@@ -36,6 +36,7 @@ class _TeamByPlayerPageState extends State<TeamByPlayerPage> {
                 ? Container()
                 : ListView(
                     shrinkWrap: true,
+                    physics: const AlwaysScrollableScrollPhysics(),
                     children: [
                       Divider(),
                       GridView.builder(

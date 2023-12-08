@@ -8,7 +8,7 @@ import 'package:ligas_futbol_flutter/src/presentation/field_owner/cubit/field_ow
 import 'package:ligas_futbol_flutter/src/presentation/field_owner/field_availability_list_page.dart';
 import 'package:ligas_futbol_flutter/src/service_locator/injection.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:new_version_plus/new_version_plus.dart';
+//import 'package:new_version_plus/new_version_plus.dart';
 
 import '../../../core/constans.dart';
 import '../../player/user_menu/user_menu.dart';
@@ -68,23 +68,21 @@ class FieldOwnerMainContent extends StatefulWidget {
 }
 
 class _FieldOwnerMainContentState extends State<FieldOwnerMainContent> {
-   @override
-  void initState(){
-
-    final newvVersion = NewVersionPlus(
+  @override
+  void initState() {
+    /*final newvVersion = NewVersionPlus(
       iOSId: 'dev.ias.swat.ccs.com.Wiplif',
       androidId: 'com.ccs.swat.iaas.spr.ligas_futbol.ligas_futbol_flutter'
-    );
+    );*/
 
-    Timer(const Duration(milliseconds: 800),(){
-      checkNewVersion(newvVersion);
-
+    Timer(const Duration(milliseconds: 800), () {
+      //checkNewVersion(newvVersion);
     });
 
     super.initState();
   }
 
-  void checkNewVersion(NewVersionPlus newVersion ) async{
+  /*void checkNewVersion(NewVersionPlus newVersion ) async{
     final status = await newVersion.getVersionStatus();
       if(status != null) {
         if (status.canUpdate) {
@@ -97,7 +95,7 @@ class _FieldOwnerMainContentState extends State<FieldOwnerMainContent> {
             );
         }
       }
-  }
+  }*/
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FieldOwnerCubit, FieldOwnerState>(

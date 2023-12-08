@@ -354,7 +354,112 @@
             }
         }
     },
+    "returnHomepageLBL": "Return to homepage",
     "forgetPasswordLBL": "Did you forget your password?",
     "signUpHereLBL":"Sign up here",
-    "notAccountLBL": "Don't have an account?"
+    "notAccountLBL": "Don't have an account?",
+
+    "usernameLBL": "Username",
+    "passwordLBL": "Password",
+    "loginLBL": "Login",
+
+    "inicioLBL": "Home",
+    "ligasLBL": "League",
+    "informacionLBL": "Information",
+    "quesAnwsersLBL": "QA",
+    "greetingLBL": "Join the Soccer family today",
+    "welcomeLBL": "Get access to the full soccer experience as a team player, referee, or coach. Interactions with league representatives, stats, players abilites, tournament standings and much more! ..  ",
+    "registerFreeLBL": "Register for FREE today",
+    "shareLBL": "Share",
+
+    
+    "miequiposLBL":"My Teams",
+    "verpartidosLBL": "My games",
+    "buscarequipoLBL": "Search teams",
+
+    "searchBarLBL": "Search by name of team",
+
+    "requestLBL": "Requests",
+    "sentrequestLBL": "Sent requests",
+    "receivedrequestLBL": "Recieved requests",
+    
+
+    "playerLBL": "Player",
+    "leagueManagerLBL": "League Representative",
+    "refereeLBL": "Referee",
+    "adminLBL": "Administrador",
+    "teamManagerLBL": "Team Representative",
+    "refereeManagerLBL": "Referee Manager",
+    "fieldOwnerLBL": "Field Owner",
+
+
+    "myprofileLBL": "My profile",
+    "myprofilesubtextLBL": "View account details, notification settings, role change",
+    "playerKeyLBL": "Player profile ",
+    "playerKeySubtextLBL": "Edit player key details, tier, etc. ",
+    "legalInformationLBL": "Terms & Conditions",
+    "legalInformationSubtextBL": "View the terms and conditions of Ligas Fútbol",
+    "helpLBL": "Help",
+    "helpSubtextLBL": "Use the help button to make use of the tutorial available.",
+    "reviewLBL": "Review",
+    "reviewSubtextLBL": "Review the field and referee of games you played in",
+
+    "logoutLBL": "Logout",
+
+    "currentRoleLBL": "Current Role",
+
+    "accountInfoLBL": "Account Details",
+    "accountInfoDetsLBL": "Edit account information and password",
+    "myPersonalInfoLBL": "Account Settings",
+    "myPersonalInfoDetsLBL": "Edit name, phone number, email",
+    "rolesLBL": "Roles",
+    "roleDetsLBL": "Request or change role",
+    "notificationsLBL": "Notifications",
+    "notificationsDetsLBL": "Edit notification settings",
+    "deleteAccountLBL": "Close Account",
+    "deleteAccountDetsLBL": "Permanently delete your account",
+
+    "updateLBL": "Update",
+    "updateDetailsLBL": "Update details",
+    "nicknameLBL": "Nickname",
+    "birthdateLBL": "Date of birth",
+
+    "goalkeeperLBL": "Goalkeeper",
+    "defenseLBL": "Defense",
+    "centralDefenseLBL": "Center defense",
+    "sideDefenseLBL": "Outside back",
+    "midfieldLBL": "Midfieler",
+    "centermidLBL": "Central Midfield",
+    "forwardLBL": "Forward",
+    "centerforwardLBL": "Center Forward",
+    "strikerLBL": "Striker",
+
+    "noAddressLBL": "No address",
+    "saveLBL": "Save",
+
+    "ageLBL": "Age",
+    "positionLBL": "Position",
+    "viewgamesLBL": "View games played",
+    "teamselectLBL": "Team",
+    "nogameLBL": "No upcoming games",
+    "viewexperienceLBL": "View my experience",
+    "myexperienceLBL": "My experience",
+    "addbuttonLBL":"Add",
+
+    "titleExperLBL": "Title",
+    "descriptionLBL": "Description",
+    "leagueNameLBL": "League",
+    "categoryLBL":"Category",
+    "tournamentLBL": "Tournament",
+    "teamLBL": "Team",
+
+    "changeRoleLBL":"Change role",
+
+    "refereeCardLBL": "Referee Card",
+    "refereeCardSubtitleLBL": "View or edit referee card",
+    "viewCalendarLBL":"View calendar",
+    "viewCalendarSubtitleLBL": "Edit availability  and view upcoming games",
+
+    "lfTitleLabel": "Welcome"
+
 }

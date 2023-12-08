@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/detail_eliminatory_dto/qualifying_match_detail_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/match_detail/match_detail_dto.dart';
+import 'package:ligas_futbol_flutter/src/domain/matches/dto/reschedule_match/reschedule_match.dart';
 import 'package:ligas_futbol_flutter/src/domain/team_tournament/entity/team_tournament.dart';
 import 'package:ligas_futbol_flutter/src/domain/team_tournament/service/i_team_tournament_service.dart';
 import 'package:ligas_futbol_flutter/src/domain/tournament/dto/config_league/config_league_interface_dto.dart';
@@ -623,6 +624,23 @@ class TournamentMainCubit extends Cubit<TournamentMainState> {
     emit(state.copyWith(screenStatus: CLScreenStatus2.loading));
 
     final response = await _matchService.finalizeMatch(state.finalizeMatchDTO);
+    response.fold(
+      (l) => emit(state.copyWith(screenStatus: CLScreenStatus2.error)),
+      (r) {
+        //getMatchDetailByTournamnet(),
+        emit(state.copyWith(
+          screenStatus: CLScreenStatus2.matchFinalized,
+        ));
+        onLoadGameRolTable();
+      },
+    );
+  }
+
+  Future<void> rescheduleMatch() async {
+    emit(state.copyWith(screenStatus: CLScreenStatus2.loading));
+
+    final response =
+        await _matchService.rescheduleMatch(state.rescheduleMatchDTO);
     response.fold(
       (l) => emit(state.copyWith(screenStatus: CLScreenStatus2.error)),
       (r) {

@@ -67,9 +67,14 @@ class _CoachmarkDescState extends State<CoachmarkDesc>
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                     MaterialStatePropertyAll(Colors.white)
+                  ),
                   onPressed: widget.onSkip,
-                  child: Text(widget.skip),
+                  child: Text(widget.skip, style: TextStyle(color: Colors.blue)),
                 ),
+                const SizedBox(width: 8.0,),
                 ElevatedButton(
                   onPressed: widget.onNext,
                   child: Text(widget.next),

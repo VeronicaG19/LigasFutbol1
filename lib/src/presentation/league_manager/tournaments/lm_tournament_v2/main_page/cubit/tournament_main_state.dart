@@ -58,6 +58,7 @@ class TournamentMainState extends Equatable {
   final String nameCh;
   final TournamentChampionDTO ttDTO;
   final FinalizeMatchDTO finalizeMatchDTO;
+  final RescheduleMatchDTO rescheduleMatchDTO;
   final int matchesWithoutResult;
   final MatchStatus matchStatus;
   final MatchDetailDTO matchDetail;
@@ -95,6 +96,7 @@ class TournamentMainState extends Equatable {
     this.nameCh = '',
     this.ttDTO = TournamentChampionDTO.empty,
     this.finalizeMatchDTO = FinalizeMatchDTO.empty,
+    this.rescheduleMatchDTO = RescheduleMatchDTO.empty,
     this.matchesWithoutResult = 0,
     this.matchStatus = MatchStatus.initial,
     this.matchDetail = MatchDetailDTO.empty,

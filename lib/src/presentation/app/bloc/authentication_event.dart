@@ -91,6 +91,23 @@ class ChangeSelectedTeam extends AuthenticationEvent {
   List<Object?> get props => [team];
 }
 
+class ChangeSelectedLanguage extends AuthenticationEvent {
+  final String selectedLanguage;
+  final int type;
+  const ChangeSelectedLanguage(this.selectedLanguage, this.type);
+
+  @override
+  List<Object?> get props => [selectedLanguage];
+}
+
+class GetLeaguesManager extends AuthenticationEvent {
+  final int personId;
+  const GetLeaguesManager(this.personId);
+
+  @override
+  List<Object?> get props => [personId];
+}
+
 class UpdateTeamList extends AuthenticationEvent {
   const UpdateTeamList();
 

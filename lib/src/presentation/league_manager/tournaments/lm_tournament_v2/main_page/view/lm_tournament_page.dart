@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/core/enums.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-import './options/league/league_option.dart';
 import '../../../../../../core/constans.dart';
 import '../../../../../../domain/category/entity/category.dart';
 import '../../../../../../domain/countResponse/entity/register_count_interface.dart';
@@ -29,6 +28,7 @@ import '../../../lm_tournament_v1/tournaments_widgets/tournament_configuration.d
 import '../../../lm_tournament_v1/tournaments_widgets/tournaments_teams.dart';
 import '../../edit_game_rol/view/p_edit_game_rol.dart';
 import '../cubit/tournament_main_cubit.dart';
+import './options/league/league_option.dart';
 
 class TournamentPage extends StatelessWidget {
   const TournamentPage({Key? key}) : super(key: key);
@@ -219,6 +219,9 @@ class _MatchDataTable extends StatelessWidget {
                         const DataColumn(
                             label: Text('Configuración',
                                 style: TextStyle(fontSize: 14))),
+                        /* const DataColumn(
+                            label: Text('Reagendar',
+                                style: TextStyle(fontSize: 14))),*/
                         const DataColumn(
                           label: Text('Calificación',
                               style: TextStyle(fontSize: 14)),
@@ -295,6 +298,67 @@ class _MatchDataTable extends StatelessWidget {
                                   icon: const Icon(Icons.edit_note, size: 18),
                                 ),
                               ),
+                              /*   DataCell(
+                                IconButton(
+                                  onPressed: () {
+                                    context
+                                        .read<TournamentMainCubit>()
+                                        .onSelectMatch(match);
+                                    showDialog(
+                                      context: context,
+                                      builder: (contextD) {
+                                        return BlocProvider.value(
+                                          value: BlocProvider.of<
+                                              TournamentMainCubit>(context),
+                                          child: AlertDialog(
+                                            title:
+                                                const Text('Reagendar partido'),
+                                            content: const RescheduleDialog(),
+                                            actions: [
+                                              TextButton.icon(
+                                                onPressed: () {
+                                                  Navigator.pop(contextD);
+                                                },
+                                                icon: const Icon(
+                                                  Icons.arrow_back,
+                                                  color: Colors.grey,
+                                                ),
+                                                label: const Text(
+                                                  "Regresar",
+                                                  style: TextStyle(
+                                                      color: Colors.grey),
+                                                ),
+                                              ),
+                                              TextButton.icon(
+                                                onPressed: () {
+                                                  context
+                                                      .read<
+                                                          TournamentMainCubit>()
+                                                      .rescheduleMatch();
+                                                  Navigator.pop(contextD);
+                                                },
+                                                icon: Icon(
+                                                  Icons.check_box_outlined,
+                                                  color: Colors.green[400],
+                                                ),
+                                                label: Text(
+                                                  "Reagendar partido",
+                                                  style: TextStyle(
+                                                      color: Colors.red[300]),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  tooltip: 'Reagendar partido',
+                                  icon: const Icon(
+                                      Icons.wifi_protected_setup_outlined,
+                                      size: 15),
+                                ),
+                              ),*/
                               DataCell(
                                 IconButton(
                                   onPressed: () => Navigator.push(context,

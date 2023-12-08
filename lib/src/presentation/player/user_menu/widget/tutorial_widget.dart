@@ -100,6 +100,9 @@ class _TutorialWidgetState extends State<TutorialWidget> {
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           )
@@ -115,12 +118,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí podemos editar la direccion, agenda y tarifas.",
+                  "Aquí podemos editar la dirección, agenda y tarifas",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           )
@@ -143,6 +149,9 @@ class _TutorialWidgetState extends State<TutorialWidget> {
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           )
@@ -159,13 +168,16 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí podemos ver los reportes arbitreales",
+                  "Aquí podemos ver los reportes arbitrales pasados",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   Navigator.pop(context);
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           )
@@ -173,7 +185,7 @@ class _TutorialWidgetState extends State<TutorialWidget> {
       ),
 
       //cambio de ligas
-      TargetFocus(
+      /*TargetFocus(
         identify: "changeLigesKey-key",
         keyTarget: CoachKey.changeLigesKey,
         contents: [
@@ -192,7 +204,7 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             },
           )
         ],
-      ),
+      ),*/
 
       //notificaciones
       TargetFocus(
@@ -204,12 +216,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos visualizar las solicitudes enviadas, recibidas y de partidos por arbitrar",
+                  "En esta sección podemos ver las solicitudes enviadas, recibidas y partidos por arbitrar",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -226,12 +241,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos ver los partidos asignados.",
+                  "En esta sección podemos ver los partidos asignados",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -247,12 +265,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos ver los partidos asignados ya sea finalizados, iniciados o pendientes.",
+                  "En esta sección podemos ver los partidos iniciados, pendientes o finalizados",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -269,12 +290,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos ver todos los partidos sin filtros.",
+                  "En esta sección podemos ver todos los partidos sin filtros",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -291,12 +315,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí podemos ver las ligas a las cuales nos podemos unir.",
+                  "Aquí podemos ver las ligas a las cuales nos podemos unir",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -313,12 +340,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí podemos ver las estadisticas arbitrales.",
+                  "Aquí podemos ver las estadísticas arbitrales",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -339,12 +369,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí podemos crear torneos y enviar solicitudes para nueva liga",
+                  "Aquí podemos crear torneos y enviar solicitudes para nuevas ligas",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           )
@@ -365,12 +398,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos cambiar nuestros datos personales y solicitar un nuevo rol en la aplicación.",
+                  "En esta sección podemos cambiar nuestros datos personales y solicitar un nuevo rol en la aplicación",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -387,13 +423,40 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos editar nuestra posición, nuestro sobre nombre, fecha de nacimiento, la direccion, igual vamos a poder ver nestros partidos y agregar nuestra experiencia.",
+                  "En esta sección podemos editar nuestro nombre, nuestra posición, fecha de nacimiento, dirección, igual vamos a poder ver nuestros partidos y agregar nuestra experiencia",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                onNext: () {
+                  controller.next();
+                },
+                onSkip: (() {
+                  controller.skip();
+                }),
+              );
+            },
+          ),
+        ],
+      ),
+      //calificar campos y arbitros
+      TargetFocus(
+        identify: "ratingPlayer-key",
+        keyTarget: CoachKey.ratingPlayer,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return CoachmarkDesc(
+                container: Text(
+                  "En esta sección podemos calificar a los árbitros y campos",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   Navigator.pop(context);
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -410,11 +473,14 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos ver los equipos a los cuales estamos inscritos.",
+                  "En esta sección podemos ver los equipos a los cuales estamos inscritos",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
+                },
+                onSkip: () {
+                  controller.skip();
                 },
               );
             },
@@ -432,12 +498,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos ver los partidos filtrados por equipo inscrito.",
+                  "En esta sección podemos ver los partidos filtrados por equipo inscrito",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -454,12 +523,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos buscar equipos y enviarles solicitudes para pertener al equipo seleccionado.",
+                  "En esta sección podemos buscar equipos y enviarles solicitudes para pertenecer al equipo seleccionado",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -480,34 +552,64 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos cambiar nuestros datos personales y solicitar un nuevo rol en la aplicación.",
+                  "En esta sección podemos cambiar nuestros datos personales y solicitar un nuevo rol en la aplicación.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
         ],
       ),
-      //mis equipos
+      //buscando jugadores
       TargetFocus(
-        identify: "miteamsTemM-key",
-        keyTarget: CoachKey.miteamsTemM,
+        identify: "mysearchplayer-key",
+        keyTarget: CoachKey.searchPlayer,
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos cambiar entre equipos creados e igual podemos enviar solicitud para un nuevo equipo",
+                  "En esta sección podemos crear publicaciones para encontrar jugadores con nuestras necesidades.",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                onNext: () {
+                  controller.next();
+                },
+                onSkip: (() {
+                  controller.skip();
+                }),
+              );
+            },
+          ),
+        ],
+      ),
+      //jugadores recomendados
+      TargetFocus(
+        identify: "myshareplayer-key",
+        keyTarget: CoachKey.sharePlayer,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return CoachmarkDesc(
+                container: Text(
+                  "En esta sección podemos consultar jugadores que han sido recomendados a nuestro equipo.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   Navigator.pop(context);
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -523,12 +625,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos administrar nuestro equipo, cambiar el logo, los uniformes de visitante y local de igual manera vamos a poder agregar a jugadores.",
+                  "En esta sección podemos administrar nuestro equipo, cambiar el logo, los uniformes de visitante y local de igual manera vamos a poder agregar a jugadores.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -550,6 +655,9 @@ class _TutorialWidgetState extends State<TutorialWidget> {
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -572,6 +680,9 @@ class _TutorialWidgetState extends State<TutorialWidget> {
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -594,6 +705,9 @@ class _TutorialWidgetState extends State<TutorialWidget> {
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -614,13 +728,16 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "En esta seccion podemos cambiar nuestros datos personales y solicitar un nuevo rol en la aplicación.",
+                  "En esta sección podemos cambiar nuestros datos personales y solicitar un nuevo rol en la aplicación",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   Navigator.pop(context);
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -637,12 +754,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí vamos a poder crear un campo.",
+                  "Aquí vamos a poder crear un campo",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),
@@ -659,12 +779,15 @@ class _TutorialWidgetState extends State<TutorialWidget> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí se muestra la lista de campos y al seleccionar uno te lleva al detalle de campos.",
+                  "Aquí se muestra la lista de campos y al seleccionar uno te lleva al detalle de campos",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
                   controller.next();
                 },
+                onSkip: (() {
+                  controller.skip();
+                }),
               );
             },
           ),

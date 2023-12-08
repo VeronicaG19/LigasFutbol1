@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hex/hex.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pointycastle/api.dart';
@@ -119,24 +121,24 @@ class User extends Equatable {
     }
   }
 
-  String get getCurrentRol => _getRol();
+  String getCurrentRol(BuildContext context) => _getRol(context);
 
-  String _getRol() {
+  String _getRol(BuildContext context) {
     switch (applicationRol) {
       case ApplicationRol.player:
-        return 'Jugador';
+        return AppLocalizations.of(context)!.playerLBL;
       case ApplicationRol.leagueManager:
-        return 'Presidente de liga';
+        return AppLocalizations.of(context)!.leagueManagerLBL;
       case ApplicationRol.referee:
-        return 'Árbitro';
+        return AppLocalizations.of(context)!.refereeLBL;
       case ApplicationRol.superAdmin:
-        return 'Administrador';
+        return AppLocalizations.of(context)!.adminLBL;
       case ApplicationRol.teamManager:
-        return 'Representante de equipo';
+        return AppLocalizations.of(context)!.teamManagerLBL;
       case ApplicationRol.refereeManager:
-        return 'Gerente de árbitros';
+        return AppLocalizations.of(context)!.refereeManagerLBL;
       case ApplicationRol.fieldOwner:
-        return 'Dueño de campo';
+        return AppLocalizations.of(context)!.fieldOwnerLBL;
       default:
         return '';
     }

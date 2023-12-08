@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ligas_futbol_flutter/src/presentation/introduction/leagues/league/league_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ligas_futbol_flutter/src/presentation/introduction/qa_page.dart';
 import 'package:ligas_futbol_flutter/src/presentation/introduction/slider_page.dart';
 import 'package:ligas_futbol_flutter/src/presentation/login/view/login_page.dart';
@@ -68,7 +69,7 @@ class _HomePageMobile extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 ),
                 child: Text(
-                  'Iniciar sesión',
+                 AppLocalizations.of(context)!.loginLBL, 
                   style: TextStyle(
                     fontFamily: 'SF Pro',
                     color: Colors.grey[200],
@@ -102,9 +103,10 @@ class _HomePageMobile extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(50),
                                   border: Border.all(
                                       color: Colors.white70, width: 1.5)),
-                              child: const Align(
+                              child: Align(
                                 alignment: Alignment.center,
-                                child: Text("Inicio",
+                                child: Text(//"Inicio" 
+                                 AppLocalizations.of(context)!.inicioLBL,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 10)),
                               ),
@@ -117,9 +119,10 @@ class _HomePageMobile extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(50),
                                   border: Border.all(
                                       color: Colors.white70, width: 1.5)),
-                              child: const Align(
+                              child: Align(
                                 alignment: Alignment.center,
-                                child: Text("Ligas",
+                                child: Text(//"Ligas"
+                                AppLocalizations.of(context)!.ligasLBL,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 10)),
                               ),
@@ -157,25 +160,22 @@ class _HomePageMobile extends StatelessWidget {
                       EdgeInsets.only(left: 15, right: 15, bottom: 40, top: 20),
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Text(
-                        '¡Ven y regístrate a Ligas fútbol!',
+                        AppLocalizations.of(context)!.greetingLBL,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.montserrat(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
-                      const Text(
-                        "Vive la experiencia como jugador, árbitro, etc, con una proyección profesional, "
-                        "estamos convencidos que los mejores jugadores deben ser destacados, por eso creamos "
-                        "la plataforma ideal donde podrás visualizar tus resultados, analizar a tu rival y"
-                        " conocer tu próxima Sede.",
+                      Text(
+                        AppLocalizations.of(context)!.welcomeLBL,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
@@ -185,8 +185,8 @@ class _HomePageMobile extends StatelessWidget {
                       ),
                       TextButton(
                         child: Text(
-                          "¡Regístrate 𝐆𝐑𝐀𝐓𝐈𝐒 ahora!",
-                          style: TextStyle(
+                         AppLocalizations.of(context)!.registerFreeLBL,
+                          style: const TextStyle(
                               color: Colors.blueGrey,
                               fontSize: 17,
                               fontWeight: FontWeight.w400),
@@ -216,7 +216,8 @@ class _HomePageMobile extends StatelessWidget {
                   color: Colors.black87,
                   child: Center(
                     child: Text(
-                      '¡Compártenos con tus amigos!',
+                     // '¡Compártenos con tus amigos!',
+                     AppLocalizations.of(context)!.shareLBL,
                       style: TextStyle(color: Colors.grey[200], fontSize: 12),
                     ),
                   )),
@@ -241,7 +242,7 @@ class _HomePageWeb extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: Size(screenSize.width, 1000),
-        child: TopBarContents(),
+        child: TopBarContents(), 
       ),
       //drawer: ExploreDrawer(),
       body: SingleChildScrollView(
@@ -286,28 +287,25 @@ class _HomePageWeb extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      '¡Ven y regístrate a Ligas fútbol!',
+                      AppLocalizations.of(context)!.greetingLBL,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.montserrat(
                         fontSize: 30,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const Text(
-                      "Vive la experiencia como jugador, árbitro, etc, con una proyección profesional, "
-                      "estamos convencidos que los mejores jugadores deben ser destacados, por eso creamos "
-                      "la plataforma ideal donde podrás visualizar tus resultados, analizar a tu rival y"
-                      " conocer tu próxima Sede.",
+                    Text(
+                      AppLocalizations.of(context)!.welcomeLBL,
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.black, fontSize: 15),
                     ),
                   ],
                 )),
             SizedBox(height: screenSize.height / 55),
-            SizedBox(
+            const SizedBox(
               width: 900,
-              child: SliderPage(),
               height: 400,
+              child: SliderPage(),
             ),
             SizedBox(height: screenSize.height / 10),
           ],
@@ -325,10 +323,10 @@ class _BottomBar extends StatelessWidget {
       color: Colors.white12,
       child: Column(
         children: [
-          Divider(
+          const Divider(
             color: Colors.blueGrey,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             'Copyright © 2022 | Ligas futbol',
             style: TextStyle(

@@ -83,6 +83,46 @@ class RequestLmCubit extends Cubit<RequestLmState> {
     }
   }
 
+  Future<void> editLeague({required League? league}) async {
+    emit(state.copyWith(
+      leagueName: LeagueName.dirty(state.leagueName.value),
+      leagueDescription: LeagueDescription.dirty(state.leagueDescription.value),
+    ));
+
+    if (state.leagueName.valid == true &&
+        state.leagueDescription.valid == true) {
+      emit(state.copyWith(formzStatus: FormzStatus.submissionInProgress));
+
+      final response = await _leagueService.updateLeague(League(
+        leagueStatus: league!.leagueStatus,
+        presidentId: league.presidentId,
+        publicFlag: league.publicFlag,
+        leagueId: league.leagueId,
+        leagueName: state.leagueName.value,
+        leagueDescription: state.leagueDescription.value,
+      ));
+
+      response.fold(
+        (l) => emit(state.copyWith(
+          formzStatus: FormzStatus.submissionFailure,
+          errorMessage: l.errorMessage,
+          screenStatus: BasicCubitScreenState.error,
+        )),
+        (r) async {
+          print("Datos ${r}");
+          emit(state.copyWith(
+            formzStatus: FormzStatus.submissionSuccess
+            // screenStatus :ScreenStatus.creatingRequest
+            ,
+            leagueEdit: r,
+            requestCount: 1,
+            screenStatus: BasicCubitScreenState.success,
+          ));
+        },
+      );
+    }
+  }
+
   Future<void> onGetLeagues() async {
     emit(state.copyWith(screenStatus: BasicCubitScreenState.loading));
 

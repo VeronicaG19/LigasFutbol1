@@ -192,6 +192,7 @@ class CoachKey {
   static final myTeamsPlayer = GlobalKey();
   static final myMatchPlayer = GlobalKey();
   static final searchTeamsPlayer = GlobalKey();
+  static final ratingPlayer = GlobalKey();
 
   //team manager
   static final miteamsTemM = GlobalKey();
@@ -199,14 +200,17 @@ class CoachKey {
   static final newPlayerTemM = GlobalKey();
   static final myMatchesTemM = GlobalKey();
   static final tournamentTemM = GlobalKey();
+  static final searchPlayer= GlobalKey();
+  static final sharePlayer = GlobalKey();
 
   //field manager
   static final addField = GlobalKey();
   static final listFields = GlobalKey();
   static final agendField = GlobalKey();
   static final priecesField = GlobalKey();
+  static final reviewField = GlobalKey(); 
   static final detailField = GlobalKey();
-  static final detailQualifications = GlobalKey();
+  static final detailQualifications = GlobalKey(); //! Possiblemente no se use
 
   // qualify player
   static final visitTeamInformation = GlobalKey();

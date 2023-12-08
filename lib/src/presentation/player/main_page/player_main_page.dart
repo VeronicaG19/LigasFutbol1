@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/core/constans.dart';
 import 'package:ligas_futbol_flutter/src/presentation/widgets/only_mobile_app/button_alert_only_web.dart';
-import 'package:new_version_plus/new_version_plus.dart';
+//import 'package:new_version_plus/new_version_plus.dart';
 import '../../app/bloc/authentication_bloc.dart';
 import '../../widgets/button_share/button_share_widget.dart';
 import '../../widgets/notification_icon/view/notification_icon.dart';
@@ -22,23 +22,21 @@ class PlayerMainPage extends StatefulWidget {
 }
 
 class _PlayerMainPageState extends State<PlayerMainPage> {
-   @override
-  void initState(){
-
-    final newvVersion = NewVersionPlus(
+  @override
+  void initState() {
+    /*final newvVersion = NewVersionPlus(
       iOSId: 'dev.ias.swat.ccs.com.Wiplif',
       androidId: 'com.ccs.swat.iaas.spr.ligas_futbol.ligas_futbol_flutter'
-    );
+    );*/
 
-    Timer(const Duration(milliseconds: 800),(){
-      checkNewVersion(newvVersion);
-
+    Timer(const Duration(milliseconds: 800), () {
+      //checkNewVersion(newvVersion);
     });
 
     super.initState();
   }
 
-  void checkNewVersion(NewVersionPlus newVersion ) async{
+  /*void checkNewVersion(NewVersionPlus newVersion ) async{
     final status = await newVersion.getVersionStatus();
       if(status != null) {
         if (status.canUpdate) {
@@ -51,7 +49,7 @@ class _PlayerMainPageState extends State<PlayerMainPage> {
             );
         }
       }
-  }
+  }*/
   @override
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);

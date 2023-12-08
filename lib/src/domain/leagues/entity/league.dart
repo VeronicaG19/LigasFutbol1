@@ -37,6 +37,17 @@ class League extends Equatable {
       presidentId: 0,
       publicFlag: '');
 
+  bool userFilter(String filter) {
+    return leagueName
+        .toString()
+        .trim()
+        .toLowerCase()
+        .contains(filter.toString().trim().toLowerCase());
+  }
+
+  bool isEqual(League model) {
+    return this.leagueId == model.leagueId;
+  }
 
   League copyWith({
     String? leagueStatus,

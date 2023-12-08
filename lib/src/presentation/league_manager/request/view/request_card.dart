@@ -8,7 +8,7 @@ import '../cubit/lm_request_cubit.dart';
 import 'referee_dialog_content.dart';
 import 'request_dialog_screen.dart';
 
-class RequestCard extends StatelessWidget {
+class RequestCard extends StatefulWidget {
   const RequestCard(
       {Key? key, required this.request, required this.requestType})
       : super(key: key);
@@ -17,16 +17,22 @@ class RequestCard extends StatelessWidget {
   final LMRequestType requestType;
 
   @override
+  State<RequestCard> createState() => _RequestCardState();
+}
+
+class _RequestCardState extends State<RequestCard> {
+  @override
   Widget build(BuildContext context) {
     final leagueManager =
         context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
+    final status = context.read<LmRequestCubit>().state.requestStatus;
     return Card(
       elevation: 0.0,
       color: Colors.grey[100],
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          if (requestType.name == LMRequestType.league.name)
+          if (widget.requestType.name == LMRequestType.league.name)
             Expanded(
               child: ListTile(
                 leading: CircleAvatar(
@@ -39,14 +45,14 @@ class RequestCard extends StatelessWidget {
                     color: Colors.grey[300],
                   ),
                 ),
-                title: Text("Equipo ${request.requestMadeBy}"),
+                title: Text("Equipo ${widget.request.requestMadeBy}"),
                 subtitle: Text(
-                  request.content ?? '',
+                  widget.request.content ?? '',
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                 ),
               ),
             ),
-          if (requestType.name == LMRequestType.referee.name)
+          if (widget.requestType.name == LMRequestType.referee.name)
             Expanded(
               child: ListTile(
                 leading: CircleAvatar(
@@ -59,9 +65,11 @@ class RequestCard extends StatelessWidget {
                     color: Colors.grey[300],
                   ),
                 ),
-                title: Text("Referee ${request.requestMadeBy}"),
+                title: leagueManager.leagueName == widget.request.requestMadeBy
+                    ? Text("Árbitros ${widget.request.requestTo}")
+                    : Text("Árbitros ${widget.request.requestMadeBy}"),
                 subtitle: Text(
-                  request.content ?? '',
+                  widget.request.content ?? '',
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                 ),
               ),
@@ -86,7 +94,7 @@ class RequestCard extends StatelessWidget {
                     builder: (dialogContext) {
                       context
                           .read<LmRequestCubit>()
-                          .onLoadLeagueRequestData(request);
+                          .onLoadLeagueRequestData(widget.request);
                       return BlocProvider.value(
                         value: BlocProvider.of<LmRequestCubit>(context),
                         child: BlocBuilder<LmRequestCubit, LmRequestState>(
@@ -105,11 +113,13 @@ class RequestCard extends StatelessWidget {
                                             LMRequestType.league) {
                                       context
                                           .read<LmRequestCubit>()
-                                          .onSubmitRequest(request, false);
+                                          .onSubmitRequest(
+                                              widget.request, false);
                                     } else {
                                       context
                                           .read<LmRequestCubit>()
-                                          .onSubmitRequest(request, true);
+                                          .onSubmitRequest(
+                                              widget.request, true);
                                       /* context
                                           .read<LmRequestCubit>()
                                           .onCancelRequest(request.requestId,
@@ -121,7 +131,7 @@ class RequestCard extends StatelessWidget {
                                           state.currentRequestType ==
                                               LMRequestType.league
                                       ? const Text('Rechazar')
-                                      : const Text('Aprobar referee'),
+                                      : const Text('Aprobar árbitro'),
                                 ),
                                 if (state.requestStatus == 1 ||
                                     state.currentRequestType ==
@@ -130,7 +140,8 @@ class RequestCard extends StatelessWidget {
                                       onPressed: () {
                                         context
                                             .read<LmRequestCubit>()
-                                            .onSubmitRequest(request, true);
+                                            .onSubmitRequest(
+                                                widget.request, true);
                                         Navigator.pop(dialogContext);
                                       },
                                       child: const Text('Aprobar')),
@@ -142,7 +153,7 @@ class RequestCard extends StatelessWidget {
                     },
                   );
                 },
-                child: const Text('Aprobar solicitud',
+                child: const Text('Detalle de la solicitud',
                     style: TextStyle(color: Color(0xff0791a3))),
               ),
             ],

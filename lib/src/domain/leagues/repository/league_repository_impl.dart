@@ -55,6 +55,7 @@ class LeagueRepositoryImpl implements ILeagueRepository {
   RepositoryResponse<League> updateLeague(League league) {
     return _apiClient.network
         .updateData(
+            requiresAuthToken: true,
             endpoint: getAllLeaguesEndpoint,
             data: league.toJson(),
             converter: League.fromJson)

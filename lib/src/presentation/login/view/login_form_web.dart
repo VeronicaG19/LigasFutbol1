@@ -12,9 +12,14 @@ import '../../recover_password/view/recover_password_page.dart';
 import '../../recover_password/view/recover_password_web_page.dart';
 import '../../sign_up/sign_up.dart';
 
-class LoginFormWeb extends StatelessWidget {
+class LoginFormWeb extends StatefulWidget {
   const LoginFormWeb({Key? key}) : super(key: key);
 
+  @override
+  State<LoginFormWeb> createState() => _LoginFormWebState();
+}
+
+class _LoginFormWebState extends State<LoginFormWeb> {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
@@ -39,6 +44,14 @@ class LoginFormWeb extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
+              /* const Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 50, right: 50, bottom: 5),
+                    child: InternalizationButton(
+                      type: 1,
+                    ),
+                  )),*/
               Image.asset(
                 EnvironmentConfig.logoImage,
                 width: 220,

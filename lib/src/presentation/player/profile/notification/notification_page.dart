@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../app/bloc/authentication_bloc.dart';
 import 'cubit/notification_cubit.dart';
@@ -28,7 +29,7 @@ class NotificationV extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: Text('Rol actual ${user.getCurrentRol}'),
+                    child: Text('${AppLocalizations.of(context)!.currentRoleLBL} ${user.getCurrentRol(context)}'),
                   ),
                   const Padding(
                     padding: EdgeInsets.all(12.0),

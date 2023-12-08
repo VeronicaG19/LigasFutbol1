@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/presentation/introduction/leagues/league/category_by_tournament_and%20league/category_by_tournament.dart';
 import 'package:ligas_futbol_flutter/src/presentation/introduction/leagues/league/cubit/league_cubit.dart';
+import 'package:ligas_futbol_flutter/src/presentation/widgets/empty_widget/empty_widget.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../splash/responsive_widget.dart';
@@ -16,7 +17,7 @@ class _TournamentsByLeagueContentState
     extends State<TournamentsByLeagueContent> {
   @override
   Widget build(BuildContext context) {
-    if(ResponsiveWidget.isSmallScreen(context)) {
+    if (ResponsiveWidget.isSmallScreen(context)) {
       return _TournamentBodyMobile();
     } else {
       return _TournamentBodyWeb();
@@ -37,6 +38,14 @@ class _TournamentBodyMobile extends StatelessWidget {
             ),
           );
         } else {
+          if (state.tournamentList.isEmpty) {
+            return Center(
+              child: DefaultEmptyWidget(
+                title: "No hay torneos registrados",
+                subtitle: "Sin registros aún",
+              ),
+            );
+          }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,30 +80,30 @@ class _TournamentBodyMobile extends StatelessWidget {
                             (state.tournamentList[index].leagueId == null)
                                 ? Container()
                                 : Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    CategoryByTournament(
-                                      state.tournamentList[index],
-                                      state.tournamentList[index].leagueId!
-                                          .leagueId,
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CategoryByTournament(
+                                        state.tournamentList[index],
+                                        state.tournamentList[index].leagueId!
+                                            .leagueId,
+                                      ),
                                     ),
-                              ),
-                            );
+                                  );
                           },
                           leading: const Icon(Icons.workspaces_filled,
                               color: Color(0xff358aac), size: 18),
                           trailing:
-                          (state.tournamentList[index].leagueId == null)
-                              ? Text("Sin categorias",
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Color(0xff358aac)))
-                              : Icon(
-                            Icons.arrow_forward_ios,
-                            size: 15,
-                            color: Colors.blueGrey,
-                          ),
+                              (state.tournamentList[index].leagueId == null)
+                                  ? Text("Sin categorias",
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          color: Color(0xff358aac)))
+                                  : Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 15,
+                                      color: Colors.blueGrey,
+                                    ),
                         ),
                         const Divider(
                           height: 5.0,
@@ -124,10 +133,27 @@ class _TournamentBodyWeb extends StatelessWidget {
             ),
           );
         } else {
+          if (state.tournamentList.isEmpty) {
+            //Text(
+            //               "No hay torneos registrados",
+            //               textAlign: TextAlign.center,
+            //               style: TextStyle(
+            //                   color: Colors.black,
+            //                   fontSize: 20,
+            //                   fontWeight: FontWeight.w900),
+            //             );
+            return Center(
+              child: DefaultEmptyWidget(
+                title: "No hay torneos registrados",
+                subtitle: "Sin registros aún",
+              ),
+            );
+          }
           return GridView.builder(
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
               padding: EdgeInsets.only(top: 15, left: 8, right: 8),
-              gridDelegate:
-              const SliverGridDelegateWithMaxCrossAxisExtent(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 200,
                   childAspectRatio: 3.5 / 2,
                   crossAxisSpacing: 30,
@@ -138,8 +164,7 @@ class _TournamentBodyWeb extends StatelessWidget {
                   child: Container(
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(20)),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.white,
@@ -149,7 +174,7 @@ class _TournamentBodyWeb extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                         CircleAvatar(
+                        CircleAvatar(
                           radius: 28,
                           backgroundColor: Color(0xff358aac),
                           child: Icon(
@@ -164,8 +189,7 @@ class _TournamentBodyWeb extends StatelessWidget {
                         Text(
                           state.tournamentList[index].tournamentName.toString(),
                           style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w900),
+                              fontSize: 14, fontWeight: FontWeight.w900),
                         ),
                       ],
                     ),
@@ -174,16 +198,14 @@ class _TournamentBodyWeb extends StatelessWidget {
                     (state.tournamentList[index].leagueId == null)
                         ? Container()
                         : Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            CategoryByTournament(
-                              state.tournamentList[index],
-                              state.tournamentList[index].leagueId!
-                                  .leagueId,
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CategoryByTournament(
+                                state.tournamentList[index],
+                                state.tournamentList[index].leagueId!.leagueId,
+                              ),
                             ),
-                      ),
-                    );
+                          );
                   },
                 );
               });

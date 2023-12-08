@@ -17,12 +17,19 @@ class LeagueCubit extends Cubit<LeagueState> {
   final ITournamentService _tournamentService;
   Future<void> loadLeagues() async {
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
+    League league = League.empty;
+
     final response = await _service.getAllLeagues(requiresAuthToken: false);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
-            errorMessage: l.errorMessage)), (r) {
-      emit(state.copyWith(screenStatus: ScreenStatus.loaded, leagueList: r));
+            errorMessage: l.errorMessage)), (r) async {
+      league = r.isNotEmpty ? r.first : League.empty;
+      emit(state.copyWith(
+          screenStatus: ScreenStatus.loaded,
+          leagueList: r,
+          selectedValue: league));
+      await getTournamentByLeagueId(league.leagueId);
     });
   }
 

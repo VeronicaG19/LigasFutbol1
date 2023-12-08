@@ -27,7 +27,7 @@ abstract class IFieldService {
   RepositoryResponse<Field> getFieldByFieldId(int fieldId);
   RepositoryResponse<Field> getFieldByMatchId(int teamId,
       {bool requiresAuthToken = true});
-  RepositoryResponse<List<Field>> getFieldsRent(int leagueId);
+  RepositoryResponse<List<Field>> getFieldsRent(int leagueId, int status);
   Future<List<Field>> getRentalFields();
   Future<List<Field>> searchFieldByFilters(AddressFilter filter);
 }

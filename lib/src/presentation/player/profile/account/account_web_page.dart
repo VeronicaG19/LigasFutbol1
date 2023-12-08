@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:formz/formz.dart';
+import 'package:ligas_futbol_flutter/src/presentation/widgets/internalization/internalization_button.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../../core/enums.dart';
@@ -32,8 +33,10 @@ class AccountWebPage extends StatelessWidget {
           backgroundColor: Colors.grey[200],
           title: Text(
             'Mis Datos',
-            style:
-                TextStyle(color: Colors.grey[200], fontWeight: FontWeight.w900),
+            style: TextStyle(
+              color: Colors.grey[200],
+              fontWeight: FontWeight.w900,
+            ),
           ),
           flexibleSpace: const Image(
             image: AssetImage('assets/images/imageAppBar25.png'),
@@ -117,6 +120,12 @@ class AccountWebPage extends StatelessWidget {
                       );
                     },
                   ),
+                /*  ListTile(
+                    leading: const Icon(Icons.language),
+                    title: const InternalizationButton(
+                      type: 2,
+                    ),
+                  )*/
                 ],
               ),
               _SingleSection(

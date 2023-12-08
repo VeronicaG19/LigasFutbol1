@@ -44,8 +44,8 @@
             "program": "lib/ligas_futbol_dev.dart",
             "args": [
               "--flavor",
-              //"dev"
-              "ligas_futbol_dev"
+              "dev"
+              //"ligas_futbol_dev"
             ]
           },
           {

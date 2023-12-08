@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ligas_futbol_flutter/src/presentation/introduction/qa_page.dart';
 
 import '../home_page.dart';
-import '../introduction/leagues/league/league_content.dart';
 import '../introduction/leagues/league/league_page.dart';
 import '../login/view/login_page.dart';
 
 class TopBarContents extends StatefulWidget {
-
   @override
   _TopBarContentsState createState() => _TopBarContentsState();
 }
@@ -61,14 +60,14 @@ class _TopBarContentsState extends State<TopBarContents> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  const HomePage()),
+                              builder: (context) => const HomePage()),
                         );
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Inicio',
+                            AppLocalizations.of(context)!.inicioLBL,
                             style: TextStyle(
                               color: _isHovering[0]
                                   ? Colors.blue.shade200
@@ -96,21 +95,21 @@ class _TopBarContentsState extends State<TopBarContents> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  const LeaguePage()),
+                              builder: (context) => const LeaguePage()),
                         );
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Ligas',
+                            AppLocalizations.of(context)!.ligasLBL,
                             style: TextStyle(
                               color: _isHovering[1]
                                   ? Colors.blue[200]
                                   : Colors.white,
                             ),
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Visibility(
                             maintainAnimation: true,
                             maintainState: true,
@@ -138,14 +137,14 @@ class _TopBarContentsState extends State<TopBarContents> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Información',
+                            AppLocalizations.of(context)!.informacionLBL,
                             style: TextStyle(
                               color: _isHovering[1]
                                   ? Colors.blue[200]
                                   : Colors.white,
                             ),
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Visibility(
                             maintainAnimation: true,
                             maintainState: true,
@@ -160,6 +159,16 @@ class _TopBarContentsState extends State<TopBarContents> {
                         ],
                       ),
                     ),
+                    /* InkWell(
+                      child: const Padding(
+                        padding:
+                            EdgeInsets.only(left: 50, right: 50, bottom: 5),
+                        child: InternalizationButton(
+                          type: 1,
+                        ),
+                      ),
+                      onHover: (value) {},
+                    ),*/
                   ],
                 ),
               ),
@@ -174,13 +183,13 @@ class _TopBarContentsState extends State<TopBarContents> {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => const LoginPage()),
-                          (Route<dynamic> route) => route.isFirst);
+                      (Route<dynamic> route) => route.isFirst);
                 },
                 child: const Icon(
-                      Icons.share,
-                      size: 18,
-                      color: Colors.white,
-                    ),
+                  Icons.share,
+                  size: 18,
+                  color: Colors.white,
+                ),
               ),
               SizedBox(
                 width: screenSize.width / 50,
@@ -196,10 +205,10 @@ class _TopBarContentsState extends State<TopBarContents> {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => const LoginPage()),
-                          (Route<dynamic> route) => route.isFirst);
-                  },
+                      (Route<dynamic> route) => route.isFirst);
+                },
                 child: Text(
-                  'Iniciar sesión',
+                  AppLocalizations.of(context)!.loginLBL,
                   style: TextStyle(
                     color: _isHovering[3] ? Colors.white : Colors.white70,
                   ),

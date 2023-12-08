@@ -39,9 +39,9 @@ class FieldLmCubit extends Cubit<FieldLmState> {
 
   TextEditingController get getTextAddresController => _textEditingController;
 
-  Future<void> loadfields({required int leagueId}) async {
+  Future<void> loadfields({required int leagueId, required int status}) async {
     emit(state.copyWith(screenStatus: ScreenStatus.loading));
-    final response = await _service.getFieldsRent(leagueId);
+    final response = await _service.getFieldsRent(leagueId, status);
     response.fold(
         (l) => emit(state.copyWith(
             screenStatus: ScreenStatus.error,
@@ -53,6 +53,27 @@ class FieldLmCubit extends Cubit<FieldLmState> {
           fieldtList: r,
           formzStatus: FormzStatus.pure));
     });
+  }
+
+  Future<void> loadOthersFields(
+      {required int leagueId, required int status}) async {
+    emit(state.copyWith(screenStatus: ScreenStatus.loading));
+    final response = await _service.getFieldsRent(leagueId, 1);
+    response.fold(
+        (l) => emit(state.copyWith(
+            screenStatus: ScreenStatus.error,
+            errorMessage: l.errorMessage)), (r) {
+      print("Datos ${r.length}");
+
+      emit(state.copyWith(
+          screenStatus: ScreenStatus.loaded,
+          otherFieldList: r,
+          formzStatus: FormzStatus.pure));
+    });
+  }
+
+  Future<void> onSendFieldRequest() async {
+    emit(state.copyWith(screenStatus: ScreenStatus.loading));
   }
 
   Future<void> detailField({required int fieldId}) async {
@@ -184,7 +205,7 @@ class FieldLmCubit extends Cubit<FieldLmState> {
           _textEditingController.text = '';
           emit(state.copyWith(
               formzStatus: FormzStatus.submissionSuccess, detailField: r));
-          loadfields(leagueId: leagueId!);
+          loadfields(leagueId: leagueId!, status: 0);
         });
       });
     } else {

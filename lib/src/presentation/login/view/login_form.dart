@@ -37,6 +37,16 @@ class LoginForm extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
+              /* Align(
+                  alignment: Alignment.bottomRight,
+                  child: Row(
+                    children: [
+                      Icon(Icons.language, color: Colors.grey[200]),
+                      const InternalizationButton(
+                        type: 1,
+                      )
+                    ],
+                  )),*/
               Image.asset(
                 EnvironmentConfig.logoImage,
                 width: 200,
@@ -290,7 +300,7 @@ class _RecoverPasswordButton extends StatelessWidget {
               minimumSize: const Size.fromHeight(50.0),
             ),
             child: Text(
-              AppLocalizations.of(context)!.forgetPasswordLBL,
+              AppLocalizations.of(context)!.lfTitleLabel,
               style: TextStyle(
                   fontSize: 15,
                   fontFamily: 'Lato',

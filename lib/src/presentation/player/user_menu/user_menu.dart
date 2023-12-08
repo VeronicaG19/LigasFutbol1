@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/presentation/app/bloc/authentication_bloc.dart';
 import 'package:ligas_futbol_flutter/src/presentation/player/soccer_team/matches_by_player/matches_by_player_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ligas_futbol_flutter/src/presentation/player/user_menu/widget/tutorial_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:user_repository/user_repository.dart';
@@ -58,8 +59,8 @@ class _UserMenuState extends State<UserMenu> {
                 currentAccountPicture: const ProfileImageWidget(),
                 accountEmail: Text(
                   user.applicationRol == ApplicationRol.referee
-                      ? '${user.getCurrentRol} - Liga ${refereeLeague.leagueName}'
-                      : user.getCurrentRol,
+                      ? '${user.getCurrentRol(context)} - Liga ${refereeLeague.leagueName}'
+                      : '${user.getCurrentRol(context)}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w300,
                     color: Colors.white,
@@ -77,8 +78,8 @@ class _UserMenuState extends State<UserMenu> {
                 _MenuCard(
                   keyOnIcon: CoachKey.myProfile,
                   icon: Icons.person_rounded,
-                  title: 'Mi perfil',
-                  subtitle: 'Visualice o edite los datos de su cuenta',
+                  title: AppLocalizations.of(context)!.myprofileLBL,
+                  subtitle: AppLocalizations.of(context)!.myprofilesubtextLBL,
                   onTap: () => Navigator.push(context, ProfileUser.route()),
                 ),
                 // if (user.applicationRol == ApplicationRol.fieldOwner)
@@ -92,8 +93,8 @@ class _UserMenuState extends State<UserMenu> {
                   _MenuCard(
                     keyOnIcon: CoachKey.playerData,
                     icon: Icons.sports_volleyball,
-                    title: 'Ficha de jugador',
-                    subtitle: 'Visualice o edite la ficha de jugador',
+                    title: AppLocalizations.of(context)!.playerKeyLBL,
+                    subtitle: AppLocalizations.of(context)!.playerKeySubtextLBL,
                     onTap: () =>
                         Navigator.push(context, PlayerProfilePage.route()),
                   ),
@@ -137,6 +138,7 @@ class _UserMenuState extends State<UserMenu> {
                   ),*/
                 if (user.applicationRol == ApplicationRol.teamManager)
                   _MenuCard(
+                    keyOnIcon: CoachKey.searchPlayer,
                     icon: Icons.person_search,
                     title: 'Buscando jugadores',
                     subtitle: 'Crea publicaciones para buscar jugadores',
@@ -147,6 +149,7 @@ class _UserMenuState extends State<UserMenu> {
                   ),
                 if (user.applicationRol == ApplicationRol.teamManager)
                   _MenuCard(
+                   keyOnIcon: CoachKey.sharePlayer,
                     icon: Icons.person_add_alt,
                     title: 'Jugadores recomendados',
                     subtitle: 'Consulta los jugadores que te han recomendado',
@@ -157,23 +160,23 @@ class _UserMenuState extends State<UserMenu> {
                   ),
                 _MenuCard(
                   icon: Icons.file_copy,
-                  title: 'Información legal',
-                  subtitle: 'Consulta la información legal sobre ligas fútbol',
+                  title: AppLocalizations.of(context)!.legalInformationLBL,
+                  subtitle: AppLocalizations.of(context)!.legalInformationSubtextBL,
                   onTap: () => launchUrl(_url),
                 ),
                 if (user.applicationRol == ApplicationRol.referee)
-                  const TutorialWidget(
+                  TutorialWidget(
                     tuto: TutorialType.referee,
                     icon: Icons.help,
-                    title: 'Ayuda',
-                    subtitle: 'Ver tutorial de la app',
+                    title: AppLocalizations.of(context)!.helpLBL,
+                    subtitle: AppLocalizations.of(context)!.helpSubtextLBL,
                   ),
                 if (user.applicationRol == ApplicationRol.player)
-                  const TutorialWidget(
+                   TutorialWidget(
                     tuto: TutorialType.player,
                     icon: Icons.help,
-                    title: 'Ayuda',
-                    subtitle: 'Ver tutorial de la app',
+                    title: AppLocalizations.of(context)!.helpLBL,
+                    subtitle: AppLocalizations.of(context)!.helpSubtextLBL,
                   ),
                 if (user.applicationRol == ApplicationRol.teamManager)
                   const TutorialWidget(
@@ -192,9 +195,10 @@ class _UserMenuState extends State<UserMenu> {
                 if (user.applicationRol == ApplicationRol.player)
                   _MenuCard(
                     icon: Icons.star_rate,
-                    title: 'Calificar',
+                    keyOnIcon: CoachKey.ratingPlayer,
+                    title: AppLocalizations.of(context)!.reviewLBL,
                     subtitle:
-                        'Calificar árbitros y campos apartir del partido del equipo seleccionado',
+                        AppLocalizations.of(context)!.reviewSubtextLBL,
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
@@ -235,7 +239,7 @@ class _UserMenuState extends State<UserMenu> {
                 height: 45.0,
                 color: Colors.red[800],
                 child: Center(
-                  child: Text("Cerrar sesión",
+                  child: Text(AppLocalizations.of(context)!.logoutLBL,
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w900,

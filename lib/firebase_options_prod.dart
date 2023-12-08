@@ -17,19 +17,24 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return iOS;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.macOS:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.linux:
@@ -44,15 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDnd278vcoIki07kYM_zTs3vskIL30xXC8',
-    appId: '1:961689438961:web:d4267d0d4c3acebc627750',
-    messagingSenderId: '961689438961',
-    projectId: 'wiplif-80bf2',
-    authDomain: 'wiplif-80bf2.firebaseapp.com',
-    storageBucket: 'wiplif-80bf2.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDbRVUP8zy1BzknX7zMg1vNTrSd-9RUNZM',
     appId: '1:961689438961:android:178e0922120f6afb627750',
@@ -60,4 +56,14 @@ class DefaultFirebaseOptions {
     projectId: 'wiplif-80bf2',
     storageBucket: 'wiplif-80bf2.appspot.com',
   );
+
+  static const FirebaseOptions iOS = FirebaseOptions(
+      apiKey: 'AIzaSyDVhgK77hCCF1SWKseJJgoQR-gtl9fGUbk',
+      appId: '1:961689438961:ios:105f8c7b96ff36a1627750',
+      messagingSenderId: '961689438961',
+      projectId: 'wiplif-80bf2',
+      storageBucket: 'wiplif-80bf2.appspot.com',
+      iosClientId:
+          '961689438961-jn1ucms9o0ck1baacpolsimdrlb08l7o.apps.googleusercontent.com',
+      iosBundleId: 'com.ccs.swat.iaas.spr.ligasfutbol.ligasFutbolFlutter');
 }

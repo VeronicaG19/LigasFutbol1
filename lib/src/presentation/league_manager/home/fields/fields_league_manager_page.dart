@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:ligas_futbol_flutter/src/presentation/league_manager/home/fields/other_field_page.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../../service_locator/injection.dart';
@@ -16,8 +17,8 @@ class FieldsLeagueManagerPage extends StatelessWidget {
     final leagueManager =
         context.select((AuthenticationBloc bloc) => bloc.state.selectedLeague);
     return BlocProvider(
-      create: (_) =>
-          locator<FieldLmCubit>()..loadfields(leagueId: leagueManager.leagueId),
+      create: (_) => locator<FieldLmCubit>()
+        ..loadfields(leagueId: leagueManager.leagueId, status: 0),
       child:
           BlocConsumer<FieldLmCubit, FieldLmState>(listener: (context, state) {
         if (state.formzStatus.isSubmissionSuccess) {
@@ -50,7 +51,7 @@ class FieldsLeagueManagerPage extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  /*Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
@@ -60,15 +61,17 @@ class FieldsLeagueManagerPage extends StatelessWidget {
                             context,
                             EditPlayerProfilePage.route(BlocProvider.of<PlayerProfileCubit>(context))
                         );*/
-                          /*   Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute<void>(
                               builder: (_) => BlocProvider.value(
-                                  value:
-                                      BlocProvider.of<FieldLmCubit>(context)..getTypeFields(),
-                                  child: const CraeteFieldLeagueManagerPage()),
+                                  value: BlocProvider.of<FieldLmCubit>(context)
+                                    ..loadOthersFields(
+                                        leagueId: leagueManager.leagueId,
+                                        status: 1),
+                                  child: const OtherFieldPage()),
                             ),
-                          );*/
+                          );
                           /* Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -102,11 +105,12 @@ class FieldsLeagueManagerPage extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),*/
+                  ),
                   GridView.builder(
                     itemCount: state.fieldtList.length,
                     itemBuilder: (context, index) {
                       return CardField(
+                        type: 0,
                         activeId: state.fieldtList[index].activeId ?? 0,
                         fieldId: state.fieldtList[index].fieldId ?? 0,
                         name: "${state.fieldtList[index].fieldName}",

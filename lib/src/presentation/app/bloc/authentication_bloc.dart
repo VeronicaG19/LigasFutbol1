@@ -51,6 +51,8 @@ class AuthenticationBloc
     on<UpdateLeagueManagerLeagues>(_onUpdateLeagueManagerLeagues);
     on<ChangeSelectedLeague>(_onChangeSelectedLeague);
     on<ChangeSelectedTeam>(_onChangeSelectedTeam);
+    on<ChangeSelectedLanguage>(_onChangeSelectedLanguage);
+    on<GetLeaguesManager>(_getLeaguesManager);
     on<UpdateTeamList>(_onUpdateTeams);
     on<UpdateRefereeData>(_onUpdateRefereeData);
     _authenticationStatusSubscription =
@@ -287,6 +289,27 @@ class AuthenticationBloc
     await Future.delayed(const Duration(seconds: 1));
     emitter(state.copyWith(
         selectedTeam: event.team, status: AuthenticationStatus.authenticated));
+  }
+
+  void _onChangeSelectedLanguage(ChangeSelectedLanguage event,
+      Emitter<AuthenticationState> emitter) async {
+    emitter(state.copyWith(status: AuthenticationStatus.loading));
+    await Future.delayed(const Duration(seconds: 1));
+    emitter(state.copyWith(
+        selectedLanguage: event.selectedLanguage,
+        locale: Locale(event.selectedLanguage),
+        status: event.type == 1
+            ? AuthenticationStatus.unauthenticated
+            : AuthenticationStatus.authenticated));
+  }
+
+  Future<void> _getLeaguesManager(
+      GetLeaguesManager event, Emitter<AuthenticationState> emitter) async {
+    emitter(state.copyWith(status: AuthenticationStatus.loading));
+    List<League> list = await _leagueService.getManagerLeagues(event.personId);
+    await Future.delayed(const Duration(seconds: 1));
+    emitter(state.copyWith(
+        managerLeagues: list, status: AuthenticationStatus.authenticated));
   }
 
   Future<void> _onChangeTeamManagerTeamEvent(ChangeTeamManagerTeamEvent event,

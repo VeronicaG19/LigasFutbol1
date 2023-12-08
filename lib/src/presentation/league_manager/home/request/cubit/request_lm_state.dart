@@ -12,6 +12,7 @@ class RequestLmState extends Equatable {
   final List<Category> categoriesList;
   final Category catSelect;
   final int requestCount;
+  final League leagueEdit;
 
   const RequestLmState(
       {this.leagueDescription = const LeagueDescription.pure(),
@@ -24,7 +25,8 @@ class RequestLmState extends Equatable {
       this.leageSlct = League.empty,
       this.categoriesList = const [],
       this.catSelect = Category.empty,
-      this.requestCount = 0});
+      this.requestCount = 0,
+      this.leagueEdit = League.empty});
 
   RequestLmState copyWith(
       {String? errorMessage,
@@ -37,7 +39,8 @@ class RequestLmState extends Equatable {
       League? leageSlct,
       List<Category>? categoriesList,
       Category? catSelect,
-      int? requestCount}) {
+      int? requestCount,
+      League? leagueEdit}) {
     return RequestLmState(
         errorMessage: errorMessage ?? this.errorMessage,
         screenStatus: screenStatus ?? this.screenStatus,
@@ -49,7 +52,8 @@ class RequestLmState extends Equatable {
         leageSlct: leageSlct ?? this.leageSlct,
         categoriesList: categoriesList ?? this.categoriesList,
         catSelect: catSelect ?? this.catSelect,
-        requestCount: requestCount ?? this.requestCount);
+        requestCount: requestCount ?? this.requestCount,
+        leagueEdit: leagueEdit ?? this.leagueEdit);
   }
 
   @override
@@ -62,6 +66,7 @@ class RequestLmState extends Equatable {
         leageSlct,
         categoriesList,
         catSelect,
-        requestCount
+        requestCount,
+        leagueEdit
       ];
 }

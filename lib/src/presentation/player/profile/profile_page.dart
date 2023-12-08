@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/environment_config.dart';
 import 'package:ligas_futbol_flutter/src/presentation/account/account_delete_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ligas_futbol_flutter/src/presentation/splash/responsive_widget.dart';
 
 import '../../../service_locator/injection.dart';
@@ -28,7 +29,7 @@ class ProfileUser extends StatelessWidget {
         child: AppBar(
           backgroundColor: Colors.grey[200],
           title: Text(
-            'Mi perfil',
+            '${AppLocalizations.of(context)!.myprofileLBL}',
             style:
                 TextStyle(color: Colors.grey[200], fontWeight: FontWeight.w900),
           ),
@@ -59,40 +60,40 @@ class _ProfilePageBodyMobile extends StatelessWidget {
           mainAxisSpacing: 10.0),
       children: [
         InkWell(
-          child: const _ProfileOptionCard(
+          child: _ProfileOptionCard(
             pathImg: "assets/images/perfil_image.png",
-            title: "Datos de cuenta",
-            subtitle: "Edite los datos de usuario o contraseña",
+            title: AppLocalizations.of(context)!.accountInfoLBL,
+            subtitle: AppLocalizations.of(context)!.accountInfoDetsLBL,
           ),
           onTap: () {
             Navigator.push(context, AccountPage.route());
           },
         ),
         InkWell(
-          child: const _ProfileOptionCard(
+          child: _ProfileOptionCard(
             pathImg: "assets/images/acount_perfil.png",
-            title: "Datos personales",
-            subtitle: "Edite los datos de nombre, telefono o correo",
+            title: AppLocalizations.of(context)!.myPersonalInfoLBL,
+            subtitle: AppLocalizations.of(context)!.myPersonalInfoDetsLBL,
           ),
           onTap: () {
             Navigator.push(context, PersonalData.route());
           },
         ),
         InkWell(
-          child: const _ProfileOptionCard(
+          child: _ProfileOptionCard(
             pathImg: "assets/images/change_rol.png",
-            title: "Roles",
-            subtitle: "Solicitar o cambiar de rol.",
+            title: AppLocalizations.of(context)!.rolesLBL,
+            subtitle: AppLocalizations.of(context)!.roleDetsLBL,
           ),
           onTap: () {
             Navigator.push(context, RolePage.route());
           },
         ),
         InkWell(
-          child: const _ProfileOptionCard(
+          child:  _ProfileOptionCard(
             pathImg: "assets/images/notif.png",
-            title: "Notificaciones",
-            subtitle: "Recibir notificaciones acerca de ligas fútbol",
+            title: AppLocalizations.of(context)!.notificationsLBL,
+            subtitle: AppLocalizations.of(context)!.notificationsDetsLBL,
           ),
           onTap: () {
             showModalBottomSheet<void>(
@@ -108,10 +109,10 @@ class _ProfilePageBodyMobile extends StatelessWidget {
           },
         ),
         InkWell(
-          child: const _ProfileOptionCard(
+          child: _ProfileOptionCard(
             pathImg: "assets/images/delete_user.png",
-            title: "Cerrar cuenta",
-            subtitle: "Cerrar cuenta de forma permanente",
+            title: AppLocalizations.of(context)!.deleteAccountLBL,
+            subtitle: AppLocalizations.of(context)!.deleteAccountDetsLBL
           ),
           onTap: () {
             Navigator.push(context, AccountDeletePage.route());
@@ -216,8 +217,8 @@ class _MenuBodyWeb extends StatelessWidget {
                 const SizedBox(height: 10),
                 _ProfileOptionList(
                   icon: Icons.person_rounded,
-                  title: 'Mis datos',
-                  subtitle: 'Visualice o edite los datos personales.',
+                  title: AppLocalizations.of(context)!.accountInfoLBL,
+                  subtitle: AppLocalizations.of(context)!.accountInfoDetsLBL,
                   normal: true,
                   onTap: () {
                     Navigator.push(context, AccountWebPage.route());
@@ -226,8 +227,8 @@ class _MenuBodyWeb extends StatelessWidget {
                 const Divider(),
                 _ProfileOptionList(
                   icon: Icons.recent_actors,
-                  title: 'Roles',
-                  subtitle: 'Consulta la información de los roles disponibles.',
+                  title:  AppLocalizations.of(context)!.rolesLBL,
+                  subtitle: AppLocalizations.of(context)!.roleDetsLBL,
                   normal: true,
                   onTap: () {
                     Navigator.push(context, RolePage.route());
@@ -236,8 +237,8 @@ class _MenuBodyWeb extends StatelessWidget {
                 const Divider(),
                 _ProfileOptionList(
                   icon: Icons.notifications,
-                  title: 'Notificaciones',
-                  subtitle: 'Recibir notificaciones acerca de ligas fútbol.',
+                  title: AppLocalizations.of(context)!.notificationsLBL,
+                  subtitle: AppLocalizations.of(context)!.notificationsDetsLBL,
                   normal: true,
                   onTap: () {
                     showModalBottomSheet<void>(
@@ -255,8 +256,8 @@ class _MenuBodyWeb extends StatelessWidget {
                 const Divider(),
                 _ProfileOptionList(
                   icon: Icons.delete_forever,
-                  title: 'Eliminar cuenta',
-                  subtitle: 'Eliminar cuenta de forma permanente',
+                  title: AppLocalizations.of(context)!.deleteAccountLBL,
+                  subtitle: AppLocalizations.of(context)!.deleteAccountDetsLBL,
                   normal: false,
                   onTap: () {
                     Navigator.push(context, AccountDeletePage.route());
@@ -330,7 +331,7 @@ class _CardUserProfile extends StatelessWidget {
                     ),
                     Container(
                       padding: const EdgeInsets.only(top: 10),
-                      child: Text("Rol actual: ${user.getCurrentRol}"),
+                      child: Text("${AppLocalizations.of(context)!.currentRoleLBL}: ${user.getCurrentRol(context)}"),
                     ),
                   ],
                 ),

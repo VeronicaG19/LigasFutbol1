@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:formz/formz.dart';
+import 'package:ligas_futbol_flutter/src/presentation/widgets/internalization/internalization_button.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../../service_locator/injection.dart';
@@ -105,6 +106,14 @@ class AccountPage extends StatelessWidget {
               );
             },
           ),
+         /* ListTile(
+            leading: Icon(Icons.language),
+            title: InternalizationButton(
+              type: 2,
+            ),
+            trailing: Icon(Icons.arrow_drop_down_outlined,
+                color: Colors.blue[800], size: 28),
+          )*/
         ],
       ),
     );

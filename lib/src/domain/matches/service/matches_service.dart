@@ -10,6 +10,7 @@ import 'package:ligas_futbol_flutter/src/domain/matches/dto/match_detail/match_d
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/match_role_dto/match_role_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/matches_by_player/matches_by_player.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/referee_match.dart';
+import 'package:ligas_futbol_flutter/src/domain/matches/dto/reschedule_match/reschedule_match.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/start_match/start_match_res_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/entity/match.dart';
 import 'package:ligas_futbol_flutter/src/domain/result/dto/result_dto.dart';
@@ -124,6 +125,12 @@ class MatchesServiceImpl implements IMatchesService {
   @override
   RepositoryResponse<MatchSpr> deleteMatch(int matchId) {
     return _repository.deleteMatch(matchId);
+  }
+
+  @override
+  RepositoryResponse<String> rescheduleMatch(
+      RescheduleMatchDTO rescheduleMatchDTO) {
+    return _repository.rescheduleMatch(rescheduleMatchDTO);
   }
 
   @override

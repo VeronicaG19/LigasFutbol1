@@ -30,7 +30,7 @@ abstract class IFieldRepository {
   RepositoryResponse<Field> getFieldByFieldId(int fieldId);
   RepositoryResponse<Field> getFieldByMatchId(int teamId,
       {bool requiresAuthToken = true});
-  RepositoryResponse<List<Field>> getFieldsRent(int leagueId);
+  RepositoryResponse<List<Field>> getFieldsRent(int leagueId, int status);
   RepositoryResponse<List<Field>> getRentalFields();
   RepositoryResponse<List<Field>> searchFieldByFilters(AddressFilter filter);
 }

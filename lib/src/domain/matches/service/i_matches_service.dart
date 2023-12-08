@@ -2,6 +2,7 @@ import 'package:ligas_futbol_flutter/src/domain/matches/dto/detail_match/detailM
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/end_match/end_match_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/match_detail/match_detail_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/matches_by_player/matches_by_player.dart';
+import 'package:ligas_futbol_flutter/src/domain/matches/dto/reschedule_match/reschedule_match.dart';
 import 'package:ligas_futbol_flutter/src/domain/matches/dto/start_match/start_match_res_dto.dart';
 import 'package:ligas_futbol_flutter/src/domain/result/dto/result_dto.dart';
 
@@ -121,4 +122,10 @@ abstract class IMatchesService {
   /// ? Get match detail by eventId
   /// @param [eventId]
   RepositoryResponse<MatchSpr> getMatchDetailByEventId(int eventId);
+
+  ///
+  /// ? Patch reschedule match
+  /// @param [rescheduleMatchDTO]
+  RepositoryResponse<String> rescheduleMatch(
+      RescheduleMatchDTO rescheduleMatchDTO);
 }

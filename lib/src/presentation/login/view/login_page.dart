@@ -7,11 +7,16 @@ import '../../../presentation/login/view/login_form.dart';
 import '../../../service_locator/injection.dart';
 import 'login_form_web.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   static Page page() => const MaterialPage<void>(child: LoginPage());
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;

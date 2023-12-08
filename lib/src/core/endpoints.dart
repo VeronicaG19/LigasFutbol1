@@ -837,7 +837,7 @@ String get getFieldRentEndpoint =>
     '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/field/searchFieldByFilters';
 
 String get getFieldRentNFEndpoint =>
-    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/field/fieldsRent';
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/field/search';
 
 //?----Scoring table-----?//
 
@@ -1061,3 +1061,6 @@ String get deleteAccountEndpoint =>
 
 String get getRefereeGlobalStaticsEndpoint =>
     '${EnvironmentConfig.sprRefereeBaseURL}$_apiBasePath/global/statics';
+
+String get patchRescheduleMatch =>
+    '${EnvironmentConfig.sprAdminBaseURL}$_apiBasePath/match/reschedule';

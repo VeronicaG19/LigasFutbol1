@@ -365,7 +365,107 @@
             }
         }
     },
+    "returnHomepagenLBL": "Ir a la pantalla de incio",
     "forgetPasswordLBL": "¿Olvidaste tu contraseña?",
     "signUpHereLBL":"Regístrate aquí",
-    "notAccountLBL": "¿No tienes una cuenta?"
+    "notAccountLBL": "¿No tienes una cuenta?",
+    "usernameLBL": "Usuario",
+    "passwordLBL": "Contraseña",
+    "loginLBL": "Iniciar sesión",
+
+    "inicioLBL": "Inicio",
+    "ligasLBL": "Ligas",
+    "informacionLBL": "Información",
+    "quesAnwsersLBL": "QA",
+    "greetingLBL": "¡Ven y regístrate a Ligas fútbol!",
+    "welcomeLBL": "Vive la experiencia como jugador, árbitro, etc, con una proyección profesional, estamos convencidos que los mejores jugadores deben ser destacados, por eso creamos la plataforma ideal donde podrás visualizar tus resultados, analizar a tu rival y conocer tu próxima Sede.",
+    "registerFreeLBL": "¡Regístrate 𝐆𝐑𝐀𝐓𝐈𝐒 ahora!",
+    "shareLBL": "¡Compártenos con tus amigos!",
+
+    "miequiposLBL":"Mis equipos",
+    "verpartidosLBL": "Ver mis partidos",
+    "buscarequipoLBL": "Buscar equipos",
+
+    "searchBarLBL": "Buscar por nombre del equipo",
+
+    "requestLBL": "Solicitudes",
+    "sentrequestLBL": "Solicitudes enviadas",
+    "receivedrequestLBL": "Solicitudes recibidas",
+
+
+    "playerLBL": "Jugador",
+    "leagueManagerLBL": "Presidente de liga",
+    "refereeLBL": "Árbitro",
+    "adminLBL": "Administrador",
+    "teamManagerLBL": "Representante de equipo",
+    "refereeManagerLBL": "Gerente de árbitros",
+    "fieldOwnerLBL": "Dueño de campo",
+    
+    "myprofileLBL": "Mi perfil",
+    "myprofilesubtextLBL": "Visualice o edite los datos de su cuenta",
+    "playerKeyLBL": "Ficha de jugador",
+    "playerKeySubtextLBL": "Visualice o edite la ficha de jugardor",
+    "legalInformationLBL": "Información legal",
+    "legalInformationSubtextBL": "Consulta la información legal sobre ligas fútbol",
+    "helpLBL": "Ayuda",
+    "helpSubtextLBL": "Ver tutorial de la app",
+    "reviewLBL": "Calificar",
+    "reviewSubtextLBL": "Calificar árbitros y campos apartir del partido del equipo seleccionado",
+
+    "logoutLBL": "Cerrar sessión",
+
+    "currentRoleLBL": "Rol actual",
+
+    "accountInfoLBL": "Datos de cuenta",
+    "accountInfoDetsLBL": "Edite datos de usuario o contraseña",
+    "myPersonalInfoLBL": "Datos personales",
+    "myPersonalInfoDetsLBL": "Edite los datos de nombre, telefono o correo",
+    "rolesLBL": "Roles",
+    "roleDetsLBL": "Solicitar o cambiar de rol",
+    "notificationsLBL": "Notificaciones",
+    "notificationsDetsLBL": "Recibe notificaciones acera de ligas fútbol",
+    "deleteAccountLBL": "Cerrar cuenta",
+    "deleteAccountDetsLBL": "Cerrar cuenta de forma permanente",
+
+    "updateLBL": "Actualizar",
+    "updateDetailsLBL": "Actualizar datos",
+    "nicknameLBL": "Sobre Nombre",
+    "birthdateLBL": "Fecha de nacimiento",
+
+    "goalkeeperLBL": "Portero",
+    "defenseLBL": "Defensa",
+    "centralDefenseLBL": "Defensa Central",
+    "sideDefenseLBL": "Defensa Lateral",
+    "midfieldLBL": "Mediocampista",
+    "centermidLBL": "Media punta",
+    "forwardLBL": "Delantero",
+    "centerforwardLBL": "Extremo",
+    "strikerLBL": "Delantero central",
+
+    "noAddressLBL": "Sin dirección",
+    "saveLBL": "Guardar",
+
+    "ageLBL": "Edad",
+    "positionLBL": "Posición",
+    "viewgamesLBL": "Ver mis partidos",
+    "teamselectLBL": "Equipo",
+    "nogameLBL": "Sin partidos",
+    "viewexperienceLBL": "Ver mis experiencia",
+    "myexperienceLBL": "Mi experiencia",
+    "addbuttonLBL":"Agregar",
+
+    "titleExperLBL": "Titulo",
+    "descriptionLBL": "Descripción",
+    "leagueNameLBL": "Liga",
+    "categoryLBL":"Categoría",
+    "tournamentLBL": "Torneo",
+    "teamLBL": "Equipo",
+
+    "changeRoleLBL":"Cambiar rol",
+
+    "refereeCardLBL": "Ficha de árbitro",
+    "refereeCardSubtitleLBL": "Visualice o edite la ficha de árbitro",
+    "viewCalendarLBL":"Ver calendario",
+    "viewCalendarSubtitleLBL": "",
+    "lfTitleLabel": "Bienvenido"
 }

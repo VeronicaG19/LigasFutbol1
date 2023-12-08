@@ -130,7 +130,7 @@ class _PageContentState extends State<_PageContent>
                       ),
                       // Tab(key: CoachKey.detailField, text: 'Campo'),
                       Tab(
-                        key: CoachKey.detailQualifications,
+                        key: CoachKey.reviewField,
                         height: tabSize,
                         child: const _FieldOwnerTab(
                           title: 'Reseñas',

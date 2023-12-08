@@ -270,8 +270,8 @@ class SelectFileTypeHeader extends StatefulWidget {
 }
 
 class _SelectFileTypeHeaderState extends State<SelectFileTypeHeader> {
-  static const String leagueLbl = 'Ver por liga';
-  static const String otherLeagueLbl = 'Ver de otras ligas';
+  static const String leagueLbl = 'Mis campos';
+  static const String otherLeagueLbl = 'Buscar otros campos';
 
   @override
   Widget build(BuildContext context) {
@@ -350,8 +350,8 @@ class SelectRefereeTypeHeader extends StatefulWidget {
 }
 
 class _SelectRefereeTypeHeaderState extends State<SelectRefereeTypeHeader> {
-  static const String leagueLbl = 'Ver por liga';
-  static const String otherLeagueLbl = 'Ver de otras ligas';
+  static const String leagueLbl = 'Mis árbitros';
+  static const String otherLeagueLbl = 'Buscar otros árbitros';
 
   @override
   Widget build(BuildContext context) {

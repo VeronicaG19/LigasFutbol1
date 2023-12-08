@@ -109,7 +109,7 @@ class _EditPlayerProfileContentState extends State<EditPlayerProfileContent>{
                               await showDatePicker(
                                 context: context,
                                 initialDate: state.playerInfo.birthday ?? DateTime.now(),
-                                firstDate: DateTime(1923),
+                                firstDate: DateTime(1953),
                                 lastDate: DateTime.now(),
                               );
                               final DateFormat formatter = DateFormat('dd-MM-yyyy');

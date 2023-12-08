@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/core/enums.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ligas_futbol_flutter/src/presentation/app/app.dart';
 import 'package:ligas_futbol_flutter/src/presentation/splash/responsive_widget.dart';
 import 'package:ligas_futbol_flutter/src/presentation/widgets/only_mobile_app/button_alert_only_web.dart';
@@ -39,7 +40,7 @@ class _RolPageContent extends StatelessWidget {
         child: AppBar(
           backgroundColor: Colors.grey[200],
           title: Text(
-            'Cambiar rol',
+            AppLocalizations.of(context)!.changeRoleLBL,
             style:
                 TextStyle(color: Colors.grey[200], fontWeight: FontWeight.w900),
           ),
@@ -81,7 +82,7 @@ class _RolPageContent extends StatelessWidget {
                       children: [
                         ListTile(
                           leading: const Icon(Icons.settings),
-                          title: const Text('Rol Actual'),
+                          title: Text(AppLocalizations.of(context)!.currentRoleLBL),
                           subtitle:
                               Text(state.currentRol.rol.roleDescription ?? ''),
                           onTap: () {},
@@ -178,7 +179,7 @@ class _RolPageContent extends StatelessWidget {
                               children: [
                                 ListTile(
                                   leading: const Icon(Icons.settings),
-                                  title: const Text('Rol Actual'),
+                                  title: Text(AppLocalizations.of(context)!.currentRoleLBL),
                                   subtitle: Text(
                                       state.currentRol.rol.roleDescription ??
                                           ''),

@@ -60,18 +60,26 @@ class EditGameRolCubit extends Cubit<EditGameRolState> {
       selectedField =
           Field(fieldId: _match.fieldMatchId, fieldName: _match.fieldMatch);
     }
+    final formattedDate1 = DateFormat('dd-MM-yyyy HH:mm');
 
+    final dateMatch1 = _match.dateMatch == null
+        ? null
+        : formattedDate1.parse(_match.dateMatch ?? '');
     final fieldsRequest =
         await _fieldService.searchFieldByFilters(AddressFilter(
       state: state.selectedState,
       leagueId: _match.requestFieldId == null ? state.leagueId : null,
       status: _match.requestFieldId != null ? 2 : 0,
+      matchDate: _match.requestFieldId == null ? dateMatch1 : null,
+      matchHour: _match.requestFieldId == null ? dateMatch1 : null,
     ));
     final refereeRequest =
         await _refereeService.searchByFiltersReferee(AddressFilter(
       state: state.selectedState,
       leagueId: _match.requestRefereeId != null ? null : state.leagueId,
       status: _match.requestRefereeId != null ? 2 : 0,
+      matchDate: _match.requestRefereeId == null ? dateMatch1 : null,
+      matchHour: _match.requestRefereeId == null ? dateMatch1 : null,
     ));
     if ((_match.refereeId != null &&
             _match.statusRequestReferee == 'ACCEPTED') ||
@@ -137,6 +145,7 @@ class EditGameRolCubit extends Cubit<EditGameRolState> {
   }
 
   Future<void> validateFieldData(int leagueId, int selectedValue) async {
+    print(selectedValue);
     emit(state.copyWith(
         screenState: BasicCubitScreenState.loading,
         leagueId: leagueId,
@@ -198,22 +207,18 @@ class EditGameRolCubit extends Cubit<EditGameRolState> {
         _fieldList.addAll(fieldsRequest);
       }
     }
-    final formattedDate = DateFormat('dd-MM-yyyy HH:mm');
-    final dateMatch = _match.dateMatch == null
-        ? null
-        : formattedDate.parse(_match.dateMatch ?? '');
+
     _buildMixedListFilter(1);
     emit(state.copyWith(
         fieldList: _fieldList.toSet().toList(),
         mixedElementsList: _mixedElements.toSet().toList(),
         addressList: _mixedElements.toSet().toList(),
         selectedField: selectedField,
-        selectedDate: dateMatch,
-        selectedHour: dateMatch,
         screenState: BasicCubitScreenState.loaded));
   }
 
   Future<void> validateRefereeData(int leagueId, int selectedValue) async {
+    print(selectedValue);
     emit(state.copyWith(
         screenState: BasicCubitScreenState.loading,
         leagueId: leagueId,
@@ -240,16 +245,16 @@ class EditGameRolCubit extends Cubit<EditGameRolState> {
             state.selectedHour?.hour ?? 08,
             state.selectedHour?.minute ?? 00,
           );
-    final refereeRequest = await _refereeService.searchByFiltersReferee(
-        AddressFilter(
-            state: state.selectedState,
-            leagueId: state.leagueId,
-            status: state.selectedRefereeValue == 0 ? 0 : 1,
-            latitude: state.latitude == 0 ? null : state.latitude?.toString(),
-            longitude:
-                state.longitude == 0 ? null : state.longitude?.toString(),
-            matchDate: matchDateM,
-            matchHour: matchHourM));
+    final refereeRequest =
+        await _refereeService.searchByFiltersReferee(AddressFilter(
+      state: state.selectedState,
+      leagueId: state.leagueId,
+      status: state.selectedRefereeValue == 0 ? 0 : 1,
+      latitude: state.latitude == 0 ? null : state.latitude?.toString(),
+      longitude: state.longitude == 0 ? null : state.longitude?.toString(),
+      matchDate: matchDateM,
+      matchHour: matchHourM,
+    ));
     if ((_match.refereeId != null &&
             _match.statusRequestReferee == 'ACCEPTED') ||
         _match.refereeAssigmentId != null) {
@@ -275,18 +280,12 @@ class EditGameRolCubit extends Cubit<EditGameRolState> {
       }
     }
 
-    final formattedDate = DateFormat('dd-MM-yyyy HH:mm');
-    final dateMatch = _match.dateMatch == null
-        ? null
-        : formattedDate.parse(_match.dateMatch ?? '');
     _buildMixedListFilter(1);
     emit(state.copyWith(
         refereeList: _refereeList.toSet().toList(),
         mixedElementsList: _mixedElements.toSet().toList(),
         addressList: _mixedElements.toSet().toList(),
         selectedReferee: selectedReferee,
-        selectedDate: dateMatch,
-        selectedHour: dateMatch,
         screenState: BasicCubitScreenState.loaded));
   }
 

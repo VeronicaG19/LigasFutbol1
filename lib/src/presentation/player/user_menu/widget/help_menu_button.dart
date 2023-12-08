@@ -67,7 +67,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
           FocusScope.of(context).requestFocus(FocusNode());
         }
       },
-      // hideSkip: false,
+       hideSkip: true,
       // skipWidget: Container(
       //   decoration: BoxDecoration(
       //     borderRadius: BorderRadius.circular(5),
@@ -222,7 +222,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí podemos buscar arbitros para ver sus tarifas y disponibilidad.",
+                  "Aquí podemos buscar árbitros para ver sus tarifas y disponibilidad.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -275,7 +275,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí podemos seleccionar las categorias disponibles.",
+                  "Aquí podemos seleccionar las categorías disponibles.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -299,7 +299,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Una vez seleccionada la categoria aquí podemos editar y/o borrar la categoria seleccionada.",
+                  "Una vez seleccionada la categoría aquí podemos editar y/o borrar la categoría seleccionada.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -345,7 +345,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Cuando se seleccione la categoria aquí podremos observar los torneos pasado de la categoria.",
+                  "Aquí podremos observar los torneos anteriores de la categoría.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -370,7 +370,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Y por ultimo aquí vamos a poder crear categorias.",
+                  "Y por último aquí vamos a poder crear categorías.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -399,7 +399,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí se mostrara una lista desplegable con las categorias y al seleccionarla se mostraran los torneos.",
+                  "Aquí se mostrará una lista desplegable con las categorías y al seleccionarla se mostrarán los torneos.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -423,7 +423,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí se mostraran los torneos disponibles por la categoria o los filtros seleccionados.",
+                  "Aquí se mostrarán los torneos disponibles por la categoría o los filtros seleccionados.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -502,7 +502,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí vamos a poder editar toda la configuracion del torneo.",
+                  "Aquí vamos a poder editar toda la configuración del torneo.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -527,7 +527,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí vamos a poder agregar equipos al torneo y podemos ver que equipos estan inscritos al torneo.",
+                  "Aquí vamos a poder agregar equipos al torneo y podemos ver que equipos están inscritos al torneo.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -552,7 +552,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí vamos a poder crear nuestros roles de juegos de manera automatica, igual vamos a poder agendarlos y enviar solicitud al dueño de campo y arbitro.",
+                  "Aquí vamos a poder crear nuestros roles de juegos de manera automática, igual vamos a poder agendar y enviar solicitud al dueño de campo y árbitro.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -576,7 +576,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí vamos a poder ver la tabla de clasificacion del torneo y de igual manera vamos a poder editar el sistema de puntuaciones.",
+                  "Aquí vamos a poder ver la tabla de clasificación del torneo y de igual manera vamos a poder editar el sistema de puntuación.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -601,7 +601,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí vamos a poder ver la tabla de goleo del torneo, vamos a observar la posicion, el nombre del jugador y los goles anotados.",
+                  "Aquí vamos a poder ver la tabla de goleo del torneo, vamos a observar la posición, el nombre del jugador y los goles anotados.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -655,7 +655,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí vamos a poder cambiar la fecha de nuestros partidos, igual sirve para buscar arbitros y campos disponibles.",
+                  "Aquí vamos a poder cambiar la fecha de nuestros partidos, igual sirve para buscar árbitros y campos disponibles.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -679,7 +679,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí vamos a poder cambiar la hora de nuestros partidos, igual sirve para buscar arbitros y campos disponibles.",
+                  "Aquí vamos a poder cambiar la hora de nuestros partidos, igual sirve para buscar árbitros y campos disponibles.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -703,7 +703,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí podremos filtar los campos y partidos disponibles en ese lugar, igual dependiendo de la hora y fecha establecida.",
+                  "Aquí podremos filtrar los campos y partidos disponibles en ese lugar, igual dependiendo de la hora y fecha establecida.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -727,7 +727,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Este boton sirve para buscar arbitros y campos con base en los filtros seleccionados y establecidos.",
+                  "Este botón sirve para buscar árbitros y campos con base en los filtros seleccionados y establecidos.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -751,7 +751,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Este boton sirve para limpiar los campos de hora, fecha y la seleccion de lugar",
+                  "Este botón sirve para limpiar los campos de hora, fecha y la selección de lugar.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -778,7 +778,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí se mostrara el detalle del campo seleccionado como la disponibilidad, tarifa, ubicacion y en caso de enviar una solicitud esta se puede cancelar.",
+                  "Aquí se muestra el detalle del campo seleccionado como la disponibilidad, tarifa, ubicación, y en el caso de cancelar una solicitud aquí se encuentra esa opción.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -805,7 +805,7 @@ class _HelpMeButtonState extends State<HelpMeButton> {
             builder: (context, controller) {
               return CoachmarkDesc(
                 container: Text(
-                  "Aquí se mostrara el detalle del arbitro seleccionado como la disponibilidad, tarifa y en caso de enviar una solicitud esta se puede cancelar.",
+                  "Aquí se muestra el detalle del árbitro seleccionado como la disponibilidad, tarifa y en caso de enviar una solicitud aquí se puede cancelar.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onNext: () {
@@ -896,6 +896,30 @@ class _HelpMeButtonState extends State<HelpMeButton> {
           )
         ],
       ),
+///ADD HERE REVIEW HELP BUTTON
+//tarifas
+TargetFocus(
+  identify: "reviewField-key",
+  keyTarget: CoachKey.reviewField, 
+  contents: [
+    TargetContent(
+      align: ContentAlign.bottom,
+      builder: (context, controller) {
+        return CoachmarkDesc(
+          container: Text("Aquí vamos a poder ver las reseñas recibidas por cada campo", 
+          style: Theme.of(context).textTheme.bodyMedium),
+          onNext: () {
+            controller.next();
+          },
+          onSkip: () {
+            controller.skip();
+          },
+          );
+        
+      },
+    )
+  ]
+),
 
       //tarifas
       TargetFocus(

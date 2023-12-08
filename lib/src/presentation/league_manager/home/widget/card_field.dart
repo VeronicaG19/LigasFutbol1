@@ -17,7 +17,8 @@ class CardField extends StatelessWidget {
       required this.quealify,
       required this.fieldId,
       required this.activeId,
-      required this.field})
+      required this.field,
+      required this.type})
       : super(key: key);
 
   final String name;
@@ -27,6 +28,7 @@ class CardField extends StatelessWidget {
   final int fieldId;
   final int activeId;
   final Field field;
+  final int type;
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +93,30 @@ class CardField extends StatelessWidget {
                       ),
                     ),
                   ),
+                  type == 1
+                      ? TextButton(
+                          onPressed: () => Navigator.pop(dialogContext),
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(
+                                16.0, 10.0, 16.0, 10.0),
+                            decoration: const BoxDecoration(
+                              color: Color(0xff045e74),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0)),
+                            ),
+                            child: Text(
+                              'Enviar solicitud',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'SF Pro',
+                                color: Colors.grey[200],
+                                fontWeight: FontWeight.w500,
+                                fontSize: 10.0,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
                   IconButton(
                     onPressed: () {
                       Navigator.pop(dialogContext);
