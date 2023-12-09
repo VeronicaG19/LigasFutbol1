@@ -2,7 +2,7 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ligas_futbol_flutter/src/presentation/introduction/leagues/league/cubit/league_cubit.dart';
-import 'package:ligas_futbol_flutter/src/presentation/widgets/%20league_search/league_search.dart';
+import 'package:ligas_futbol_flutter/src/presentation/widgets/league_search/league_search.dart';
 
 class LeagueContent extends StatefulWidget {
   const LeagueContent({Key? key}) : super(key: key);
