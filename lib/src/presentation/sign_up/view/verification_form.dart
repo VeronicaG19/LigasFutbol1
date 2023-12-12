@@ -255,7 +255,6 @@ class _SubmitButton extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  primary: Colors.blueAccent,
                 ),
                 onPressed: state.status.isValidated
                     ? () {
@@ -267,7 +266,6 @@ class _SubmitButton extends StatelessWidget {
                     : null,
                 child: Text(
                   AppLocalizations.of(context)!.aeSubmitLbl,
-                  style: Theme.of(context).primaryTextTheme.button,
                 ),
               );
       },

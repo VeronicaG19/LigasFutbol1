@@ -29,7 +29,7 @@ class _LeagueSearchState extends State<LeagueSearch> {
             : BoxDecoration(
                 border: Border.all(color: Color(0xff358aac)),
                 borderRadius: BorderRadius.circular(5),
-                color: Colors.white,
+                color: Color(0xff358aac),
               ),
         child: ListTile(
           selected: isSelected,

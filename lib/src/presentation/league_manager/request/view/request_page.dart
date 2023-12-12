@@ -78,7 +78,9 @@ class _RequestContent extends StatelessWidget {
               title: const Text(
                 "Notificaciones",
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
+              actionsIconTheme: IconThemeData(color: Colors.white),
               centerTitle: true,
               // backgroundColor: Color(0xFFFFFFFF),
               flexibleSpace: const Image(

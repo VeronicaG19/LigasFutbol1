@@ -12,94 +12,102 @@ class VerificationCodeForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveWidget.isSmallScreen(context) ?
-    Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          AppLocalizations.of(context)!.signUpEnterCodeLbl,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(
-          height: 20.0,
-        ),
-        Text(
-          AppLocalizations.of(context)!.signUpCodeFormLbl(
-              context.watch<SignUpBloc>().state.verificationSender.value),
-        ),
-         const SizedBox(
-              height: 7.0,
-            ),
-            Visibility(
-              visible: (context.watch<SignUpBloc>().state.verificationType == VerificationType.email),
-              child: const Text(
-                "En caso de no recibir el código favor de revisar en la carpeta de correos no deseados",
-               textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.red
+    return ResponsiveWidget.isSmallScreen(context)
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.signUpEnterCodeLbl,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              Text(
+                AppLocalizations.of(context)!.signUpCodeFormLbl(
+                    context.watch<SignUpBloc>().state.verificationSender.value),
+              ),
+              const SizedBox(
+                height: 7.0,
+              ),
+              Visibility(
+                visible: (context.watch<SignUpBloc>().state.verificationType ==
+                    VerificationType.email),
+                child: const Text(
+                  "En caso de no recibir el código favor de revisar en la carpeta de correos no deseados",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 12, color: Colors.red),
                 ),
               ),
-            ),
-        const SizedBox(
-          height: 25.0,
-        ),
-        _CodeAutoFillPage(),
-        const SizedBox(
-          height: 25.0,
-        ),
-        Visibility(
-          visible:
-          !context.watch<SignUpBloc>().state.status.isSubmissionInProgress,
-          child: _ResentCodeButton(),
-        ),
-      ],
-    ) :
-    Center(
-      child: Padding(
-        padding: const EdgeInsets.only(right: 400, left: 400, top: 20, bottom: 20),
-        child: Column(
-          children: [
-            Text(
-              AppLocalizations.of(context)!.signUpEnterCodeLbl,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            Text(
-              AppLocalizations.of(context)!.signUpCodeFormLbl(
-                  context.watch<SignUpBloc>().state.verificationSender.value),
-            ),
-            const SizedBox(
-              height: 9.0,
-            ),
-            Visibility(
-              visible: (context.watch<SignUpBloc>().state.verificationType == VerificationType.email),
-              child: const Text(
-                "En caso de no recibir el código favor de revisar en la carpeta de correos no deseados",
-               textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Colors.red
-                ),
+              const SizedBox(
+                height: 25.0,
+              ),
+              _CodeAutoFillPage(),
+              const SizedBox(
+                height: 25.0,
+              ),
+              Visibility(
+                visible: !context
+                    .watch<SignUpBloc>()
+                    .state
+                    .status
+                    .isSubmissionInProgress,
+                child: _ResentCodeButton(),
+              ),
+            ],
+          )
+        : Center(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 400, left: 400, top: 20, bottom: 20),
+              child: Column(
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.signUpEnterCodeLbl,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.signUpCodeFormLbl(context
+                        .watch<SignUpBloc>()
+                        .state
+                        .verificationSender
+                        .value),
+                  ),
+                  const SizedBox(
+                    height: 9.0,
+                  ),
+                  Visibility(
+                    visible:
+                        (context.watch<SignUpBloc>().state.verificationType ==
+                            VerificationType.email),
+                    child: const Text(
+                      "En caso de no recibir el código favor de revisar en la carpeta de correos no deseados",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 25.0,
+                  ),
+                  _CodeAutoFillPage(),
+                  const SizedBox(
+                    height: 25.0,
+                  ),
+                  Visibility(
+                    visible: !context
+                        .watch<SignUpBloc>()
+                        .state
+                        .status
+                        .isSubmissionInProgress,
+                    child: _ResentCodeButton(),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(
-              height: 25.0,
-            ),
-            _CodeAutoFillPage(),
-            const SizedBox(
-              height: 25.0,
-            ),
-            Visibility(
-              visible:
-              !context.watch<SignUpBloc>().state.status.isSubmissionInProgress,
-              child: _ResentCodeButton(),
-            ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }
 
@@ -113,7 +121,6 @@ class _ResentCodeButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
-        primary: Colors.blueAccent,
       ),
       onPressed: () => context.read<SignUpBloc>().add(const SignUpResentCode()),
       child: Text(

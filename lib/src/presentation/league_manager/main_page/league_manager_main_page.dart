@@ -86,7 +86,7 @@ s
                           fontSize: 28,
                           fontWeight: FontWeight.w900),
                     ),
-                   const SizedBox(
+                    const SizedBox(
                       width: 15,
                     ),
                   ],

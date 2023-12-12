@@ -222,7 +222,6 @@ class _SubmitButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
-            primary: Color(0xff358aac),
           ),
           onPressed: () {},
           /* onPressed: state.status.isValidated

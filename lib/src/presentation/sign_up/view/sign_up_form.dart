@@ -151,8 +151,7 @@ class SignUpForm extends StatelessWidget {
                                           child: ElevatedButton(
                                             onPressed: controls.onStepContinue,
                                             style: ElevatedButton.styleFrom(
-                                                fixedSize: const Size(140, 50),
-                                                primary: Colors.blue),
+                                                fixedSize: const Size(140, 50)),
                                             child: Text(
                                                 AppLocalizations.of(context)!
                                                     .aeContinueButtonLbl),
@@ -194,8 +193,7 @@ class SignUpForm extends StatelessWidget {
                                           child: ElevatedButton(
                                             onPressed: controls.onStepContinue,
                                             style: ElevatedButton.styleFrom(
-                                                fixedSize: const Size(140, 50),
-                                                primary: Colors.blue),
+                                                fixedSize: const Size(140, 50)),
                                             child: Text(
                                                 AppLocalizations.of(context)!
                                                     .aeContinueButtonLbl),

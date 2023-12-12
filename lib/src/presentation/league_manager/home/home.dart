@@ -44,6 +44,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           labelColor: Colors.blue,
           unselectedLabelColor: Colors.black54,
           isScrollable: true,
+          tabAlignment: TabAlignment.center,
           tabs: [
             Tab(
               key: CoachKey.leaguesMenuLeagueAdmin,

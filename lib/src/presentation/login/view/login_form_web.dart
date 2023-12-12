@@ -116,6 +116,7 @@ class _EmailInput extends StatelessWidget {
               : context.read<LoginCubit>().logInWithCredentials(),
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
+            floatingLabelStyle: const TextStyle(color: Colors.white70),
             hintStyle: const TextStyle(color: Colors.white70),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
@@ -162,6 +163,7 @@ class _PasswordInput extends StatelessWidget {
               : context.read<LoginCubit>().logInWithCredentials(),
           obscureText: context.watch<LoginCubit>().state.isPasswordVisible,
           decoration: InputDecoration(
+            floatingLabelStyle: const TextStyle(color: Colors.white70),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: const BorderSide(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:ligas_futbol_flutter/src/presentation/app/view/theme.dart';
 import 'package:notification_repository/notification_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -53,7 +54,8 @@ class AppView extends StatelessWidget {
         Locale('es', ''),
       ],
       onGenerateTitle: (BuildContext context) => EnvironmentConfig.appName,
-      theme: ThemeData(),
+      theme: auxilioAppTheme,
+      //darkTheme: darkThemeData,
       home: MultiBlocListener(
         listeners: [
           BlocListener<AuthenticationBloc, AuthenticationState>(

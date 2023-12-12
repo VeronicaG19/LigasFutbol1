@@ -207,7 +207,6 @@ class _SubmitButton extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  primary: Colors.blueAccent,
                 ),
                 onPressed: state.status.isValidated
                     ? () {
@@ -217,7 +216,6 @@ class _SubmitButton extends StatelessWidget {
                     : null,
                 child: Text(
                   AppLocalizations.of(context)!.aeSubmitLbl,
-                  style: Theme.of(context).primaryTextTheme.button,
                 ),
               );
       },
@@ -248,7 +246,6 @@ class _CancelButton extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
         child: Text(
           AppLocalizations.of(context)!.aeCancelLbl,
-          style: Theme.of(context).primaryTextTheme.button,
         ),
       ),
     );
@@ -296,12 +293,10 @@ class AdviseConfirmation extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                primary: Colors.blueAccent,
               ),
               onPressed: () => Navigator.pop(context),
               child: Text(
                 AppLocalizations.of(context)!.aeAcceptLbl,
-                style: Theme.of(context).primaryTextTheme.button,
               ),
             )
           ],

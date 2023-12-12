@@ -5,5 +5,8 @@ import 'injection.config.dart';
 
 final locator = GetIt.instance;
 
-@InjectableInit()
-Future<void> configureDependencies() async => await $initGetIt(locator);
+/*@InjectableInit()
+Future<void> configureDependencies() async => await $initGetIt(locator);*/
+//upgrade to injectable 2.0
+@InjectableInit(preferRelativeImports: false)
+Future<void> configureDependencies() => locator.init();
